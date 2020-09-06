@@ -12,7 +12,7 @@ namespace SoftTissue.Application.Controllers
     /// <summary>
     /// This controller executes linear viscoelasticity analysis.
     /// </summary>
-    [Route("api/v1/linear-viscoelastic")]
+    [Route("api/v1/linear-viscoelasticity")]
     public class LinearViscoelasticityController : ControllerBase
     {
         [ProducesResponseType(StatusCodes.Status201Created)]
