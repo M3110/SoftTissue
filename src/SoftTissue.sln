@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Application", "SoftTissue.Application\SoftTissue.Application.csproj", "{D0BF4B1A-4B28-4F4E-99E5-7F3EC7E8F4F3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Core", "SoftTissue.Core\SoftTissue.Core.csproj", "{CBBE7258-551D-4977-86DD-7BC54225740A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{458B5AE9-25EC-4844-AB1B-6819297736F1}"
+	ProjectSection(SolutionItems) = preProject
+		..\etc\CHANGELOG.md = ..\etc\CHANGELOG.md
+		..\etc\Notes.txt = ..\etc\Notes.txt
+		..\etc\README.md = ..\etc\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.DataContract", "SoftTissue.DataContract\SoftTissue.DataContract.csproj", "{1F4020E1-1AB6-43B8-874C-5C9605F4533C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0BF4B1A-4B28-4F4E-99E5-7F3EC7E8F4F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0BF4B1A-4B28-4F4E-99E5-7F3EC7E8F4F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0BF4B1A-4B28-4F4E-99E5-7F3EC7E8F4F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0BF4B1A-4B28-4F4E-99E5-7F3EC7E8F4F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBBE7258-551D-4977-86DD-7BC54225740A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBBE7258-551D-4977-86DD-7BC54225740A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBBE7258-551D-4977-86DD-7BC54225740A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBBE7258-551D-4977-86DD-7BC54225740A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F4020E1-1AB6-43B8-874C-5C9605F4533C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F4020E1-1AB6-43B8-874C-5C9605F4533C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F4020E1-1AB6-43B8-874C-5C9605F4533C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F4020E1-1AB6-43B8-874C-5C9605F4533C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D0BF4B1A-4B28-4F4E-99E5-7F3EC7E8F4F3} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
+		{CBBE7258-551D-4977-86DD-7BC54225740A} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
+		{1F4020E1-1AB6-43B8-874C-5C9605F4533C} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B473ED5-B2A2-4F4D-B6E5-50E19C4C88DA}
+	EndGlobalSection
+EndGlobal

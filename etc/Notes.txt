@@ -1,0 +1,19 @@
+Anotações - IC Viscoelasticidade
+
+Livro para programar em VBA
+- excel_for_scientists_and_engineers_numerical_methods
+- Está no dropbox, pasta Knee
+
+Ajustamento de curva
+- Feito em software
+- Extrapola alguns conjuntos de pontos em diversos conjuntos de pontos para gerar uma curva.
+
+Fazer análise de sensibilidade para cada variável
+- Gerar gráficos comparando a interferência de cada variável.
+	- Cada gráfico deve ter um valor diferente para alguma variável.
+	
+Preparar o código para iterar cada variável
+
+Para o caso do modelo de Maxwell, caso queira analisar a tensão, a deformação deve ser constante e vice-versa.
+
+pegar com kenedi a pesquisa que ele fez do mini baja passando por um quebra mola
