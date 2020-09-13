@@ -9,16 +9,16 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
 {
     public abstract class CalculateStrain : OperationBase<CalculateStrainRequest, CalculateStrainResponse, CalculateStrainResponseData>, ICalculateStrain
     {
-        private readonly IViscoelasticModel<LinearModelInput> _viscoelasticModel;
+        private readonly IViscoelasticModel<LinearViscoelasticityModelInput> _viscoelasticModel;
 
-        public CalculateStrain(IViscoelasticModel<LinearModelInput> viscoelasticModel)
+        public CalculateStrain(IViscoelasticModel<LinearViscoelasticityModelInput> viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
         }
 
-        public Task<List<LinearModelInput>> BuildInput(CalculateStrainRequest request)
+        public Task<List<LinearViscoelasticityModelInput>> BuildInput(CalculateStrainRequest request)
         {
-            var inputs = new List<LinearModelInput>();
+            var inputs = new List<LinearViscoelasticityModelInput>();
 
             foreach (var stiffness in request.StiffnessList)
             {
@@ -26,7 +26,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
                 {
                     foreach (var initialStress in request.InitialStressList)
                     {
-                        var input = new LinearModelInput
+                        var input = new LinearViscoelasticityModelInput
                         {
                             InitialStress = initialStress,
                             Viscosity = viscosity,
@@ -46,7 +46,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
         {
             var response = new CalculateStrainResponse { Data = new CalculateStrainResponseData() };
 
-            List<LinearModelInput> inputs = await this.BuildInput(request).ConfigureAwait(false);
+            List<LinearViscoelasticityModelInput> inputs = await this.BuildInput(request).ConfigureAwait(false);
 
             int i = 0;
             foreach (var input in inputs)

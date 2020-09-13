@@ -4,10 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SoftTissue.Application.Extensions;
-using SoftTissue.Core.ConstitutiveEquations.LinearModel;
+using SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell;
+using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.DifferentialEquation;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress;
 
 namespace SoftTissue.Application
 {
@@ -34,12 +36,19 @@ namespace SoftTissue.Application
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IDifferentialEquation, DifferentialEquation>();
+            services.AddScoped<IDerivative, Derivative>();
 
             services.AddScoped<IMaxwellModel, MaxwellModel>();
 
+            // Register Operations
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
+            services.AddScoped<ICalculateQuasiLinearViscosityStress>(provider =>
+            {
+                var operation = new CalculateQuasiLinearViscosityStress();
+
+                return operation;
+            });
 
             services.AddControllers();
 

@@ -5,6 +5,5 @@
     /// </summary>
     public class ViscoelasticModelInput
     {
-        public double Time { get; set; }
     }
 }

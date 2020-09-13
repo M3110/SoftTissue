@@ -11,31 +11,10 @@ namespace SoftTissue.Core.ConstitutiveEquations
         where TInput : ViscoelasticModelInput, new()
     {
         /// <summary>
-        /// This method calculates the reduced relaxation function for a specific time.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<double> CalculateReducedRelaxationFunction(TInput input);
-
-        /// <summary>
-        /// This method calculates the strain for a specific time.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<double> CalculateStrain(TInput input);
-
-        /// <summary>
         /// This method calculates the stress for a specific time.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<double> CalculateStress(TInput input);
-
-        /// <summary>
-        /// This method calculates the Creep Compliance J(t) for a specific time.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<double> CalculateCreepCompliance(TInput input);
+        Task<double> CalculateStress(TInput input, double time, double strain);
     }
 }
