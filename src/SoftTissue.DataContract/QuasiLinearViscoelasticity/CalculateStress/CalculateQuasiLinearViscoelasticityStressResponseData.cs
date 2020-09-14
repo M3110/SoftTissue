@@ -1,6 +1,6 @@
 ﻿namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
 {
-    public class CalculateQuasiLinearStressResponseData : OperationResponseData
+    public class CalculateQuasiLinearViscoelasticityStressResponseData : OperationResponseData
     {
     }
 }

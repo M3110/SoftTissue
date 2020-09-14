@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations;
+using SoftTissue.Core.ConstitutiveEquations.LinearModel;
 using SoftTissue.Core.Models;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
 {
     public abstract class CalculateStrain : OperationBase<CalculateStrainRequest, CalculateStrainResponse, CalculateStrainResponseData>, ICalculateStrain
     {
-        private readonly IViscoelasticModel<LinearViscoelasticityModelInput> _viscoelasticModel;
+        private readonly ILinearViscoelasticityModel _viscoelasticModel;
 
-        public CalculateStrain(IViscoelasticModel<LinearViscoelasticityModelInput> viscoelasticModel)
+        public CalculateStrain(ILinearViscoelasticityModel viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
         }
@@ -30,8 +31,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
                         {
                             InitialStress = initialStress,
                             Viscosity = viscosity,
-                            Stiffness = stiffness,
-                            Time = request.InitialTime
+                            Stiffness = stiffness
                         };
 
                         inputs.Add(input);
@@ -66,18 +66,19 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
                     streamWriter.WriteLine($"Relaxation Time: {input.RelaxationTime} s");
                 }
 
+                double time = request.InitialTime;
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
                     streamWriter.WriteLine("Time;Creep Compliance;Strain");
 
-                    while (input.Time - request.FinalTime <= 1e-3)
+                    while (time - request.FinalTime <= 1e-3)
                     {
-                        double creepCompliance = await this._viscoelasticModel.CalculateCreepCompliance(input).ConfigureAwait(false);
-                        double strain = await this._viscoelasticModel.CalculateStrain(input).ConfigureAwait(false);
+                        double creepCompliance = await this._viscoelasticModel.CalculateCreepCompliance(input, time).ConfigureAwait(false);
+                        double strain = await this._viscoelasticModel.CalculateStrain(input, time).ConfigureAwait(false);
 
-                        streamWriter.WriteLine($"{input.Time};{creepCompliance};{strain}");
+                        streamWriter.WriteLine($"{time};{creepCompliance};{strain}");
 
-                        input.Time += request.TimeStep;
+                        time += request.TimeStep;
                     }
                 }
             }

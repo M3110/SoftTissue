@@ -1,0 +1,6 @@
+﻿using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
+
+namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
+{
+    public interface ICalculateQuasiLinearViscoelasticityStress : IOperationBase<CalculateQuasiLinearViscoelasticityStressRequest, CalculateQuasiLinearViscoelasticityStressResponse, CalculateQuasiLinearViscoelasticityStressResponseData> { }
+}

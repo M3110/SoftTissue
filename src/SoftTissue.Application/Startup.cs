@@ -43,9 +43,9 @@ namespace SoftTissue.Application
             // Register Operations
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
-            services.AddScoped<ICalculateQuasiLinearViscosityStress>(provider =>
+            services.AddScoped<ICalculateQuasiLinearViscoelasticityStress>(provider =>
             {
-                var operation = new CalculateQuasiLinearViscosityStress();
+                var operation = new CalculateQuasiLinearViscoelasticityStress();
 
                 return operation;
             });
