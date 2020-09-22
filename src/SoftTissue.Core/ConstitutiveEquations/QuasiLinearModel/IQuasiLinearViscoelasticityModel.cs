@@ -1,16 +1,15 @@
 ﻿using SoftTissue.Core.Models;
-using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
     public interface IQuasiLinearViscoelasticityModel : IViscoelasticModel<QuasiLinearViscoelasticityModelInput>
     {
-        Task<double> CalculateElasticResponse(QuasiLinearViscoelasticityModelInput input, double strain);
+        double CalculateElasticResponse(QuasiLinearViscoelasticityModelInput input, double time);
 
-        Task<double> CalculateElasticResponseDerivative(QuasiLinearViscoelasticityModelInput input, double strain);
+        double CalculateElasticResponseDerivative(QuasiLinearViscoelasticityModelInput input, double time);
 
-        Task<double> CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time);
 
-        Task<double> CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time);
     }
 }

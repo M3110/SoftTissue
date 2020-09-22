@@ -1,4 +1,4 @@
-﻿using SoftTissue.Core.ConstitutiveEquations;
+﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
 using SoftTissue.Core.Models;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
 {
     public abstract class CalculateLinearViscosityStress : OperationBase<CalculateStressRequest, CalculateStressResponse, CalculateStressResponseData>, ICalculateLinearViscosityStress
     {
-        private readonly IViscoelasticModel<LinearViscoelasticityModelInput> _viscoelasticModel;
+        private readonly ILinearViscoelasticityModel _viscoelasticModel;
 
-        public CalculateLinearViscosityStress(IViscoelasticModel<LinearViscoelasticityModelInput> viscoelasticModel)
+        public CalculateLinearViscosityStress(ILinearViscoelasticityModel viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
         }
@@ -30,8 +30,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
                         {
                             InitialStrain = initialStrain,
                             Viscosity = viscosity,
-                            Stiffness = stiffness,
-                            Time = request.InitialTime
+                            Stiffness = stiffness
                         };
 
                         inputs.Add(input);
@@ -66,18 +65,19 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
                     streamWriter.WriteLine($"Relaxation Time: {input.RelaxationTime} s");
                 }
 
+                double time = request.InitialTime;
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
                     streamWriter.WriteLine("Time;Relaxation Function;Stress");
 
-                    while (input.Time - request.FinalTime <= 1e-3)
+                    while (time - request.FinalTime <= 1e-3)
                     {
-                        double relaxationFunction = await this._viscoelasticModel.CalculateReducedRelaxationFunction(input).ConfigureAwait(false);
-                        double stress = await this._viscoelasticModel.CalculateStress(input).ConfigureAwait(false);
+                        double relaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
+                        double stress = this._viscoelasticModel.CalculateStress(input, time);
 
-                        streamWriter.WriteLine($"{input.Time};{relaxationFunction};{stress}");
+                        streamWriter.WriteLine($"{time};{relaxationFunction};{stress}");
 
-                        input.Time += request.TimeStep;
+                        time += request.TimeStep;
                     }
                 }
             }

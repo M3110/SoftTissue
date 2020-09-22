@@ -5,57 +5,85 @@ namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
 {
     public class SimpsonRuleIntegration : ISimpsonRuleIntegration
     {
-        public double Calculate<TInput>(Func<TInput, double, double> equation, TInput equationInput, IntegralInput integralInput)
+        public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput equationInput, IntegralInput integralInput)
             where TInput : ViscoelasticModelInput
         {
-            double step = (integralInput.FinalPoint - integralInput.InitialPoint) / integralInput.PeriodDivision;
+            double finalPoint = integralInput.InitialPoint;
 
-            double result = 0;
-
-            for (int i = 0; i <= integralInput.PeriodDivision; i++)
+            if (integralInput.FinalPoint != null)
             {
-                if (i == 0 || i == integralInput.PeriodDivision)
+                finalPoint = integralInput.FinalPoint.Value;
+            }
+            else
+            {
+                while (Equation(equationInput, finalPoint) >= integralInput.Precision)
                 {
-                    result += equation(equationInput, integralInput.InitialPoint + i * step);
-                }
-                else if (i % 2 != 0)
-                {
-                    result += 4 * equation(equationInput, integralInput.InitialPoint + i * step); ;
-                }
-                else
-                {
-                    result += 2 * equation(equationInput, integralInput.InitialPoint + i * step); ;
+                    finalPoint += integralInput.Step;
                 }
             }
 
-            result *= step / 3;
+            double numberOfDivisions = (finalPoint - integralInput.InitialPoint) / integralInput.Step;
+
+            double result = 0;
+
+            for (int i = 0; i <= numberOfDivisions; i++)
+            {
+                if (i == 0 || i == integralInput.Step)
+                {
+                    result += Equation(equationInput, integralInput.InitialPoint + i * integralInput.Step);
+                }
+                else if (i % 2 != 0)
+                {
+                    result += 4 * Equation(equationInput, integralInput.InitialPoint + i * integralInput.Step);
+                }
+                else
+                {
+                    result += 2 * Equation(equationInput, integralInput.InitialPoint + i * integralInput.Step);
+                }
+            }
+
+            result *= integralInput.Step / 3;
 
             return result;
         }
 
-        public double Calculate(Func<double, double> equation, IntegralInput integralInput)
+        public double Calculate(Func<double, double> Equation, IntegralInput integralInput)
         {
-            double step = (integralInput.FinalPoint - integralInput.InitialPoint) / integralInput.PeriodDivision;
+            double finalPoint = integralInput.InitialPoint;
 
-            double result = 0;
-
-            for (int i = 0; i <= integralInput.PeriodDivision; i++)
+            if (integralInput.FinalPoint != null)
             {
-                if (i == 0 || i == integralInput.PeriodDivision)
+                finalPoint = integralInput.FinalPoint.Value;
+            }
+            else
+            {
+                while (Equation(finalPoint) >= integralInput.Precision)
                 {
-                    result += equation(integralInput.InitialPoint + i * step);
-                }
-                else if (i % 2 != 0)
-                {
-                    result += 4 * equation(integralInput.InitialPoint + i * step); ;
-                }
-                else
-                {
-                    result += 2 * equation(integralInput.InitialPoint + i * step); ;
+                    finalPoint += integralInput.Step;
                 }
             }
 
-            result *= step / 3;
+            double numberOfDivisions = (finalPoint - integralInput.InitialPoint) / integralInput.Step;
+
+            double result = 0;
+
+            for (int i = 0; i <= numberOfDivisions; i++)
+            {
+                if (i == 0 || i == integralInput.Step)
+                {
+                    result += Equation(integralInput.InitialPoint + i * integralInput.Step);
+                }
+                else if (i % 2 != 0)
+                {
+                    result += 4 * Equation(integralInput.InitialPoint + i * integralInput.Step);
+                }
+                else
+                {
+                    result += 2 * Equation(integralInput.InitialPoint + i * integralInput.Step);
+                }
+            }
+
+            result *= integralInput.Step / 3;
 
             return result;
         }

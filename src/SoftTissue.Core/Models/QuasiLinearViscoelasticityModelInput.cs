@@ -5,23 +5,38 @@ namespace SoftTissue.Core.Models
 {
     public class QuasiLinearViscoelasticityModelInput : ViscoelasticModelInput
     {
-        public double InitialStrain { get; set; }
-
         public double StrainRate { get; set; }
 
         public double MaximumStrain { get; set; }
 
-        public double StrainFinalTime { get; set; }
+        //public double StrainFinalTime { get; set; }
 
-        public double VariableA { get; set; }
-
-        public double VariableB { get; set; }
+        /// <summary>
+        /// Constant A.
+        /// </summary>
+        public double ElasticStressConstant { get; set; }
         
-        public double VariableC { get; set; }
+        /// <summary>
+        /// Constant B.
+        /// </summary>
+        public double ElasticPowerConstant { get; set; }
+        
+        /// <summary>
+        /// Constant C.
+        /// </summary>
+        public double RelaxationIndex { get; set; }
 
-        public double RelaxationTime1 { get; set; }
+        /// <summary>
+        /// Tau 1.
+        /// </summary>
+        public double FastRelaxationTime { get; set; }
 
-        public double RelaxationTime2 { get; set; }
+        /// <summary>
+        /// Tau 2.
+        /// </summary>
+        public double SlowRelaxationTime { get; set; }
+
+        public double TimeStep { get; set; }
 
         public List<RelaxationFunctionSimplifiedInput> RelaxationFunctionSimplifiedInputList { get; set; }
     }

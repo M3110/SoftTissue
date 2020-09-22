@@ -22,7 +22,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("calculate-stress/maxwell-model")]
         public async Task<ActionResult<CalculateStrainResponse>> CalculateStress(
             [FromServices] ICalculateMaxwellModelStress calculateMaxwellModelStress,
-            [FromBody] CalculateStressRequest request)
+            [FromQuery] CalculateStressRequest request)
         {
             CalculateStressResponse response = await calculateMaxwellModelStress.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
@@ -35,7 +35,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("calculate-strain/maxwell-model")]
         public async Task<ActionResult<CalculateStrainResponse>> CalculateStrain(
             [FromServices] ICalculateMaxwellModelStrain calculateMaxwellModelStrain,
-            [FromBody] CalculateStrainRequest request)
+            [FromQuery] CalculateStrainRequest request)
         {
             CalculateStrainResponse response = await calculateMaxwellModelStrain.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

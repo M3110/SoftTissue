@@ -1,5 +1,4 @@
 ﻿using SoftTissue.Core.Models;
-using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations
 {
@@ -14,7 +13,16 @@ namespace SoftTissue.Core.ConstitutiveEquations
         /// This method calculates the stress for a specific time.
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="time"></param>
         /// <returns></returns>
-        Task<double> CalculateStress(TInput input, double time, double strain);
+        double CalculateStress(TInput input, double time);
+
+        /// <summary>
+        /// This method calculates the strain for a specific time.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        double CalculateStrain(TInput input, double time);
     }
 }

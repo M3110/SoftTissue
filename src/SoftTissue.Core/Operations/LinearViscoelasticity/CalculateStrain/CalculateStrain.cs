@@ -1,5 +1,4 @@
-﻿using SoftTissue.Core.ConstitutiveEquations;
-using SoftTissue.Core.ConstitutiveEquations.LinearModel;
+﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
 using SoftTissue.Core.Models;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
 using System.Collections.Generic;
@@ -73,8 +72,8 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
 
                     while (time - request.FinalTime <= 1e-3)
                     {
-                        double creepCompliance = await this._viscoelasticModel.CalculateCreepCompliance(input, time).ConfigureAwait(false);
-                        double strain = await this._viscoelasticModel.CalculateStrain(input, time).ConfigureAwait(false);
+                        double creepCompliance = this._viscoelasticModel.CalculateCreepCompliance(input, time);
+                        double strain = this._viscoelasticModel.CalculateStrain(input, time);
 
                         streamWriter.WriteLine($"{time};{creepCompliance};{strain}");
 

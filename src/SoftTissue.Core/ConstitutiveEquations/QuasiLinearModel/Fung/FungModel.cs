@@ -1,110 +1,100 @@
 ﻿using SoftTissue.Core.Models;
+using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using System;
-using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
     public class FungModel : QuasiLinearViscoelasticityModel, IFungModel
     {
+        private readonly double _precision = 1e-10;
         private readonly ISimpsonRuleIntegration _simpsonRuleIntegration;
+        private readonly IDerivative _derivative;
 
-        public FungModel(ISimpsonRuleIntegration simpsonRuleIntegration)
+        public FungModel(
+            ISimpsonRuleIntegration simpsonRuleIntegration,
+            IDerivative derivative)
         {
             this._simpsonRuleIntegration = simpsonRuleIntegration;
+            this._derivative = derivative;
         }
 
-        public override Task<double> CalculateElasticResponse(QuasiLinearViscoelasticityModelInput input, double strain)
+        public override double CalculateElasticResponse(QuasiLinearViscoelasticityModelInput input, double time)
         {
-            double result = input.VariableA * (Math.Exp(input.VariableB * strain) - 1);
+            double strain = this.CalculateStrain(input, time);
 
-            return Task.FromResult(result);
+            return input.ElasticStressConstant * (Math.Exp(input.ElasticPowerConstant * strain) - 1);
         }
 
-        public override Task<double> CalculateElasticResponseDerivative(QuasiLinearViscoelasticityModelInput input, double strain)
+        public override double CalculateElasticResponseDerivative(QuasiLinearViscoelasticityModelInput input, double time)
         {
-            double result = input.VariableA * input.VariableB * Math.Exp(input.VariableB * strain);
-
-            return Task.FromResult(result);
+            double strain = this.CalculateStrain(input, time);
+            double strainDerivative = this._derivative.Calculate((derivativeTime) => this.CalculateStrain(input, derivativeTime), time);
+            return input.ElasticStressConstant * input.ElasticPowerConstant * strainDerivative * Math.Exp(input.ElasticPowerConstant * strain);
         }
 
-        public override Task<double> CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time)
-        {
-            if (time == 0)
-            {
-                return Task.FromResult<double>(1);
-            }
-
-            double result = (1 + input.VariableC * (this.CalculateE1(time / input.RelaxationTime2) - this.CalculateE1(time / input.RelaxationTime1))) / (1 + input.VariableC * Math.Log(input.RelaxationTime2 / input.RelaxationTime1));
-
-            return Task.FromResult(result);
-        }
-
-        public override Task<double> CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time)
-        {
-            double result = 0;
-
-            foreach (var simplifiedInput in input.RelaxationFunctionSimplifiedInputList)
-            {
-                result += simplifiedInput.VariableC * Math.Exp(-simplifiedInput.RelaxationTime / time);
-            }
-
-            return Task.FromResult(result);
-        }
-
-        public async override Task<double> CalculateStress(QuasiLinearViscoelasticityModelInput input, double time, double strain)
+        public override double CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time)
         {
             if (time == 0)
             {
-                return 0;
+                return 1;
             }
 
-            double reducedRelaxationFunction = await this.CalculateReducedRelaxationFunction(input, time).ConfigureAwait(false);
-            double elasticResponseDerivative = await this.CalculateElasticResponseDerivative(input, strain).ConfigureAwait(false);
+            if (time <= 1)
+            {
+                return (1 - input.RelaxationIndex * Constants.EulerMascheroniConstant - input.RelaxationIndex * Math.Log(time, input.SlowRelaxationTime)) / (1 + input.RelaxationIndex * Math.Log(input.SlowRelaxationTime / input.FastRelaxationTime));
+            }
 
+            return (1 + input.RelaxationIndex * (this.CalculateE1(input, time / input.SlowRelaxationTime) - this.CalculateE1(input, time / input.FastRelaxationTime))) / (1 + input.RelaxationIndex * Math.Log(input.SlowRelaxationTime / input.FastRelaxationTime));
+        }
+
+        // TODO: Revisar equação e parâmetros de entrada.
+        public override double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time)
+        {
             double result = 0;
+
+            //foreach (var simplifiedInput in input.RelaxationFunctionSimplifiedInputList)
+            //{
+            //    result += simplifiedInput.VariableC * Math.Exp(-simplifiedInput.RelaxationTime / time);
+            //}
 
             return result;
         }
 
-        private double CalculateE1(double variable)
+        public override double CalculateStrain(QuasiLinearViscoelasticityModelInput input, double time)
         {
-            // Original equation:
-            //  f(x) = e^(-x)/x
-            // Transformed equation:
-            //  f(t) = e^(-(a + t/(1 - t)))/(1 - t)^2
-            //  a --> initial point
-            // This step is necessary the interval of original equation goes to infinity and it's impossible to integrate.
-            // With that step, the interval is changed to 0 from 1.
-            Func<double, double> equation = (parameter) =>
+            return input.StrainRate * time < input.MaximumStrain ? input.StrainRate * time : input.MaximumStrain;
+        }
+
+        public override double CalculateStress(QuasiLinearViscoelasticityModelInput input, double time)
+        {
+            var integralInput = new IntegralInput
             {
-                return Math.Exp(-(variable + (parameter / (1 - parameter)))) / (variable + (parameter / (1 - parameter))) / Math.Pow(1 - parameter, 2);
+                InitialPoint = 0,
+                FinalPoint = time,
+                Step = input.TimeStep
             };
 
-            double numberOfDivisions = 10;
-            double step = 1 / numberOfDivisions;
+            //double derivative = this._derivative.Calculate((derivativeTime) => this.CalculateReducedRelaxationFunction(input, derivativeTime), time);
 
-            double result = 0;
+            //double result = this.CalculateReducedRelaxationFunction(input, time: 0) * this.CalculateElasticResponse(input, time) +
+            //    this._simpsonRuleIntegration.Calculate((integrationTime) => this.CalculateElasticResponse(input, integrationTime) * this._derivative.Calculate((derivativeTime) => this.CalculateReducedRelaxationFunction(input, derivativeTime), time),
+            //    integralInput);
 
-            for (int i = 0; i < numberOfDivisions; i++)
+            return this.CalculateElasticResponse(input, time: 0) * this.CalculateReducedRelaxationFunction(input, time) +
+                this._simpsonRuleIntegration.Calculate((equationTime) => this.CalculateReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime), integralInput);
+        }
+
+        private double CalculateE1(QuasiLinearViscoelasticityModelInput input, double variable)
+        {
+            var integralInput = new IntegralInput
             {
-                if (i == 0)
-                {
-                    result += equation(variable);
-                }
-                else if (i % 2 != 0)
-                {
-                    result += 4 * equation(i * step);
-                }
-                else
-                {
-                    result += 2 * equation(i * step);
-                }
-            }
+                InitialPoint = variable,
+                Precision = this._precision,
+                Step = input.TimeStep
+            };
 
-            result *= step / 3;
-
-            return result;
+            return this._simpsonRuleIntegration.Calculate((parameter) => Math.Exp(-parameter) / parameter, integralInput);
         }
     }
 }

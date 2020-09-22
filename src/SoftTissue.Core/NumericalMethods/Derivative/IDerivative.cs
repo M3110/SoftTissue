@@ -1,11 +1,13 @@
 ﻿using SoftTissue.Core.Models;
-using System.Threading.Tasks;
+using System;
 
 namespace SoftTissue.Core.NumericalMethods.Derivative
 {
     public interface IDerivative
     {
-        Task<double> Calculate<TInput>(IEquation<TInput> equation, TInput input, double time)
+        double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double variable)
             where TInput : ViscoelasticModelInput;
+
+        double Calculate(Func<double, double> Equation, double variable);
     }
 }

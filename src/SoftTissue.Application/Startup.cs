@@ -5,11 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell;
+using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.NumericalMethods.Derivative;
-using SoftTissue.Core.NumericalMethods.DifferentialEquation;
+using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel;
 
 namespace SoftTissue.Application
 {
@@ -38,17 +39,18 @@ namespace SoftTissue.Application
         {
             services.AddScoped<IDerivative, Derivative>();
 
+            // Register Constitutive Equations to Viscoelastic Models
             services.AddScoped<IMaxwellModel, MaxwellModel>();
+            services.AddScoped<IFungModel, FungModel>();
 
             // Register Operations
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
-            services.AddScoped<ICalculateQuasiLinearViscoelasticityStress>(provider =>
-            {
-                var operation = new CalculateQuasiLinearViscoelasticityStress();
+            services.AddScoped<ICalculateFungModelStress, CalculateFungModelStress>();
 
-                return operation;
-            });
+            // Register Numerical Methods
+            services.AddTransient<ISimpsonRuleIntegration, SimpsonRuleIntegration>();
+            services.AddTransient<IDerivative, Derivative>();
 
             services.AddControllers();
 

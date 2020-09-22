@@ -1,5 +1,4 @@
 ﻿using SoftTissue.Core.Models;
-using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.LinearModel
 {
@@ -13,20 +12,13 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<double> CalculateReducedRelaxationFunction(LinearViscoelasticityModelInput inpu, double timet);
-
-        /// <summary>
-        /// This method calculates the strain for a specific time.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<double> CalculateStrain(LinearViscoelasticityModelInput input, double time);
+        double CalculateReducedRelaxationFunction(LinearViscoelasticityModelInput inpu, double time);
 
         /// <summary>
         /// This method calculates the Creep Compliance J(t) for a specific time.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<double> CalculateCreepCompliance(LinearViscoelasticityModelInput input, double time);
+        double CalculateCreepCompliance(LinearViscoelasticityModelInput input, double time);
     }
 }
