@@ -5,7 +5,7 @@
     /// </summary>
     public class OperationRequestBase
     {
-        public double InitialTime => 0;
+        public double InitialTime { get; set; }
 
         public double TimeStep { get; set; }
         

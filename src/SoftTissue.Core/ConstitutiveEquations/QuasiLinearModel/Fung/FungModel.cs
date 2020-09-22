@@ -7,7 +7,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
     public class FungModel : QuasiLinearViscoelasticityModel, IFungModel
     {
-        private readonly double _precision = 1e-10;
         private readonly ISimpsonRuleIntegration _simpsonRuleIntegration;
         private readonly IDerivative _derivative;
 
@@ -35,14 +34,14 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 
         public override double CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time)
         {
-            if (time == 0)
+            if (time <= Constants.Precision)
             {
                 return 1;
             }
 
             if (time <= 1)
             {
-                return (1 - input.RelaxationIndex * Constants.EulerMascheroniConstant - input.RelaxationIndex * Math.Log(time, input.SlowRelaxationTime)) / (1 + input.RelaxationIndex * Math.Log(input.SlowRelaxationTime / input.FastRelaxationTime));
+                return (1 - input.RelaxationIndex * Constants.EulerMascheroniConstant - input.RelaxationIndex * Math.Log(time / input.SlowRelaxationTime)) / (1 + input.RelaxationIndex * Math.Log(input.SlowRelaxationTime / input.FastRelaxationTime));
             }
 
             return (1 + input.RelaxationIndex * (this.CalculateE1(input, time / input.SlowRelaxationTime) - this.CalculateE1(input, time / input.FastRelaxationTime))) / (1 + input.RelaxationIndex * Math.Log(input.SlowRelaxationTime / input.FastRelaxationTime));
@@ -90,7 +89,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             var integralInput = new IntegralInput
             {
                 InitialPoint = variable,
-                Precision = this._precision,
+                Precision = Constants.Precision,
                 Step = input.TimeStep
             };
 

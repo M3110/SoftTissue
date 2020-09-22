@@ -1,5 +1,11 @@
 Anotações - IC Viscoelasticidade
 
+A equação 34 do livro do Fung não é aplicável para tempos menores que 1 segundo. 
+- Para esses tempos é melhor usar a equação 37.
+- As equações são encontradas no capítulo 7.
+- OBS: Foi feito uma comparação para essas equações usando os parâmetros fornecidos pela Stephanie na planilha
+com os valores para aproximação numérica. 
+
 A equação E1 não vale a pena usar série, os valores deram muito distantes do real.
 
 A deformação se mantém constante no experimento ou o alongamento?

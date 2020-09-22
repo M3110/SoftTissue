@@ -68,7 +68,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                 string solutionFileName = $"SolutionFile_{i}.csv";
                 string inputDataFileName = $"InputDataFile_{i}.csv";
                 i++;
-
+                
                 using (StreamWriter streamWriter = new StreamWriter(inputDataFileName))
                 {
                     streamWriter.WriteLine($"Initial Time: {request.InitialTime} s");
