@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{458B5AE9-25EC-4844-AB1B-6819297736F1}"
+	ProjectSection(SolutionItems) = preProject
+		..\etc\CHANGELOG.md = ..\etc\CHANGELOG.md
+		..\etc\Notes.txt = ..\etc\Notes.txt
+		..\etc\README.md = ..\etc\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Application", "src\SoftTissue.Application\SoftTissue.Application.csproj", "{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Core", "src\SoftTissue.Core\SoftTissue.Core.csproj", "{60784354-AC13-4790-9F6F-45DAD94D4646}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.DataContract", "src\SoftTissue.DataContract\SoftTissue.DataContract.csproj", "{76BF62CE-C20E-468D-A231-459FEE227BE5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60784354-AC13-4790-9F6F-45DAD94D4646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60784354-AC13-4790-9F6F-45DAD94D4646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60784354-AC13-4790-9F6F-45DAD94D4646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60784354-AC13-4790-9F6F-45DAD94D4646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76BF62CE-C20E-468D-A231-459FEE227BE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76BF62CE-C20E-468D-A231-459FEE227BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76BF62CE-C20E-468D-A231-459FEE227BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76BF62CE-C20E-468D-A231-459FEE227BE5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
+		{60784354-AC13-4790-9F6F-45DAD94D4646} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
+		{76BF62CE-C20E-468D-A231-459FEE227BE5} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B473ED5-B2A2-4F4D-B6E5-50E19C4C88DA}
+	EndGlobalSection
+EndGlobal

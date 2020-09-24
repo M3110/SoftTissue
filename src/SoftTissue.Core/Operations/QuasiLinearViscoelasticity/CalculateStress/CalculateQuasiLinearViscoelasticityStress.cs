@@ -1,94 +1,92 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel;
 using SoftTissue.Core.Models;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 {
-    public abstract class CalculateQuasiLinearViscoelasticityStress : OperationBase<CalculateQuasiLinearViscoelasticityStressRequest, CalculateQuasiLinearViscoelasticityStressResponse, CalculateQuasiLinearViscoelasticityStressResponseData>, ICalculateQuasiLinearViscoelasticityStress
+    public abstract class CalculateQuasiLinearViscoelasticityStress : OperationBase<CalculateFungModelStressRequest, CalculateFungModelStressResponse, CalculateFungModelStressResponseData>, ICalculateQuasiLinearViscoelasticityStress
     {
         private readonly IQuasiLinearViscoelasticityModel _viscoelasticModel;
 
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        /// <param name="viscoelasticModel"></param>
         public CalculateQuasiLinearViscoelasticityStress(IQuasiLinearViscoelasticityModel viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
         }
 
-        private IEnumerable<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateQuasiLinearViscoelasticityStressRequest request)
+        public abstract string CreateSolutionFile(QuasiLinearViscoelasticityModelInput input);
+
+        public abstract string CreateInputDataFile(QuasiLinearViscoelasticityModelInput input);
+
+        public virtual string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
+
+        public virtual void WriteInputDataInFile(QuasiLinearViscoelasticityModelInput input, StreamWriter streamWriter)
+        {
+            streamWriter.WriteLine($"Initial Time: {input.InitialTime} s");
+            streamWriter.WriteLine($"Time Step: {input.TimeStep} s");
+            streamWriter.WriteLine($"Final Time: {input.FinalTime} s");
+            streamWriter.WriteLine($"Elastic Stress Constant (A): {input.ElasticStressConstant} MPa");
+            streamWriter.WriteLine($"Elastic Power Constant (B): {input.ElasticPowerConstant}");
+            streamWriter.WriteLine($"Relaxation Index (C): {input.RelaxationIndex}");
+            streamWriter.WriteLine($"Fast Relaxation Time (Tau1): {input.FastRelaxationTime} s");
+            streamWriter.WriteLine($"Slow Relaxation Time (Tau2): {input.SlowRelaxationTime} s");
+            streamWriter.WriteLine($"Strain Rate: {input.StrainRate} /s");
+            streamWriter.WriteLine($"Maximum Strain: {input.MaximumStrain}");
+        }
+
+        public IEnumerable<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateFungModelStressRequest request)
         {
             var inputList = new List<QuasiLinearViscoelasticityModelInput>();
 
-            foreach (double strainRate in request.StrainRateList)
+            foreach (var requestData in request.RequestDataList)
             {
-                foreach (double maximumStrain in request.MaximumStrainList)
+                inputList.Add(new QuasiLinearViscoelasticityModelInput
                 {
-                    foreach (double elasticStressConstant in request.ElasticStressConstantList)
-                    {
-                        foreach (double elasticPowerConstant in request.ElasticPowerConstantList)
-                        {
-                            foreach (double relaxationIndex in request.RelaxationIndexList)
-                            {
-                                foreach (double fastRelaxationTime in request.FastRelaxationTimeList)
-                                {
-                                    foreach (double slowRelaxationTime in request.SlowRelaxationTimeList)
-                                    {
-                                        inputList.Add(new QuasiLinearViscoelasticityModelInput
-                                        {
-                                            StrainRate = strainRate,
-                                            MaximumStrain = maximumStrain,
-                                            ElasticStressConstant = elasticStressConstant,
-                                            ElasticPowerConstant = elasticPowerConstant,
-                                            RelaxationIndex = relaxationIndex,
-                                            FastRelaxationTime = fastRelaxationTime,
-                                            SlowRelaxationTime = slowRelaxationTime,
-                                            TimeStep = request.TimeStep
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                    ElasticStressConstant = requestData.ElasticStressConstant,
+                    ElasticPowerConstant = requestData.ElasticPowerConstant,
+                    RelaxationIndex = requestData.RelaxationIndex,
+                    FastRelaxationTime = requestData.FastRelaxationTime,
+                    SlowRelaxationTime = requestData.SlowRelaxationTime,
+                    MaximumStrain = requestData.MaximumStrain,
+                    StrainRate = requestData.StrainRate,
+                    FinalTime = requestData.FinalTime,
+                    TimeStep = requestData.TimeStep,
+                    InitialTime = requestData.InitialTime
+                });
             }
 
             return inputList;
         }
 
-        protected override Task<CalculateQuasiLinearViscoelasticityStressResponse> ProcessOperation(CalculateQuasiLinearViscoelasticityStressRequest request)
+        protected override Task<CalculateFungModelStressResponse> ProcessOperation(CalculateFungModelStressRequest request)
         {
-            var response = new CalculateQuasiLinearViscoelasticityStressResponse { Data = new CalculateQuasiLinearViscoelasticityStressResponseData() };
+            var response = new CalculateFungModelStressResponse { Data = new CalculateFungModelStressResponseData() };
+            response.SetSuccessCreated();
 
             IEnumerable<QuasiLinearViscoelasticityModelInput> inputList = this.BuildInputList(request);
 
-            int i = 0;
-            foreach (var input in inputList)
+            foreach(var input in inputList)
             {
-                string solutionFileName = $"SolutionFile_{i}.csv";
-                string inputDataFileName = $"InputDataFile_{i}.csv";
-                i++;
-                
+                string solutionFileName = this.CreateSolutionFile(input);
+                string inputDataFileName = this.CreateInputDataFile(input);
+
                 using (StreamWriter streamWriter = new StreamWriter(inputDataFileName))
                 {
-                    streamWriter.WriteLine($"Initial Time: {request.InitialTime} s");
-                    streamWriter.WriteLine($"Time Step: {request.TimeStep} s");
-                    streamWriter.WriteLine($"Final Time: {request.FinalTime} s");
-                    streamWriter.WriteLine($"Elastic Stress Constant (A): {input.ElasticStressConstant}");
-                    streamWriter.WriteLine($"Elastic Power Constant (B): {input.ElasticPowerConstant}");
-                    streamWriter.WriteLine($"Relaxation Index (C): {input.RelaxationIndex}");
-                    streamWriter.WriteLine($"Fast Relaxation Time (Tau1): {input.FastRelaxationTime} s");
-                    streamWriter.WriteLine($"Slow Relaxation Time (Tau2): {input.SlowRelaxationTime} s");
-                    streamWriter.WriteLine($"Strain Rate: {input.StrainRate}");
-                    streamWriter.WriteLine($"Maximum Strain: {input.MaximumStrain}");
+                    this.WriteInputDataInFile(input, streamWriter);
                 }
 
-                double time = request.InitialTime;
+                double time = input.InitialTime;
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
-                    streamWriter.WriteLine("Time;Strain;Reduced Relaxation Function;Elastic Response;Stress");
+                    streamWriter.WriteLine(this.SolutionFileHeader);
 
-                    while (time <= request.FinalTime)
+                    while (time <= input.FinalTime)
                     {
                         double strain = this._viscoelasticModel.CalculateStrain(input, time);
                         double reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
@@ -97,7 +95,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 
                         streamWriter.WriteLine($"{time};{strain};{reducedRelaxationFunction};{elasticResponse};{stress}");
 
-                        time += request.TimeStep;
+                        time += input.TimeStep;
                     }
                 }
             }
@@ -105,7 +103,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             return Task.FromResult(response);
         }
 
-        protected override Task<CalculateQuasiLinearViscoelasticityStressResponse> ValidateOperation(CalculateQuasiLinearViscoelasticityStressRequest request)
+        protected override Task<CalculateFungModelStressResponse> ValidateOperation(CalculateFungModelStressRequest request)
         {
             return base.ValidateOperation(request);
         }

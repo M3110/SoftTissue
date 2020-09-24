@@ -5,5 +5,10 @@
     /// </summary>
     public class ViscoelasticModelInput
     {
+        public double InitialTime { get; set; }
+
+        public double TimeStep { get; set; }
+
+        public double FinalTime { get; set; }
     }
 }

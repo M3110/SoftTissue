@@ -1,15 +1,10 @@
-﻿using SoftTissue.DataContract.Models;
-using System.Collections.Generic;
-
-namespace SoftTissue.Core.Models
+﻿namespace SoftTissue.Core.Models
 {
     public class QuasiLinearViscoelasticityModelInput : ViscoelasticModelInput
     {
         public double StrainRate { get; set; }
 
         public double MaximumStrain { get; set; }
-
-        //public double StrainFinalTime { get; set; }
 
         /// <summary>
         /// Constant A.
@@ -36,8 +31,8 @@ namespace SoftTissue.Core.Models
         /// </summary>
         public double SlowRelaxationTime { get; set; }
 
-        public double TimeStep { get; set; }
+        //public double StrainFinalTime { get; set; }
 
-        public List<RelaxationFunctionSimplifiedInput> RelaxationFunctionSimplifiedInputList { get; set; }
+        //public List<RelaxationFunctionSimplifiedInput> RelaxationFunctionSimplifiedInputList { get; set; }
     }
 }

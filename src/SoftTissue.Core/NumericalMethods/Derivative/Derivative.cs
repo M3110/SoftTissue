@@ -10,38 +10,38 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
         public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double variable)
             where TInput : ViscoelasticModelInput
         {
-            double stepTime;
-            if (variable == 0)
-            {
-                stepTime = Math.Sqrt(Epsilon);
-            }
-            else
-            {
-                stepTime = Math.Sqrt(Epsilon) * variable;
-            }
+            //double stepTime;
+            //if (variable == 0)
+            //{
+            //    stepTime = Math.Sqrt(Epsilon);
+            //}
+            //else
+            //{
+            //    stepTime = Math.Sqrt(Epsilon) * variable;
+            //}
 
             double actualValue = Equation(input, variable);
-            double nextValue = Equation(input, variable + stepTime);
+            double nextValue = Equation(input, variable + input.TimeStep);
 
-            return (nextValue - actualValue) / stepTime;
+            return (nextValue - actualValue) / input.TimeStep;
         }
 
-        public double Calculate(Func<double, double> Equation, double variable)
+        public double Calculate(Func<double, double> Equation, double step, double variable)
         {
-            double stepTime;
-            if (variable == 0)
-            {
-                stepTime = Math.Sqrt(Epsilon);
-            }
-            else
-            {
-                stepTime = Math.Sqrt(Epsilon) * variable;
-            }
+            //double stepTime;
+            //if (variable == 0)
+            //{
+            //    stepTime = Math.Sqrt(Epsilon);
+            //}
+            //else
+            //{
+            //    stepTime = Math.Sqrt(Epsilon) * variable;
+            //}
 
             double actualValue = Equation(variable);
-            double nextValue = Equation(variable + stepTime);
+            double nextValue = Equation(variable + step);
 
-            return (nextValue - actualValue) / stepTime;
+            return (nextValue - actualValue) / step;
         }
     }
 }

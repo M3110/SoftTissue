@@ -8,6 +8,6 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
         double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double variable)
             where TInput : ViscoelasticModelInput;
 
-        double Calculate(Func<double, double> Equation, double variable);
+        double Calculate(Func<double, double> Equation, double step, double variable);
     }
 }
