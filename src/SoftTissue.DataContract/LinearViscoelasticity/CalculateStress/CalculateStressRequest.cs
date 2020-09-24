@@ -7,10 +7,6 @@ namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
     /// </summary>
     public class CalculateStressRequest : OperationRequestBase
     {
-        public List<double> StiffnessList { get; set; }
-
-        public List<double> InitialStrainList { get; set; }
-
-        public List<double> ViscosityList { get; set; }
+        public List<CalculateStressRequestData> RequestDataList { get; set; }
     }
 }

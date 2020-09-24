@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel
 {
-    public class CalculateQuasiLinearViscoelasticityStressRequest : OperationRequestBase
+    public class CalculateQuasiLinearViscoelasticityStressRequestCopy : OperationRequestBase
     {
-        /// <summary>
-        /// A list with the experiment strain ratio.
-        /// </summary>
         public IEnumerable<double> StrainRateList { get; set; }
 
         public IEnumerable<double> MaximumStrainList { get; set; }
@@ -18,7 +15,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
         public IEnumerable<double> RelaxationIndexList { get; set; }
 
         public IEnumerable<double> FastRelaxationTimeList { get; set; }
-        
+
         public IEnumerable<double> SlowRelaxationTimeList { get; set; }
     }
 }
