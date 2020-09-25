@@ -31,6 +31,8 @@
         /// </summary>
         public double SlowRelaxationTime { get; set; }
 
+        public string AnalysisType { get; set; }
+
         //public double StrainFinalTime { get; set; }
 
         //public List<RelaxationFunctionSimplifiedInput> RelaxationFunctionSimplifiedInputList { get; set; }

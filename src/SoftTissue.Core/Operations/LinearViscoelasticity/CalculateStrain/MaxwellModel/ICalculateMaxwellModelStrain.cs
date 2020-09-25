@@ -1,4 +1,7 @@
 ﻿namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel
 {
-    public interface ICalculateMaxwellModelStrain : ICalculateStrain { }
+    /// <summary>
+    /// It is responsible to calculate the stress to Maxwell model.
+    /// </summary>
+    public interface ICalculateMaxwellModelStrain : ICalculateLinearViscosityStrain { }
 }

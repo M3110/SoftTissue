@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 {
+    /// <summary>
+    /// It is responsible to calculate the stress to a quasi-linear viscoelastic model.
+    /// </summary>
     public abstract class CalculateQuasiLinearViscoelasticityStress : OperationBase<CalculateFungModelStressRequest, CalculateFungModelStressResponse, CalculateFungModelStressResponseData>, ICalculateQuasiLinearViscoelasticityStress
     {
         private readonly IQuasiLinearViscoelasticityModel _viscoelasticModel;
@@ -20,16 +23,35 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             this._viscoelasticModel = viscoelasticModel;
         }
 
+        /// <summary>
+        /// This method creates the path to save the solution on a file.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public abstract string CreateSolutionFile(QuasiLinearViscoelasticityModelInput input);
 
+        /// <summary>
+        /// This method creates the path to save the input data on a file.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public abstract string CreateInputDataFile(QuasiLinearViscoelasticityModelInput input);
 
+        /// <summary>
+        /// The header to solution file.
+        /// </summary>
         public virtual string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
 
+        /// <summary>
+        /// This method writes the input data into a file.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="streamWriter"></param>
         public virtual void WriteInputDataInFile(QuasiLinearViscoelasticityModelInput input, StreamWriter streamWriter)
         {
+            streamWriter.WriteLine($"Analysis type: {input.AnalysisType}");
             streamWriter.WriteLine($"Initial Time: {input.InitialTime} s");
-            streamWriter.WriteLine($"Time Step: {input.TimeStep} s");
+            streamWriter.WriteLine($"Time Step: {input.TimeStep} s"); 
             streamWriter.WriteLine($"Final Time: {input.FinalTime} s");
             streamWriter.WriteLine($"Elastic Stress Constant (A): {input.ElasticStressConstant} MPa");
             streamWriter.WriteLine($"Elastic Power Constant (B): {input.ElasticPowerConstant}");
@@ -40,6 +62,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             streamWriter.WriteLine($"Maximum Strain: {input.MaximumStrain}");
         }
 
+        /// <summary>
+        /// This method builds a list with the inputs based on the request.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public IEnumerable<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateFungModelStressRequest request)
         {
             var inputList = new List<QuasiLinearViscoelasticityModelInput>();
@@ -57,13 +84,35 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                     StrainRate = requestData.StrainRate,
                     FinalTime = requestData.FinalTime,
                     TimeStep = requestData.TimeStep,
-                    InitialTime = requestData.InitialTime
+                    InitialTime = requestData.InitialTime,
+                    AnalysisType = requestData.AnalysisType
                 });
             }
 
             return inputList;
         }
 
+        /// <summary>
+        /// This method calculates the results and writes them to a file.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <param name="streamWriter"></param>
+        public virtual void CalculateAndWriteResults(QuasiLinearViscoelasticityModelInput input, double time, StreamWriter streamWriter)
+        {
+            double strain = this._viscoelasticModel.CalculateStrain(input, time);
+            double reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
+            double elasticResponse = this._viscoelasticModel.CalculateElasticResponse(input, time);
+            double stress = this._viscoelasticModel.CalculateStress(input, time);
+
+            streamWriter.WriteLine($"{time};{strain};{reducedRelaxationFunction};{elasticResponse};{stress}");
+        }
+
+        /// <summary>
+        /// This method executes an analysis to calculate the stress for a quasi-linear viscoelasticity model.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected override Task<CalculateFungModelStressResponse> ProcessOperation(CalculateFungModelStressRequest request)
         {
             var response = new CalculateFungModelStressResponse { Data = new CalculateFungModelStressResponseData() };
@@ -88,12 +137,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 
                     while (time <= input.FinalTime)
                     {
-                        double strain = this._viscoelasticModel.CalculateStrain(input, time);
-                        double reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
-                        double elasticResponse = this._viscoelasticModel.CalculateElasticResponse(input, time);
-                        double stress = this._viscoelasticModel.CalculateStress(input, time);
-
-                        streamWriter.WriteLine($"{time};{strain};{reducedRelaxationFunction};{elasticResponse};{stress}");
+                        this.CalculateAndWriteResults(input, time, streamWriter);
 
                         time += input.TimeStep;
                     }
@@ -103,6 +147,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             return Task.FromResult(response);
         }
 
+        /// <summary>
+        /// This method validates the request to be used on process.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected override Task<CalculateFungModelStressResponse> ValidateOperation(CalculateFungModelStressRequest request)
         {
             return base.ValidateOperation(request);
