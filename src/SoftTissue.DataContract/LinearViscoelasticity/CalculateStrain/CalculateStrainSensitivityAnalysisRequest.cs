@@ -2,7 +2,7 @@
 
 namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain.CalculateStrainSensitivityTest
 {
-    public class CalculateStrainSensitivityTestRequest : OperationRequestBase
+    public class CalculateStrainSensitivityAnalysisRequest : OperationRequestBase
     {
         public List<double> StiffnessList { get; set; }
 

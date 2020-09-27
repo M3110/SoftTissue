@@ -5,27 +5,36 @@ using System.IO;
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel
 {
     /// <summary>
-    /// It is responsible to calculate the stress to Fung model.
+    /// It is responsible to do a semsitivity analysis while calculating the stress to Fung model.
     /// </summary>
-    public class CalculateFungModelStress : CalculateQuasiLinearViscoelasticityStress, ICalculateFungModelStress
+    public class CalculateFungModelStressSentivityAnalysis : CalculateQuasiLinearViscoelasticityStress, ICalculateFungModelStressSentivityAnalysis
     {
-        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Quasi-Linear Viscosity/Fung Model/Stress");
-
         private readonly IFungModel _viscoelasticModel;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateFungModelStress(IFungModel viscoelasticModel) : base(viscoelasticModel) 
+        public CalculateFungModelStressSentivityAnalysis(IFungModel viscoelasticModel) : base(viscoelasticModel) 
         {
+            this.LoopIndex = 0;
             this._viscoelasticModel = viscoelasticModel;
         }
+
+        /// <summary>
+        /// The base path to files.
+        /// </summary>
+        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Quasi-Linear Viscosity/Fung Model/Stress/Sensitivity Analysis");
 
         /// <summary>
         /// The header to solution file.
         /// </summary>
         public override string SolutionFileHeader => "Time;Strain;Reduced Relaxation Function;Elastic Response;Stress with derivative;Stress with dG;Stress with dSigma";
+
+        /// <summary>
+        /// The loop index that is used in files names.
+        /// </summary>
+        public int LoopIndex { get; set; }
 
         /// <summary>
         /// This method creates the path to save the input data on a file.
@@ -36,9 +45,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"InputData_{input.AnalysisType}.csv"));
+                $"InputData_{this.LoopIndex}.csv"));
 
-            if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
+            if (fileInfo.Exists == false && fileInfo.Directory.Exists == false)
             {
                 fileInfo.Directory.Create();
             }
@@ -55,12 +64,16 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"Solution_{input.AnalysisType}.csv"));
+                $"Solution_{this.LoopIndex}.csv"));
 
-            if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
+
+            if (fileInfo.Exists == false && fileInfo.Directory.Exists == false)
             {
                 fileInfo.Directory.Create();
             }
+
+            // The loop index is iterated just when creating the solution file to keep the same index with the input data file.
+            this.LoopIndex++;
 
             return fileInfo.FullName;
         }

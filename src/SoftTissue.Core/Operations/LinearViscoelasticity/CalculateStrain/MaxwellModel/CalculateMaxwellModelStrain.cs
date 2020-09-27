@@ -9,13 +9,16 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
     /// </summary>
     public class CalculateMaxwellModelStrain : CalculateLinearViscosityStrain, ICalculateMaxwellModelStrain
     {
-        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Linear Viscosity/Maxwell Model/Strain");
-
         /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
         public CalculateMaxwellModelStrain(IMaxwellModel viscoelasticModel) : base(viscoelasticModel) { }
+
+        /// <summary>
+        /// The base path to files.
+        /// </summary>
+        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Linear Viscosity/Maxwell Model/Strain");
 
         /// <summary>
         /// This method creates the path to save the input data on a file.
@@ -26,9 +29,9 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"InputData_k={input.Stiffness}_v={input.Viscosity}_tau={input.RelaxationTime}_Sigma0={input.InitialStress}.csv"));
+                $"InputData_{input.AnalysisType}.csv"));
 
-            if (fileInfo.Exists && !fileInfo.Directory.Exists)
+            if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
             {
                 fileInfo.Directory.Create();
             }
@@ -45,9 +48,9 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"Solution_k={input.Stiffness}_v={input.Viscosity}_tau={input.RelaxationTime}_Sigma0={input.InitialStress}.csv"));
+                $"Solution_{input.AnalysisType}.csv"));
 
-            if (fileInfo.Exists && !fileInfo.Directory.Exists)
+            if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
             {
                 fileInfo.Directory.Create();
             }

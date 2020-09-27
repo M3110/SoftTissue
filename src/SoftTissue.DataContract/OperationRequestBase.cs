@@ -5,10 +5,10 @@
     /// </summary>
     public class OperationRequestBase
     {
-        public double InitialTime { get; set; }
+        public double? InitialTime { get; set; }
 
-        public double TimeStep { get; set; }
+        public double? TimeStep { get; set; }
         
-        public double FinalTime { get; set; }
+        public double? FinalTime { get; set; }
     }
 }

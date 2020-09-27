@@ -2,8 +2,10 @@
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel
 {
-    public class CalculateQuasiLinearViscoelasticityStressRequestCopy : OperationRequestBase
+    public class CalculateFungModelStressSensitivityAnalysisRequest : OperationRequestBase
     {
+        public bool UseSimplifiedReducedRelaxationFunction { get; set; }
+
         public IEnumerable<double> StrainRateList { get; set; }
 
         public IEnumerable<double> MaximumStrainList { get; set; }

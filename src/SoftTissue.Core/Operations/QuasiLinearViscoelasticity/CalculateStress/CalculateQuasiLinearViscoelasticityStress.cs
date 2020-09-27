@@ -67,7 +67,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public IEnumerable<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateFungModelStressRequest request)
+        public virtual IEnumerable<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateFungModelStressRequest request)
         {
             var inputList = new List<QuasiLinearViscoelasticityModelInput>();
 
@@ -82,9 +82,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                     SlowRelaxationTime = requestData.SlowRelaxationTime,
                     MaximumStrain = requestData.MaximumStrain,
                     StrainRate = requestData.StrainRate,
-                    FinalTime = requestData.FinalTime,
-                    TimeStep = requestData.TimeStep,
-                    InitialTime = requestData.InitialTime,
+                    FinalTime = request.FinalTime ?? requestData.FinalTime,
+                    TimeStep = request.TimeStep ?? requestData.TimeStep,
+                    InitialTime = request.InitialTime ?? requestData.InitialTime,
                     AnalysisType = requestData.AnalysisType
                 });
             }

@@ -20,7 +20,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("calculate-stress/fung-model")]
         public async Task<ActionResult<CalculateFungModelStressResponse>> CalculateStress(
             [FromServices] ICalculateFungModelStress calculateFungModelStress,
-            [FromQuery] CalculateFungModelStressRequest request)
+            [FromBody] CalculateFungModelStressRequest request)
         {
             CalculateFungModelStressResponse response = await calculateFungModelStress.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

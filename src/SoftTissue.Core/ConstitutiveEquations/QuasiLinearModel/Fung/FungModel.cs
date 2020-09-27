@@ -37,6 +37,18 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             return input.ElasticStressConstant * input.ElasticPowerConstant * strainDerivative * Math.Exp(input.ElasticPowerConstant * strain);
         }
 
+        public override double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time)
+        {
+            double result = 0;
+
+            foreach (var simplifiedInput in input.RelaxationFunctionSimplifiedInputList)
+            {
+                result += simplifiedInput.VariableE * Math.Exp(-time / simplifiedInput.RelaxationTime);
+            }
+
+            return result;
+        }
+
         public override double CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time)
         {
             if (time <= Constants.Precision)
@@ -62,19 +74,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             };
 
             return this._simpsonRuleIntegration.Calculate((parameter) => Math.Exp(-parameter) / parameter, integralInput);
-        }
-
-        // TODO: Revisar equação e parâmetros de entrada.
-        public override double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time)
-        {
-            double result = 0;
-
-            //foreach (var simplifiedInput in input.RelaxationFunctionSimplifiedInputList)
-            //{
-            //    result += simplifiedInput.VariableC * Math.Exp(-simplifiedInput.RelaxationTime / time);
-            //}
-
-            return result;
         }
 
         public override double CalculateStress(QuasiLinearViscoelasticityModelInput input, double time)

@@ -50,12 +50,13 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
             {
                 inputs.Add(new LinearViscoelasticityModelInput
                 {
-                    FinalTime = requestData.FinalTime,
-                    TimeStep = requestData.TimeStep,
-                    InitialTime = requestData.InitialTime,
+                    FinalTime = request.FinalTime ?? requestData.FinalTime,
+                    TimeStep = request.TimeStep ?? requestData.TimeStep,
+                    InitialTime = request.InitialTime ?? requestData.InitialTime,
                     InitialStrain = requestData.InitialStrain,
                     Stiffness = requestData.Stiffness,
-                    Viscosity = requestData.Viscosity
+                    Viscosity = requestData.Viscosity,
+                    AnalysisType = requestData.AnalysisType
                 });
             }
 
@@ -90,19 +91,19 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
                     streamWriter.WriteLine($"Relaxation Time: {input.RelaxationTime} s");
                 }
 
-                double time = request.InitialTime;
+                double time = input.InitialTime;
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
                     streamWriter.WriteLine("Time;Relaxation Function;Stress");
 
-                    while (time - request.FinalTime <= 1e-3)
+                    while (time - input.FinalTime <= 1e-3)
                     {
                         double relaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
                         double stress = this._viscoelasticModel.CalculateStress(input, time);
 
                         streamWriter.WriteLine($"{time};{relaxationFunction};{stress}");
 
-                        time += request.TimeStep;
+                        time += input.TimeStep;
                     }
                 }
             }

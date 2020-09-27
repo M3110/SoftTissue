@@ -2,23 +2,31 @@
 using SoftTissue.Core.Models;
 using System.IO;
 
-namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel
+namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel
 {
     /// <summary>
-    /// It is responsible to calculate the stress to Maxwell model.
+    /// It is responsible to do a semsitivity analysis while calculating the strain to Maxwell model.
     /// </summary>
-    public class CalculateMaxwellModelStress : CalculateLinearViscosityStress, ICalculateMaxwellModelStress
+    public class CalculateMaxwellModelStrainSensitivityAnalysis : CalculateLinearViscosityStrain, ICalculateMaxwellModelStrainSensitivityAnalysis
     {
         /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateMaxwellModelStress(IMaxwellModel viscoelasticModel) : base(viscoelasticModel) { }
+        public CalculateMaxwellModelStrainSensitivityAnalysis(IMaxwellModel viscoelasticModel) : base(viscoelasticModel) 
+        {
+            this.LoopIndex = 0;
+        }
 
         /// <summary>
         /// The base path to files.
         /// </summary>
-        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Linear Viscosity/Maxwell Model/Stress");
+        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Linear Viscosity/Maxwell Model/Strain/Sensitivity Analysis");
+
+        /// <summary>
+        /// The loop index that is used in files names.
+        /// </summary>
+        public int LoopIndex { get; set; }
 
         /// <summary>
         /// This method creates the path to save the input data on a file.
@@ -29,7 +37,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.Maxwe
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"InputData_k={input.Stiffness}_v={input.Viscosity}_tau={input.RelaxationTime}_E0={input.InitialStrain}.csv"));
+                $"InputData_{this.LoopIndex}.csv"));
 
             if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
             {
@@ -48,12 +56,14 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.Maxwe
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"Solution_k={input.Stiffness}_v={input.Viscosity}_tau={input.RelaxationTime}_E0={input.InitialStrain}.csv"));
+                $"Solution_{this.LoopIndex}.csv"));
 
             if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
             {
                 fileInfo.Directory.Create();
             }
+
+            this.LoopIndex++;
 
             return fileInfo.FullName;
         }

@@ -2,6 +2,8 @@
 {
     public class OperationRequestData
     {
+        public string AnalysisType { get; set; }
+
         public double InitialTime { get; set; }
 
         public double TimeStep { get; set; }

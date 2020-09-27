@@ -30,7 +30,5 @@
         /// Tau 2.
         /// </summary>
         public double SlowRelaxationTime { get; set; }
-
-        public string AnalysisType { get; set; }
     }
 }

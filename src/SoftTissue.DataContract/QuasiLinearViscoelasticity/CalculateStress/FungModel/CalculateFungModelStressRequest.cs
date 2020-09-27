@@ -4,6 +4,8 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
 {
     public class CalculateFungModelStressRequest : OperationRequestBase
     {
+        public bool UseSimplifiedReducedRelaxationFunction { get; set; }
+
         public IEnumerable<CalculateFungModelStressRequestData> RequestDataList { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SoftTissue.Core.Models
 {
-    public class QuasiLinearViscoelasticityModelInput : ViscoelasticModelInput
+    public class QuasiLinearViscoelasticityModelSimplifiedGInput : ViscoelasticModelInput
     {
         public double StrainRate { get; set; }
 
@@ -18,11 +18,6 @@ namespace SoftTissue.Core.Models
         /// Constant B.
         /// </summary>
         public double ElasticPowerConstant { get; set; }
-        
-        /// <summary>
-        /// Constant C.
-        /// </summary>
-        public double RelaxationIndex { get; set; }
 
         /// <summary>
         /// Tau 1.

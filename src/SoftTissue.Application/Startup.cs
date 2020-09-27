@@ -45,8 +45,11 @@ namespace SoftTissue.Application
 
             // Register Operations
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
+            services.AddScoped<ICalculateMaxwellModelStrainSensitivityAnalysis, CalculateMaxwellModelStrainSensitivityAnalysis>();
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
+            services.AddScoped<ICalculateMaxwellModelStressSensitivityAnalysis, CalculateMaxwellModelStressSensitivityAnalysis>();
             services.AddScoped<ICalculateFungModelStress, CalculateFungModelStress>();
+            services.AddScoped<ICalculateFungModelStressSentivityAnalysis, CalculateFungModelStressSentivityAnalysis>();
 
             // Register Numerical Methods
             services.AddTransient<ISimpsonRuleIntegration, SimpsonRuleIntegration>();
