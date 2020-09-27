@@ -1,5 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
 using SoftTissue.Core.Models;
+using SoftTissue.DataContract;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
 using System.Collections.Generic;
 using System.IO;
@@ -10,9 +11,15 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStress : OperationBase<CalculateStressRequest, CalculateStressResponse, CalculateStressResponseData>, ICalculateLinearViscosityStress
+    public abstract class CalculateLinearViscosityStress<TRequest> : OperationBase<TRequest, CalculateStressResponse, CalculateStressResponseData>, ICalculateLinearViscosityStress<TRequest>
+        where TRequest : OperationRequestBase
     {
         private readonly ILinearViscoelasticityModel _viscoelasticModel;
+
+        /// <summary>
+        /// The header to solution file.
+        /// </summary>
+        public virtual string SolutionFileHeader => "Time;Relaxation Function;Stress";
 
         /// <summary>
         /// Class constructor.
@@ -42,38 +49,19 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Task<List<LinearViscoelasticityModelInput>> BuildInputList(CalculateStressRequest request)
-        {
-            var inputs = new List<LinearViscoelasticityModelInput>();
-
-            foreach(var requestData in request.RequestDataList)
-            {
-                inputs.Add(new LinearViscoelasticityModelInput
-                {
-                    FinalTime = request.FinalTime ?? requestData.FinalTime,
-                    TimeStep = request.TimeStep ?? requestData.TimeStep,
-                    InitialTime = request.InitialTime ?? requestData.InitialTime,
-                    InitialStrain = requestData.InitialStrain,
-                    Stiffness = requestData.Stiffness,
-                    Viscosity = requestData.Viscosity,
-                    AnalysisType = requestData.AnalysisType
-                });
-            }
-
-            return Task.FromResult(inputs);
-        }
+        public abstract List<LinearViscoelasticityModelInput> BuildInputList(TRequest request);
 
         /// <summary>
         /// This method executes an analysis to calculate the stress for a linear viscoelasticity model.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override async Task<CalculateStressResponse> ProcessOperation(CalculateStressRequest request)
+        protected override Task<CalculateStressResponse> ProcessOperation(TRequest request)
         {
             var response = new CalculateStressResponse { Data = new CalculateStressResponseData() };
             response.SetSuccessCreated();
 
-            List<LinearViscoelasticityModelInput> inputs = await BuildInputList(request).ConfigureAwait(false);
+            List<LinearViscoelasticityModelInput> inputs = this.BuildInputList(request);
 
             foreach (var input in inputs)
             {
@@ -94,7 +82,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
                 double time = input.InitialTime;
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
-                    streamWriter.WriteLine("Time;Relaxation Function;Stress");
+                    streamWriter.WriteLine(SolutionFileHeader);
 
                     while (time - input.FinalTime <= 1e-3)
                     {
@@ -108,7 +96,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
                 }
             }
 
-            return response;
+            return Task.FromResult(response);
         }
     }
 }

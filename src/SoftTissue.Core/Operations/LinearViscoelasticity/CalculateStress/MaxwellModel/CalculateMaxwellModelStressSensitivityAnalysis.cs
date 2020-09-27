@@ -1,5 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell;
 using SoftTissue.Core.Models;
+using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel
@@ -7,7 +9,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.Maxwe
     /// <summary>
     /// It is responsible to do a semsitivity analysis while calculating the stress to Maxwell model.
     /// </summary>
-    public class CalculateMaxwellModelStressSensitivityAnalysis : CalculateLinearViscosityStress, ICalculateMaxwellModelStressSensitivityAnalysis
+    public class CalculateMaxwellModelStressSensitivityAnalysis : CalculateLinearViscosityStress<CalculateStressSensitivityAnalysisRequest>, ICalculateMaxwellModelStressSensitivityAnalysis
     {
         /// <summary>
         /// Class constructor.
@@ -27,6 +29,37 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.Maxwe
         /// The loop index that is used in files names.
         /// </summary>
         public int LoopIndex { get; set; }
+
+        /// <summary>
+        /// This method builds a list with the inputs based on the request.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public override List<LinearViscoelasticityModelInput> BuildInputList(CalculateStressSensitivityAnalysisRequest request)
+        {
+            var inputList = new List<LinearViscoelasticityModelInput>();
+
+            foreach (var initialStrain in request.InitialStrainList)
+            {
+                foreach (var stiffness in request.StiffnessList)
+                {
+                    foreach (var viscosity in request.ViscosityList)
+                    {
+                        inputList.Add(new LinearViscoelasticityModelInput
+                        {
+                            FinalTime = request.FinalTime.Value,
+                            TimeStep = request.TimeStep.Value,
+                            InitialTime = request.InitialTime.Value,
+                            InitialStrain = initialStrain,
+                            Stiffness = stiffness,
+                            Viscosity = viscosity
+                        });
+                    }
+                }
+            }
+
+            return inputList;
+        }
 
         /// <summary>
         /// This method creates the path to save the input data on a file.

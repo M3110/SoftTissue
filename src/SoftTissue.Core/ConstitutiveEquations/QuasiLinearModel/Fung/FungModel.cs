@@ -37,7 +37,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             return input.ElasticStressConstant * input.ElasticPowerConstant * strainDerivative * Math.Exp(input.ElasticPowerConstant * strain);
         }
 
-        public override double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time)
+        public override double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelSimplifiedGInput input, double time)
         {
             double result = 0;
 

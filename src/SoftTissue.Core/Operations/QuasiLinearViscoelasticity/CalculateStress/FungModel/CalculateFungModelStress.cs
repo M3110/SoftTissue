@@ -1,5 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.Models;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel
@@ -7,10 +9,8 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// <summary>
     /// It is responsible to calculate the stress to Fung model.
     /// </summary>
-    public class CalculateFungModelStress : CalculateQuasiLinearViscoelasticityStress, ICalculateFungModelStress
+    public class CalculateFungModelStress : CalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressRequest>, ICalculateFungModelStress
     {
-        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Quasi-Linear Viscosity/Fung Model/Stress");
-
         private readonly IFungModel _viscoelasticModel;
 
         /// <summary>
@@ -23,9 +23,45 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         }
 
         /// <summary>
+        /// The base path.
+        /// </summary>
+        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Quasi-Linear Viscosity/Fung Model/Stress");
+
+        /// <summary>
         /// The header to solution file.
         /// </summary>
         public override string SolutionFileHeader => "Time;Strain;Reduced Relaxation Function;Elastic Response;Stress with derivative;Stress with dG;Stress with dSigma";
+
+
+        /// <summary>
+        /// This method builds a list with the inputs based on the request.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public override List<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateFungModelStressRequest request)
+        {
+            var inputList = new List<QuasiLinearViscoelasticityModelInput>();
+
+            foreach (var requestData in request.RequestDataList)
+            {
+                inputList.Add(new QuasiLinearViscoelasticityModelInput
+                {
+                    ElasticStressConstant = requestData.ElasticStressConstant,
+                    ElasticPowerConstant = requestData.ElasticPowerConstant,
+                    RelaxationIndex = requestData.RelaxationIndex,
+                    FastRelaxationTime = requestData.FastRelaxationTime,
+                    SlowRelaxationTime = requestData.SlowRelaxationTime,
+                    MaximumStrain = requestData.MaximumStrain,
+                    StrainRate = requestData.StrainRate,
+                    FinalTime = request.FinalTime ?? requestData.FinalTime,
+                    TimeStep = request.TimeStep ?? requestData.TimeStep,
+                    InitialTime = request.InitialTime ?? requestData.InitialTime,
+                    AnalysisType = requestData.AnalysisType
+                });
+            }
+
+            return inputList;
+        }
 
         /// <summary>
         /// This method creates the path to save the input data on a file.

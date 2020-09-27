@@ -35,7 +35,5 @@ namespace SoftTissue.Core.Models
         public double SlowRelaxationTime { get; set; }
 
         //public double StrainFinalTime { get; set; }
-
-        public List<RelaxationFunctionSimplifiedInput> RelaxationFunctionSimplifiedInputList { get; set; }
     }
 }

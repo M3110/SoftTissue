@@ -1,5 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel;
 using SoftTissue.Core.Models;
+using SoftTissue.DataContract;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
 using System.Collections.Generic;
 using System.IO;
@@ -10,10 +11,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to calculate the stress to a quasi-linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateQuasiLinearViscoelasticityStress : OperationBase<CalculateFungModelStressRequest, CalculateFungModelStressResponse, CalculateFungModelStressResponseData>, ICalculateQuasiLinearViscoelasticityStress
+    public abstract class CalculateQuasiLinearViscoelasticityStress<TRequest> : OperationBase<TRequest, CalculateFungModelStressResponse, CalculateFungModelStressResponseData>, ICalculateQuasiLinearViscoelasticityStress<TRequest>
+        where TRequest : OperationRequestBase
     {
         private readonly IQuasiLinearViscoelasticityModel _viscoelasticModel;
-
+        
         /// <summary>
         /// Class constructor.
         /// </summary>
@@ -22,6 +24,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         {
             this._viscoelasticModel = viscoelasticModel;
         }
+
+        /// <summary>
+        /// The header to solution file.
+        /// </summary>
+        public virtual string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
 
         /// <summary>
         /// This method creates the path to save the solution on a file.
@@ -38,9 +45,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         public abstract string CreateInputDataFile(QuasiLinearViscoelasticityModelInput input);
 
         /// <summary>
-        /// The header to solution file.
+        /// This method builds a list with the inputs based on the request.
         /// </summary>
-        public virtual string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public abstract List<QuasiLinearViscoelasticityModelInput> BuildInputList(TRequest request);
 
         /// <summary>
         /// This method writes the input data into a file.
@@ -60,36 +69,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             streamWriter.WriteLine($"Slow Relaxation Time (Tau2): {input.SlowRelaxationTime} s");
             streamWriter.WriteLine($"Strain Rate: {input.StrainRate} /s");
             streamWriter.WriteLine($"Maximum Strain: {input.MaximumStrain}");
-        }
-
-        /// <summary>
-        /// This method builds a list with the inputs based on the request.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public virtual IEnumerable<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateFungModelStressRequest request)
-        {
-            var inputList = new List<QuasiLinearViscoelasticityModelInput>();
-
-            foreach (var requestData in request.RequestDataList)
-            {
-                inputList.Add(new QuasiLinearViscoelasticityModelInput
-                {
-                    ElasticStressConstant = requestData.ElasticStressConstant,
-                    ElasticPowerConstant = requestData.ElasticPowerConstant,
-                    RelaxationIndex = requestData.RelaxationIndex,
-                    FastRelaxationTime = requestData.FastRelaxationTime,
-                    SlowRelaxationTime = requestData.SlowRelaxationTime,
-                    MaximumStrain = requestData.MaximumStrain,
-                    StrainRate = requestData.StrainRate,
-                    FinalTime = request.FinalTime ?? requestData.FinalTime,
-                    TimeStep = request.TimeStep ?? requestData.TimeStep,
-                    InitialTime = request.InitialTime ?? requestData.InitialTime,
-                    AnalysisType = requestData.AnalysisType
-                });
-            }
-
-            return inputList;
         }
 
         /// <summary>
@@ -113,12 +92,12 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateFungModelStressResponse> ProcessOperation(CalculateFungModelStressRequest request)
+        protected override Task<CalculateFungModelStressResponse> ProcessOperation(TRequest request)
         {
             var response = new CalculateFungModelStressResponse { Data = new CalculateFungModelStressResponseData() };
             response.SetSuccessCreated();
 
-            IEnumerable<QuasiLinearViscoelasticityModelInput> inputList = this.BuildInputList(request);
+            List<QuasiLinearViscoelasticityModelInput> inputList = this.BuildInputList(request);
 
             foreach(var input in inputList)
             {
@@ -152,7 +131,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateFungModelStressResponse> ValidateOperation(CalculateFungModelStressRequest request)
+        protected override Task<CalculateFungModelStressResponse> ValidateOperation(TRequest request)
         {
             return base.ValidateOperation(request);
         }

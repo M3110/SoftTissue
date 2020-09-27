@@ -1,9 +1,12 @@
-﻿using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
+﻿using SoftTissue.DataContract;
+using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
 
 namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
 {
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
     /// </summary>
-    public interface ICalculateLinearViscosityStress : IOperationBase<CalculateStressRequest, CalculateStressResponse, CalculateStressResponseData> { }
+    public interface ICalculateLinearViscosityStress<TRequest> : IOperationBase<TRequest, CalculateStressResponse, CalculateStressResponseData> 
+        where TRequest : OperationRequestBase
+    { }
 }

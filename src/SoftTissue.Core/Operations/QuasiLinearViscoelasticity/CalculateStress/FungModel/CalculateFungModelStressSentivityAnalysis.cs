@@ -1,5 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.Models;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel
@@ -7,7 +9,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// <summary>
     /// It is responsible to do a semsitivity analysis while calculating the stress to Fung model.
     /// </summary>
-    public class CalculateFungModelStressSentivityAnalysis : CalculateQuasiLinearViscoelasticityStress, ICalculateFungModelStressSentivityAnalysis
+    public class CalculateFungModelStressSentivityAnalysis : CalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressSensitivityAnalysisRequest>, ICalculateFungModelStressSentivityAnalysis
     {
         private readonly IFungModel _viscoelasticModel;
 
@@ -15,7 +17,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateFungModelStressSentivityAnalysis(IFungModel viscoelasticModel) : base(viscoelasticModel) 
+        public CalculateFungModelStressSentivityAnalysis(IFungModel viscoelasticModel) : base(viscoelasticModel)
         {
             this.LoopIndex = 0;
             this._viscoelasticModel = viscoelasticModel;
@@ -35,6 +37,48 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// The loop index that is used in files names.
         /// </summary>
         public int LoopIndex { get; set; }
+
+        public override List<QuasiLinearViscoelasticityModelInput> BuildInputList(CalculateFungModelStressSensitivityAnalysisRequest request)
+        {
+            var inputList = new List<QuasiLinearViscoelasticityModelInput>();
+
+            foreach (double strainRate in request.StrainRateList)
+            {
+                foreach (double maximumStrain in request.MaximumStrainList)
+                {
+                    foreach (double elasticStressConstant in request.ElasticStressConstantList)
+                    {
+                        foreach (double elasticPowerConstant in request.ElasticPowerConstantList)
+                        {
+                            foreach (double relaxationIndex in request.RelaxationIndexList)
+                            {
+                                foreach (double fastRelaxationTime in request.FastRelaxationTimeList)
+                                {
+                                    foreach (double slowRelaxationTime in request.SlowRelaxationTimeList)
+                                    {
+                                        inputList.Add(new QuasiLinearViscoelasticityModelInput
+                                        {
+                                            StrainRate = strainRate,
+                                            MaximumStrain = maximumStrain,
+                                            ElasticStressConstant = elasticStressConstant,
+                                            ElasticPowerConstant = elasticPowerConstant,
+                                            RelaxationIndex = relaxationIndex,
+                                            FastRelaxationTime = fastRelaxationTime,
+                                            SlowRelaxationTime = slowRelaxationTime,
+                                            FinalTime = request.FinalTime.Value,
+                                            TimeStep = request.TimeStep.Value,
+                                            InitialTime = request.InitialTime.Value
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return inputList;
+        }
 
         /// <summary>
         /// This method creates the path to save the input data on a file.

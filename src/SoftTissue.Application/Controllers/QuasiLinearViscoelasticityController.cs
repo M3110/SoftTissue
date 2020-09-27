@@ -26,50 +26,17 @@ namespace SoftTissue.Application.Controllers
             return response.BuildHttpResponse();
         }
 
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        //[HttpPost("calculate-stress/fung-model/sensitivity-test")]
-        //public async Task<ActionResult<CalculateQuasiLinearViscoelasticityStressResponse>> CalculateStressByList(
-        //    [FromServices] ICalculateFungModelStress calculateFungModelStress,
-        //    [FromQuery] CalculateQuasiLinearViscoelasticityStressRequest request)
-        //{
-        //    CalculateQuasiLinearViscoelasticityStressResponse response = await calculateFungModelStress.Process(request).ConfigureAwait(false);
-        //    return response.BuildHttpResponse();
-        //}
-
-        //foreach (double strainRate in request.StrainRateList)
-        //{
-        //    foreach (double maximumStrain in request.MaximumStrainList)
-        //    {
-        //        foreach (double elasticStressConstant in request.ElasticStressConstantList)
-        //        {
-        //            foreach (double elasticPowerConstant in request.ElasticPowerConstantList)
-        //            {
-        //                foreach (double relaxationIndex in request.RelaxationIndexList)
-        //                {
-        //                    foreach (double fastRelaxationTime in request.FastRelaxationTimeList)
-        //                    {
-        //                        foreach (double slowRelaxationTime in request.SlowRelaxationTimeList)
-        //                        {
-        //                            inputList.Add(new QuasiLinearViscoelasticityModelInput
-        //                            {
-        //                                StrainRate = strainRate,
-        //                                MaximumStrain = maximumStrain,
-        //                                ElasticStressConstant = elasticStressConstant,
-        //                                ElasticPowerConstant = elasticPowerConstant,
-        //                                RelaxationIndex = relaxationIndex,
-        //                                FastRelaxationTime = fastRelaxationTime,
-        //                                SlowRelaxationTime = slowRelaxationTime,
-        //                                TimeStep = request.TimeStep
-        //                            });
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("calculate-stress/fung-model/sensitivity-analysis")]
+        public async Task<ActionResult<CalculateFungModelStressResponse>> CalculateStressSensivityAnalysis(
+            [FromServices] ICalculateFungModelStressSentivityAnalysis calculateFungModelStressSentivityAnalysis,
+            [FromQuery] CalculateFungModelStressSensitivityAnalysisRequest request)
+        {
+            CalculateFungModelStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
     }
 }

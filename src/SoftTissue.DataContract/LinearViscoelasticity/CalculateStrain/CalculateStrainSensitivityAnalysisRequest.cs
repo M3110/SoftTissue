@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain.CalculateStrainSensitivityTest
+namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain
 {
     public class CalculateStrainSensitivityAnalysisRequest : OperationRequestBase
     {

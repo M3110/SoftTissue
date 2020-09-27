@@ -10,6 +10,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
         double CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time);
 
-        double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelSimplifiedGInput input, double time);
     }
 }
