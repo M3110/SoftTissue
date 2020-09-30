@@ -1,7 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
-using SoftTissue.Core.Models;
-using SoftTissue.DataContract;
+using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
+using SoftTissue.DataContract.OperationBase;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,10 +11,11 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStress<TRequest> : OperationBase<TRequest, CalculateStressResponse, CalculateStressResponseData>, ICalculateLinearViscosityStress<TRequest>
+    public abstract class CalculateLinearViscosityStress<TRequest, TInput> : OperationBase<TRequest, CalculateStressResponse, CalculateStressResponseData>, ICalculateLinearViscosityStress<TRequest, TInput>
         where TRequest : OperationRequestBase
+        where TInput : LinearViscoelasticityModelInput, new()
     {
-        private readonly ILinearViscoelasticityModel _viscoelasticModel;
+        private readonly ILinearViscoelasticityModel<TInput> _viscoelasticModel;
 
         /// <summary>
         /// The header to solution file.
@@ -25,7 +26,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateLinearViscosityStress(ILinearViscoelasticityModel viscoelasticModel)
+        public CalculateLinearViscosityStress(ILinearViscoelasticityModel<TInput> viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
         }
@@ -35,21 +36,21 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public abstract string CreateSolutionFile(LinearViscoelasticityModelInput input);
+        public abstract string CreateSolutionFile(TInput input);
 
         /// <summary>
         /// This method creates the path to save the input data on a file.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public abstract string CreateInputDataFile(LinearViscoelasticityModelInput input);
+        public abstract string CreateInputDataFile(TInput input);
 
         /// <summary>
         /// This method builds a list with the inputs based on the request.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public abstract List<LinearViscoelasticityModelInput> BuildInputList(TRequest request);
+        public abstract List<TInput> BuildInputList(TRequest request);
 
         /// <summary>
         /// This method executes an analysis to calculate the stress for a linear viscoelasticity model.
@@ -61,7 +62,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
             var response = new CalculateStressResponse { Data = new CalculateStressResponseData() };
             response.SetSuccessCreated();
 
-            List<LinearViscoelasticityModelInput> inputs = this.BuildInputList(request);
+            List<TInput> inputs = this.BuildInputList(request);
 
             foreach (var input in inputs)
             {

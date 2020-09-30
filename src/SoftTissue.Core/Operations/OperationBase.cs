@@ -1,4 +1,4 @@
-﻿using SoftTissue.DataContract;
+﻿using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Net;
 using System.Threading.Tasks;

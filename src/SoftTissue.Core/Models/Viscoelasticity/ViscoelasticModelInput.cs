@@ -1,11 +1,11 @@
-﻿namespace SoftTissue.Core.Models
+﻿namespace SoftTissue.Core.Models.Viscoelasticity
 {
     /// <summary>
     /// It contains the input data to a generic Viscoelastic Model.
     /// </summary>
     public class ViscoelasticModelInput
     {
-        public string AnalysisType { get; set; }
+        public string SoftTissueType { get; set; }
 
         public double InitialTime { get; set; }
 

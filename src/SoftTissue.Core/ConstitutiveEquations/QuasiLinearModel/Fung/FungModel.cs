@@ -1,11 +1,12 @@
 ﻿using SoftTissue.Core.Models;
+using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using System;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
-    public class FungModel : QuasiLinearViscoelasticityModel, IFungModel
+    public class FungModel : QuasiLinearViscoelasticityModel<FungModelInput>, IFungModel
     {
         private readonly ISimpsonRuleIntegration _simpsonRuleIntegration;
         private readonly IDerivative _derivative;
@@ -18,30 +19,30 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             this._derivative = derivative;
         }
 
-        public override double CalculateStrain(QuasiLinearViscoelasticityModelInput input, double time)
+        public override double CalculateStrain(FungModelInput input, double time)
         {
             return input.StrainRate * time < input.MaximumStrain ? input.StrainRate * time : input.MaximumStrain;
         }
 
-        public override double CalculateElasticResponse(QuasiLinearViscoelasticityModelInput input, double time)
+        public override double CalculateElasticResponse(FungModelInput input, double time)
         {
             double strain = this.CalculateStrain(input, time);
 
             return input.ElasticStressConstant * (Math.Exp(input.ElasticPowerConstant * strain) - 1);
         }
 
-        public override double CalculateElasticResponseDerivative(QuasiLinearViscoelasticityModelInput input, double time)
+        public override double CalculateElasticResponseDerivative(FungModelInput input, double time)
         {
             double strain = this.CalculateStrain(input, time);
             double strainDerivative = this._derivative.Calculate((derivativeTime) => this.CalculateStrain(input, derivativeTime), input.TimeStep, time);
             return input.ElasticStressConstant * input.ElasticPowerConstant * strainDerivative * Math.Exp(input.ElasticPowerConstant * strain);
         }
 
-        public override double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelSimplifiedGInput input, double time)
+        public override double CalculateReducedRelaxationFunctionSimplified(FungModelInput input, double time)
         {
             double result = 0;
 
-            foreach (var simplifiedInput in input.RelaxationFunctionSimplifiedInputList)
+            foreach (var simplifiedInput in input.SimplifiedReducedRelaxationFunctionInputList)
             {
                 result += simplifiedInput.VariableE * Math.Exp(-time / simplifiedInput.RelaxationTime);
             }
@@ -49,22 +50,24 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             return result;
         }
 
-        public override double CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time)
+        public override double CalculateReducedRelaxationFunction(FungModelInput input, double time)
         {
             if (time <= Constants.Precision)
             {
                 return 1;
             }
 
+            var inputG = input.ReducedRelaxationFunctionInput;
+
             if (time <= 1)
             {
-                return (1 - input.RelaxationIndex * Constants.EulerMascheroniConstant - input.RelaxationIndex * Math.Log(time / input.SlowRelaxationTime)) / (1 + input.RelaxationIndex * Math.Log(input.SlowRelaxationTime / input.FastRelaxationTime));
+                return (1 - inputG.RelaxationIndex * Constants.EulerMascheroniConstant - inputG.RelaxationIndex * Math.Log(time / inputG.SlowRelaxationTime)) / (1 + inputG.RelaxationIndex * Math.Log(inputG.SlowRelaxationTime / inputG.FastRelaxationTime));
             }
 
-            return (1 + input.RelaxationIndex * (this.CalculateE1(input, time / input.SlowRelaxationTime) - this.CalculateE1(input, time / input.FastRelaxationTime))) / (1 + input.RelaxationIndex * Math.Log(input.SlowRelaxationTime / input.FastRelaxationTime));
+            return (1 + inputG.RelaxationIndex * (this.CalculateE1(input, time / inputG.SlowRelaxationTime) - this.CalculateE1(input, time / inputG.FastRelaxationTime))) / (1 + inputG.RelaxationIndex * Math.Log(inputG.SlowRelaxationTime / inputG.FastRelaxationTime));
         }
 
-        private double CalculateE1(QuasiLinearViscoelasticityModelInput input, double variable)
+        private double CalculateE1(FungModelInput input, double variable)
         {
             var integralInput = new IntegralInput
             {
@@ -76,7 +79,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             return this._simpsonRuleIntegration.Calculate((parameter) => Math.Exp(-parameter) / parameter, integralInput);
         }
 
-        public override double CalculateStress(QuasiLinearViscoelasticityModelInput input, double time)
+        public override double CalculateStress(FungModelInput input, double time)
         {
             var integralInput = new IntegralInput
             {
@@ -89,7 +92,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
                 this._simpsonRuleIntegration.Calculate((equationTime) => this.CalculateReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime), integralInput);
         }
 
-        public double CalculateStressByIntegrationDerivative(QuasiLinearViscoelasticityModelInput input, double time)
+        public double CalculateStressByIntegrationDerivative(FungModelInput input, double time)
         {
             return this._derivative.Calculate((derivativeTime) =>
             {
@@ -109,7 +112,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             input.TimeStep, time);
         }
 
-        public double CalculateStressByReducedRelaxationFunctionDerivative(QuasiLinearViscoelasticityModelInput input, double time)
+        public double CalculateStressByReducedRelaxationFunctionDerivative(FungModelInput input, double time)
         {
             var integralInput = new IntegralInput
             {
