@@ -1,4 +1,6 @@
-﻿namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
+﻿using SoftTissue.DataContract.OperationBase;
+
+namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
 {
     public class CalculateStressRequestData : OperationRequestData
     {

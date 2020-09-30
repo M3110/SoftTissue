@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SoftTissue.DataContract.OperationBase;
+using System.Collections.Generic;
 
 namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
 {

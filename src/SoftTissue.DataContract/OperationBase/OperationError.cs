@@ -1,4 +1,4 @@
-﻿namespace SoftTissue.DataContract
+﻿namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
     /// It contains the content 'data' of the error class used in application.
