@@ -1,0 +1,48 @@
+{
+  "requestDataList": [
+    {
+      "strainRate": 0.0015,
+      "maximumStrain": 0.05,
+      "elasticStressConstant": 9.7,
+      "elasticPowerConstant": 53.1,
+      "relaxationIndex": 0.089,
+      "fastRelaxationTime": 0.54,
+      "slowRelaxationTime": 1602,
+      "softTissueType": "MCL Goat"
+    },
+    {
+      "strainRate": 0.005,
+      "maximumStrain": 0.1,
+      "elasticStressConstant": 0.193,
+      "elasticPowerConstant": 161,
+      "relaxationIndex": 0.099,
+      "fastRelaxationTime": 0.29,
+      "slowRelaxationTime": 199000,
+      "softTissueType": "MCL Canine",
+      "timeStep": 1,
+      "finalTime": 3600
+    },
+    {
+      "strainRate": 0.001,
+      "maximumStrain": 0.06,
+      "elasticStressConstant": 1.87,
+      "elasticPowerConstant": 9.87,
+      "relaxationIndex": 0.9,
+      "fastRelaxationTime": 1,
+      "slowRelaxationTime": 100,
+      "softTissueType": "Sheep tendon"
+    },
+    {
+      "strainRate": 0.0001,
+      "maximumStrain": 0.001,
+      "elasticStressConstant": 0.001,
+      "elasticPowerConstant": 0.1,
+      "relaxationIndex": 0.05,
+      "fastRelaxationTime": 0.005,
+      "slowRelaxationTime": 50,
+      "softTissueType": "Numerical estimation"
+    }
+  ],
+  "timeStep": 0.5,
+  "finalTime": 600
+}

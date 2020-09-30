@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace SoftTissue.Application.Controllers
 {
     /// <summary>
-    /// This controller executes linear viscoelasticity analysis.
+    /// This controller executes quasi-linear viscoelasticity analysis.
     /// </summary>
-    [Route("api/v1/linear-viscoelasticity")]
+    [Route("api/v1/quasi-linear-viscoelasticity")]
     public class QuasiLinearViscoelasticityController : ControllerBase
     {
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -33,7 +33,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("calculate-stress/fung-model/sensitivity-analysis")]
         public async Task<ActionResult<CalculateFungModelStressResponse>> CalculateStressSensivityAnalysis(
             [FromServices] ICalculateFungModelStressSentivityAnalysis calculateFungModelStressSentivityAnalysis,
-            [FromQuery] CalculateFungModelStressSensitivityAnalysisRequest request)
+            [FromBody] CalculateFungModelStressSensitivityAnalysisRequest request)
         {
             CalculateFungModelStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

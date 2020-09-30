@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2D2CDBBD-8FC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{458B5AE9-25EC-4844-AB1B-6819297736F1}"
 	ProjectSection(SolutionItems) = preProject
-		..\etc\CHANGELOG.md = ..\etc\CHANGELOG.md
-		..\etc\Notes.txt = ..\etc\Notes.txt
-		..\etc\README.md = ..\etc\README.md
+		etc\CHANGELOG.md = etc\CHANGELOG.md
+		etc\Notes.txt = etc\Notes.txt
+		etc\README.md = etc\README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Application", "src\SoftTissue.Application\SoftTissue.Application.csproj", "{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62}"

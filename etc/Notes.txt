@@ -1,5 +1,14 @@
 Anotações - IC Viscoelasticidade
 
+Nos primeiros tempos (de 0s a 100s)
+- Iterar de 0.1s
+De 100s a 1000s
+- Iterar de 1s.
+De 1000s em diante
+- Iterar de 10s
+==> TENTAR IMPLEMENTAR:
+Se a variação de tensão for pequena, ir aumentando o delta t.
+
 A equação 34 do livro do Fung não é aplicável para tempos menores que 1 segundo. 
 - Para esses tempos é melhor usar a equação 37.
 - As equações são encontradas no capítulo 7.

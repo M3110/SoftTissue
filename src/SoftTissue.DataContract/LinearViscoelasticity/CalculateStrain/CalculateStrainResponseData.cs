@@ -1,4 +1,6 @@
-﻿namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain
+﻿using SoftTissue.DataContract.OperationBase;
+
+namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain
 {
     /// <summary>
     /// It represents the 'data' content to CalculateStrain operation response.

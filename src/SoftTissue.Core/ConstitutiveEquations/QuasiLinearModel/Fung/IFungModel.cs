@@ -1,11 +1,11 @@
-﻿using SoftTissue.Core.Models;
+﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
-    public interface IFungModel : IQuasiLinearViscoelasticityModel 
+    public interface IFungModel : IQuasiLinearViscoelasticityModel<FungModelInput>
     {
-        double CalculateStressByIntegrationDerivative(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateStressByIntegrationDerivative(FungModelInput input, double time);
 
-        double CalculateStressByReducedRelaxationFunctionDerivative(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateStressByReducedRelaxationFunctionDerivative(FungModelInput input, double time);
     }
 }

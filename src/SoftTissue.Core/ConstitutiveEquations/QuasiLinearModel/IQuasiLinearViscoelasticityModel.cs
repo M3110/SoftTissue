@@ -1,15 +1,16 @@
-﻿using SoftTissue.Core.Models;
+﻿using SoftTissue.Core.Models.Viscoelasticity;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
-    public interface IQuasiLinearViscoelasticityModel : IViscoelasticModel<QuasiLinearViscoelasticityModelInput>
+    public interface IQuasiLinearViscoelasticityModel<TInput> : IViscoelasticModel<TInput>
+        where TInput : QuasiLinearViscoelasticityModelInput, new()
     {
-        double CalculateElasticResponse(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateElasticResponse(TInput input, double time);
 
-        double CalculateElasticResponseDerivative(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateElasticResponseDerivative(TInput input, double time);
 
-        double CalculateReducedRelaxationFunction(QuasiLinearViscoelasticityModelInput input, double time);
+        double CalculateReducedRelaxationFunction(TInput input, double time);
 
-        double CalculateReducedRelaxationFunctionSimplified(QuasiLinearViscoelasticityModelSimplifiedGInput input, double time);
+        double CalculateReducedRelaxationFunctionSimplified(TInput input, double time);
     }
 }

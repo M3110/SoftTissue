@@ -1,4 +1,4 @@
-﻿using SoftTissue.Core.Models;
+﻿using SoftTissue.Core.Models.Viscoelasticity;
 
 namespace SoftTissue.Core.NumericalMethods
 {

@@ -1,12 +1,10 @@
-﻿namespace SoftTissue.Core.Models
+﻿namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
-    /// It contains the input data to a generic Viscoelastic Model.
+    /// It represents the essencial request content to operations.
     /// </summary>
-    public class ViscoelasticModelInput
+    public class OperationRequestBase
     {
-        public string AnalysisType { get; set; }
-
         public double InitialTime { get; set; }
 
         public double TimeStep { get; set; }

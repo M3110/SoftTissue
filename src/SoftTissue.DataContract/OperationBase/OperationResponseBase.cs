@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace SoftTissue.DataContract
+namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
     /// It contains the content of response for all operations.
@@ -47,10 +47,10 @@ namespace SoftTissue.DataContract
         /// <param name="httpStatusCode"></param>
         public void AddError(string code, string message, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
         {
-            Errors.Add(new OperationError(code, message));
+            this.Errors.Add(new OperationError(code, message));
 
-            HttpStatusCode = httpStatusCode;
-            Success = false;
+            this.HttpStatusCode = httpStatusCode;
+            this.Success = false;
         }
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace SoftTissue.DataContract
         /// </summary>
         public void SetSuccessCreated()
         {
-            HttpStatusCode = HttpStatusCode.Created;
-            Success = true;
+            this.HttpStatusCode = HttpStatusCode.Created;
+            this.Success = true;
         }
 
         /// <summary>
@@ -67,8 +67,8 @@ namespace SoftTissue.DataContract
         /// </summary>
         public void SetBadRequestError()
         {
-            HttpStatusCode = HttpStatusCode.BadRequest;
-            Success = false;
+            this.HttpStatusCode = HttpStatusCode.BadRequest;
+            this.Success = false;
         }
 
         /// <summary>
@@ -85,8 +85,8 @@ namespace SoftTissue.DataContract
         /// </summary>
         public void SetInternalServerError()
         {
-            HttpStatusCode = HttpStatusCode.InternalServerError;
-            Success = false;
+            this.HttpStatusCode = HttpStatusCode.InternalServerError;
+            this.Success = false;
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace SoftTissue.DataContract
         /// </summary>
         public void SetNotImplementedError()
         {
-            HttpStatusCode = HttpStatusCode.NotImplemented;
-            Success = false;
+            this.HttpStatusCode = HttpStatusCode.NotImplemented;
+            this.Success = false;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell;
-using SoftTissue.Core.Models;
+using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
     /// <summary>
     /// It is responsible to calculate the strain to Maxwell model.
     /// </summary>
-    public class CalculateMaxwellModelStrain : CalculateLinearViscosityStrain<CalculateStrainRequest>, ICalculateMaxwellModelStrain
+    public class CalculateMaxwellModelStrain : CalculateLinearViscosityStrain<CalculateStrainRequest, MaxwellModelInput>, ICalculateMaxwellModelStrain
     {
         /// <summary>
         /// Class constructor.
@@ -27,21 +27,21 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override List<LinearViscoelasticityModelInput> BuildInputList(CalculateStrainRequest request)
+        public override List<MaxwellModelInput> BuildInputList(CalculateStrainRequest request)
         {
-            var inputList = new List<LinearViscoelasticityModelInput>();
+            var inputList = new List<MaxwellModelInput>();
 
             foreach (var requestData in request.RequestDataList)
             {
-                inputList.Add(new LinearViscoelasticityModelInput
+                inputList.Add(new MaxwellModelInput
                 {
-                    FinalTime = request.FinalTime ?? requestData.FinalTime,
-                    TimeStep = request.TimeStep ?? requestData.TimeStep,
-                    InitialTime = request.InitialTime ?? requestData.InitialTime,
+                    FinalTime = requestData.FinalTime ?? request.FinalTime,
+                    TimeStep = requestData.TimeStep ?? request.TimeStep,
+                    InitialTime = requestData.InitialTime ?? request.InitialTime,
                     InitialStress = requestData.InitialStress,
                     Stiffness = requestData.Stiffness,
                     Viscosity = requestData.Viscosity,
-                    AnalysisType = requestData.AnalysisType
+                    SoftTissueType = requestData.SoftTissueType
                 });
             }
 
@@ -53,11 +53,11 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public override string CreateInputDataFile(LinearViscoelasticityModelInput input)
+        public override string CreateInputDataFile(MaxwellModelInput input)
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"InputData_{input.AnalysisType}.csv"));
+                $"InputData_{input.SoftTissueType}.csv"));
 
             if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
             {
@@ -72,11 +72,11 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public override string CreateSolutionFile(LinearViscoelasticityModelInput input)
+        public override string CreateSolutionFile(MaxwellModelInput input)
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,
-                $"Solution_{input.AnalysisType}.csv"));
+                $"Solution_{input.SoftTissueType}.csv"));
 
             if (fileInfo.Exists == false || fileInfo.Directory.Exists == false)
             {

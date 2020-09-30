@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SoftTissue.DataContract;
+using SoftTissue.DataContract.OperationBase;
 using System.Net;
 
 namespace SoftTissue.Application.Extensions

@@ -1,9 +1,10 @@
-﻿using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel
 {
     /// <summary>
     /// It is responsible to calculate the stress to Fung model.
     /// </summary>
-    public interface ICalculateFungModelStress : ICalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressRequest> { }
+    public interface ICalculateFungModelStress : ICalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressRequest, FungModelInput> { }
 }

@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.Models;
+using SoftTissue.Core.Models.Viscoelasticity;
 using System;
 
 namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
