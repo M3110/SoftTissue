@@ -6,7 +6,7 @@ using System;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
-    public class FungModel : QuasiLinearViscoelasticityModel<FungModelInput>, IFungModel
+    public class FungModel : QuasiLinearViscoelasticityModel<FungModelInput, FungModelResult>, IFungModel
     {
         private readonly ISimpsonRuleIntegration _simpsonRuleIntegration;
         private readonly IDerivative _derivative;
@@ -17,6 +17,20 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         {
             this._simpsonRuleIntegration = simpsonRuleIntegration;
             this._derivative = derivative;
+        }
+
+        public override FungModelResult CalculateInitialConditions(FungModelInput input)
+        {
+            return new FungModelResult
+            {
+                ReducedRelaxationFunction = 1,
+                ElasticResponse = 0,
+                Strain = 0,
+                Stress = 0,
+                StressWithElasticResponseDerivative = 0,
+                StressWithIntegralDerivative = 0,
+                StressWithReducedRelaxationFunctionDerivative = 0
+            };
         }
 
         public override double CalculateStrain(FungModelInput input, double time)

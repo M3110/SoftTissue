@@ -2,7 +2,7 @@
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
-    public interface IFungModel : IQuasiLinearViscoelasticityModel<FungModelInput>
+    public interface IFungModel : IQuasiLinearViscoelasticityModel<FungModelInput, FungModelResult>
     {
         double CalculateStressByIntegrationDerivative(FungModelInput input, double time);
 
