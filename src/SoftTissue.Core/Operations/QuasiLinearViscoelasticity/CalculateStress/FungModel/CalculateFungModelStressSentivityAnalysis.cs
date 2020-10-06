@@ -10,7 +10,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// <summary>
     /// It is responsible to do a semsitivity analysis while calculating the stress to Fung model.
     /// </summary>
-    public class CalculateFungModelStressSentivityAnalysis : CalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressSensitivityAnalysisRequest, FungModelInput>, ICalculateFungModelStressSentivityAnalysis
+    public class CalculateFungModelStressSentivityAnalysis : CalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressSensitivityAnalysisRequest, FungModelInput, FungModelResult>, ICalculateFungModelStressSentivityAnalysis
     {
         private readonly IFungModel _viscoelasticModel;
 
@@ -168,30 +168,34 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <param name="streamWriter"></param>
-        public override void CalculateAndWriteResults(FungModelInput input, double time, StreamWriter streamWriter)
+        public override FungModelResult CalculateAndWriteResults(FungModelInput input, double time, StreamWriter streamWriter)
         {
             double strain = this._viscoelasticModel.CalculateStrain(input, time);
 
             double reducedRelaxationFunction;
-            if (input.UseSimplifiedReducedRelaxationFunction == true)
-            {
-                reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunctionSimplified(input, time);
-            }
-            else
-            {
-                reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
-            }
+            if (input.UseSimplifiedReducedRelaxationFunction == true) reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunctionSimplified(input, time);
+            else reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
 
             double elasticResponse = this._viscoelasticModel.CalculateElasticResponse(input, time);
 
             // TODO: Alterar métodos que calculam a tensão para usar a equação certa do ReducedRelaxationFunction.
-            double stress = this._viscoelasticModel.CalculateStress(input, time);
-
-            double stressWithElasticResponseDerivative = this._viscoelasticModel.CalculateStressByIntegrationDerivative(input, time);
+            double stressWithElasticResponseDerivative = this._viscoelasticModel.CalculateStress(input, time);
 
             double stressWithReducedRelaxationFunctionDerivative = this._viscoelasticModel.CalculateStressByReducedRelaxationFunctionDerivative(input, time);
 
-            streamWriter.WriteLine($"{time};{strain};{reducedRelaxationFunction};{elasticResponse};{stress};{stressWithElasticResponseDerivative};{stressWithReducedRelaxationFunctionDerivative}");
+            double stressWithIntegrationDerivative = this._viscoelasticModel.CalculateStressByIntegrationDerivative(input, time);
+
+            streamWriter.WriteLine($"{time};{strain};{reducedRelaxationFunction};{elasticResponse};{stressWithElasticResponseDerivative};{stressWithReducedRelaxationFunctionDerivative};{stressWithIntegrationDerivative}");
+
+            return new FungModelResult
+            {
+                Strain = strain,
+                ReducedRelaxationFunction = reducedRelaxationFunction,
+                ElasticResponse = elasticResponse,
+                StressWithElasticResponseDerivative = stressWithElasticResponseDerivative,
+                StressWithReducedRelaxationFunctionDerivative = stressWithReducedRelaxationFunctionDerivative,
+                StressWithIntegralDerivative = stressWithIntegrationDerivative
+            };
         }
     }
 }

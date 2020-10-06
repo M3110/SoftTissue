@@ -1,5 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
 using SoftTissue.Core.Models.Viscoelasticity.Linear;
+using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
 using SoftTissue.DataContract.OperationBase;
 using System.Collections.Generic;
@@ -11,11 +12,16 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
     /// <summary>
     /// It is responsible to calculate the strain to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStrain<TRequest, TInput> : OperationBase<TRequest, CalculateStrainResponse, CalculateStrainResponseData>, ICalculateLinearViscosityStrain<TRequest, TInput>
+    public abstract class CalculateLinearViscosityStrain<TRequest, TInput> : CalculateResult<TRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>, ICalculateLinearViscosityStrain<TRequest, TInput>
         where TRequest : OperationRequestBase
         where TInput : LinearViscoelasticityModelInput, new()
     {
         private readonly ILinearViscoelasticityModel<TInput> _viscoelasticModel;
+
+        /// <summary>
+        /// The header to solution file.
+        /// </summary>
+        public override string SolutionFileHeader => "Time;Creep Compliance;Strain";
 
         /// <summary>
         /// Class constructor.
@@ -25,27 +31,6 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
         {
             this._viscoelasticModel = viscoelasticModel;
         }
-
-        /// <summary>
-        /// This method creates the path to save the solution on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public abstract string CreateSolutionFile(TInput input);
-
-        /// <summary>
-        /// This method creates the path to save the input data on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public abstract string CreateInputDataFile(TInput input);
-
-        /// <summary>
-        /// This method builds a list with the inputs based on the request.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public abstract List<TInput> BuildInputList(TRequest request);
 
         /// <summary>
         /// This method executes an analysis to calculate the strain for a linear viscoelasticity model.
@@ -78,7 +63,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
                 double time = input.InitialTime;
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
-                    streamWriter.WriteLine("Time;Creep Compliance;Strain");
+                    streamWriter.WriteLine(this.SolutionFileHeader);
 
                     while (time - input.FinalTime <= 1e-3)
                     {

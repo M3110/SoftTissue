@@ -11,7 +11,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// <summary>
     /// It is responsible to calculate the stress to Fung model.
     /// </summary>
-    public class CalculateFungModelStress : CalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressRequest, FungModelInput>, ICalculateFungModelStress
+    public class CalculateFungModelStress : CalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressRequest, FungModelInput, FungModelResult>, ICalculateFungModelStress
     {
         private readonly IFungModel _viscoelasticModel;
 
@@ -25,7 +25,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         }
 
         /// <summary>
-        /// The base path.
+        /// The base path to files.
         /// </summary>
         private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "sheets/Solutions/Quasi-Linear Viscosity/Fung Model/Stress");
 
@@ -33,7 +33,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// The header to solution file.
         /// </summary>
         public override string SolutionFileHeader => "Time;Strain;Reduced Relaxation Function;Elastic Response;Stress with dSigma;Stress with dG;Stress with integral derivative";
-
 
         /// <summary>
         /// This method builds a list with the inputs based on the request.
@@ -159,19 +158,13 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <param name="streamWriter"></param>
-        public override void CalculateAndWriteResults(FungModelInput input, double time, StreamWriter streamWriter)
+        public override FungModelResult CalculateAndWriteResults(FungModelInput input, double time, StreamWriter streamWriter)
         {
             double strain = this._viscoelasticModel.CalculateStrain(input, time);
 
             double reducedRelaxationFunction;
-            if (input.UseSimplifiedReducedRelaxationFunction == true)
-            {
-                reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunctionSimplified(input, time);
-            }
-            else
-            {
-                reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
-            }
+            if (input.UseSimplifiedReducedRelaxationFunction == true) reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunctionSimplified(input, time);
+            else reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
 
             double elasticResponse = this._viscoelasticModel.CalculateElasticResponse(input, time);
 
@@ -183,6 +176,16 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
             double stressWithIntegrationDerivative = this._viscoelasticModel.CalculateStressByIntegrationDerivative(input, time);
 
             streamWriter.WriteLine($"{time};{strain};{reducedRelaxationFunction};{elasticResponse};{stressWithElasticResponseDerivative};{stressWithReducedRelaxationFunctionDerivative};{stressWithIntegrationDerivative}");
+
+            return new FungModelResult
+            {
+                Strain = strain,
+                ReducedRelaxationFunction = reducedRelaxationFunction,
+                ElasticResponse = elasticResponse,
+                StressWithElasticResponseDerivative = stressWithElasticResponseDerivative,
+                StressWithReducedRelaxationFunctionDerivative = stressWithReducedRelaxationFunctionDerivative,
+                StressWithIntegralDerivative = stressWithIntegrationDerivative
+            };
         }
     }
 }

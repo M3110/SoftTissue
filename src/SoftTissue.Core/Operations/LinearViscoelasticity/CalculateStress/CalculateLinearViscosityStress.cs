@@ -1,5 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
 using SoftTissue.Core.Models.Viscoelasticity.Linear;
+using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
 using SoftTissue.DataContract.OperationBase;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStress<TRequest, TInput> : OperationBase<TRequest, CalculateStressResponse, CalculateStressResponseData>, ICalculateLinearViscosityStress<TRequest, TInput>
+    public abstract class CalculateLinearViscosityStress<TRequest, TInput> : CalculateResult<TRequest, CalculateStressResponse, CalculateStressResponseData, TInput>, ICalculateLinearViscosityStress<TRequest, TInput>
         where TRequest : OperationRequestBase
         where TInput : LinearViscoelasticityModelInput, new()
     {
@@ -20,7 +21,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         /// <summary>
         /// The header to solution file.
         /// </summary>
-        public virtual string SolutionFileHeader => "Time;Relaxation Function;Stress";
+        public override string SolutionFileHeader => "Time;Relaxation Function;Stress";
 
         /// <summary>
         /// Class constructor.
@@ -30,27 +31,6 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         {
             this._viscoelasticModel = viscoelasticModel;
         }
-
-        /// <summary>
-        /// This method creates the path to save the solution on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public abstract string CreateSolutionFile(TInput input);
-
-        /// <summary>
-        /// This method creates the path to save the input data on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public abstract string CreateInputDataFile(TInput input);
-
-        /// <summary>
-        /// This method builds a list with the inputs based on the request.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public abstract List<TInput> BuildInputList(TRequest request);
 
         /// <summary>
         /// This method executes an analysis to calculate the stress for a linear viscoelasticity model.
@@ -83,7 +63,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
                 double time = input.InitialTime;
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
-                    streamWriter.WriteLine(SolutionFileHeader);
+                    streamWriter.WriteLine(this.SolutionFileHeader);
 
                     while (time - input.FinalTime <= 1e-3)
                     {

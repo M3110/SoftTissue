@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SoftTissue.Core.Operations
+namespace SoftTissue.Core.Operations.Base
 {
     /// <summary>
     /// It represents the base for all operations in the application.

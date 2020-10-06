@@ -1,5 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel;
 using SoftTissue.Core.Models.Viscoelasticity;
+using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
+using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
 using System.Collections.Generic;
@@ -11,47 +13,27 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to calculate the stress to a quasi-linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateQuasiLinearViscoelasticityStress<TRequest, TInput> : OperationBase<TRequest, CalculateFungModelStressResponse, CalculateFungModelStressResponseData>, ICalculateQuasiLinearViscoelasticityStress<TRequest, TInput>
+    public abstract class CalculateQuasiLinearViscoelasticityStress<TRequest, TInput, TResult> : CalculateResult<TRequest, CalculateFungModelStressResponse, CalculateFungModelStressResponseData, TInput>, ICalculateQuasiLinearViscoelasticityStress<TRequest, TInput>
         where TRequest : OperationRequestBase
         where TInput : QuasiLinearViscoelasticityModelInput, new()
+        where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
-        private readonly IQuasiLinearViscoelasticityModel<TInput> _viscoelasticModel;
-        
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="viscoelasticModel"></param>
-        public CalculateQuasiLinearViscoelasticityStress(IQuasiLinearViscoelasticityModel<TInput> viscoelasticModel)
-        {
-            this._viscoelasticModel = viscoelasticModel;
-        }
+        private readonly IQuasiLinearViscoelasticityModel<TInput, TResult> _viscoelasticModel;
 
         /// <summary>
         /// The header to solution file.
         /// This property depends on what is calculated on method <see cref="CalculateAndWriteResults"/>.
         /// </summary>
-        public virtual string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
+        public override string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
 
         /// <summary>
-        /// This method creates the path to save the solution on a file.
+        /// Class constructor.
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public abstract string CreateSolutionFile(TInput input);
-
-        /// <summary>
-        /// This method creates the path to save the input data on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public abstract string CreateInputDataFile(TInput input);
-
-        /// <summary>
-        /// This method builds a list with the inputs based on the request.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public abstract List<TInput> BuildInputList(TRequest request);
+        /// <param name="viscoelasticModel"></param>
+        public CalculateQuasiLinearViscoelasticityStress(IQuasiLinearViscoelasticityModel<TInput, TResult> viscoelasticModel)
+        {
+            this._viscoelasticModel = viscoelasticModel;
+        }
 
         /// <summary>
         /// This method writes the input data into a file.
@@ -62,7 +44,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         {
             streamWriter.WriteLine($"Analysis type: {input.SoftTissueType}");
             streamWriter.WriteLine($"Initial Time: {input.InitialTime} s");
-            streamWriter.WriteLine($"Time Step: {input.TimeStep} s"); 
+            streamWriter.WriteLine($"Time Step: {input.TimeStep} s");
             streamWriter.WriteLine($"Final Time: {input.FinalTime} s");
             streamWriter.WriteLine($"Strain Rate: {input.StrainRate} /s");
             streamWriter.WriteLine($"Maximum Strain: {input.MaximumStrain}");
@@ -76,14 +58,23 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <param name="streamWriter"></param>
-        public virtual void CalculateAndWriteResults(TInput input, double time, StreamWriter streamWriter)
+        public virtual TResult CalculateAndWriteResults(TInput input, double time, StreamWriter streamWriter)
         {
+            // TODO: Tornar assíncrono o cálculo dos resultados
             double strain = this._viscoelasticModel.CalculateStrain(input, time);
             double reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
             double elasticResponse = this._viscoelasticModel.CalculateElasticResponse(input, time);
             double stress = this._viscoelasticModel.CalculateStress(input, time);
 
             streamWriter.WriteLine($"{time};{strain};{reducedRelaxationFunction};{elasticResponse};{stress}");
+
+            return new TResult
+            {
+                Strain = strain,
+                ReducedRelaxationFunction = reducedRelaxationFunction,
+                ElasticResponse = elasticResponse,
+                Stress = stress
+            };
         }
 
         /// <summary>
@@ -109,15 +100,18 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                 }
 
                 double time = input.InitialTime;
+                var previousResult = this._viscoelasticModel.CalculateInitialConditions(input);
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
                     streamWriter.WriteLine(this.SolutionFileHeader);
 
                     while (time <= input.FinalTime)
                     {
-                        this.CalculateAndWriteResults(input, time, streamWriter);
+                        TResult result = this.CalculateAndWriteResults(input, time, streamWriter);
 
                         time += input.TimeStep;
+
+                        previousResult = result;
                     }
                 }
             });
