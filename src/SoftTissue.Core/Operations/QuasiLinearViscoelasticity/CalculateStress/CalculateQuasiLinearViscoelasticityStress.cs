@@ -109,7 +109,16 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                     {
                         TResult result = this.CalculateAndWriteResults(input, time, streamWriter);
 
-                        time += input.TimeStep;
+                        double increasement = (result.Stress - previousResult.Stress) / result.Stress;
+
+                        // It increases the time step when the stress is converging to its asymptote.
+                        // Here is used 0.1 and 0.01 to represent that the difference between the preivous value and the actual value is 10% and 1%, respectively.
+                        if (increasement > 0.1)
+                            time += input.TimeStep;
+                        else if (increasement <= 0.1 && increasement > 0.01)
+                            time += 10 * input.TimeStep;
+                        else if (increasement <= 0.01)
+                            time += 100 * input.TimeStep;
 
                         previousResult = result;
                     }

@@ -182,7 +182,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
                 Strain = strain,
                 ReducedRelaxationFunction = reducedRelaxationFunction,
                 ElasticResponse = elasticResponse,
-                StressWithElasticResponseDerivative = stressWithElasticResponseDerivative,
+                Stress = stressWithElasticResponseDerivative,
                 StressWithReducedRelaxationFunctionDerivative = stressWithReducedRelaxationFunctionDerivative,
                 StressWithIntegralDerivative = stressWithIntegrationDerivative
             };

@@ -27,7 +27,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
                 ElasticResponse = 0,
                 Strain = 0,
                 Stress = 0,
-                StressWithElasticResponseDerivative = 0,
                 StressWithIntegralDerivative = 0,
                 StressWithReducedRelaxationFunctionDerivative = 0
             };
