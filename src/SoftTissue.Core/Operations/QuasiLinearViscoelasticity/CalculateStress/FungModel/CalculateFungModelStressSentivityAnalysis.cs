@@ -1,6 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// <summary>
     /// It is responsible to do a semsitivity analysis while calculating the stress to Fung model.
     /// </summary>
-    public class CalculateFungModelStressSentivityAnalysis : CalculateQuasiLinearViscoelasticityStress<CalculateFungModelStressSensitivityAnalysisRequest, FungModelInput, FungModelResult>, ICalculateFungModelStressSentivityAnalysis
+    public class CalculateFungModelStressSentivityAnalysis : CalculateQuasiLinearViscoelasticityStress<CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest, FungModelInput, FungModelResult>, ICalculateFungModelStressSentivityAnalysis
     {
         private readonly IFungModel _viscoelasticModel;
 
@@ -39,48 +39,54 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// </summary>
         public int LoopIndex { get; set; }
 
-        public override List<FungModelInput> BuildInputList(CalculateFungModelStressSensitivityAnalysisRequest request)
+        public override List<FungModelInput> BuildInputList(CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest request)
         {
             var inputList = new List<FungModelInput>();
 
-            if (request.UseSimplifiedReducedRelaxationFunction == true)
+            foreach (double strainRate in request.StrainRateList)
             {
-                throw new NotImplementedException($"The method '{nameof(BuildInputList)}' does not have an implementation to '{nameof(request.UseSimplifiedReducedRelaxationFunction)}' when it is {request.UseSimplifiedReducedRelaxationFunction}.");
-            }
-            else
-            {
-                foreach (double strainRate in request.StrainRateList)
+                foreach (double maximumStrain in request.MaximumStrainList)
                 {
-                    foreach (double maximumStrain in request.MaximumStrainList)
+                    foreach (double elasticStressConstant in request.ElasticStressConstantList)
                     {
-                        foreach (double elasticStressConstant in request.ElasticStressConstantList)
+                        foreach (double elasticPowerConstant in request.ElasticPowerConstantList)
                         {
-                            foreach (double elasticPowerConstant in request.ElasticPowerConstantList)
+                            if (request.UseSimplifiedReducedRelaxationFunction == true)
                             {
-                                foreach (double relaxationIndex in request.RelaxationIndexList)
+                                foreach (var simplifiedReducedRelaxationFunctionData in request.SimplifiedReducedRelaxationFunctionDataList)
                                 {
-                                    foreach (double fastRelaxationTime in request.FastRelaxationTimeList)
+                                    inputList.Add(new FungModelInput
                                     {
-                                        foreach (double slowRelaxationTime in request.SlowRelaxationTimeList)
-                                        {
-                                            inputList.Add(new FungModelInput
-                                            {
-                                                StrainRate = strainRate,
-                                                MaximumStrain = maximumStrain,
-                                                ElasticStressConstant = elasticStressConstant,
-                                                ElasticPowerConstant = elasticPowerConstant,
-                                                ReducedRelaxationFunctionInput = new ReducedRelaxationFunctionInput
-                                                {
-                                                    RelaxationIndex = relaxationIndex,
-                                                    FastRelaxationTime = fastRelaxationTime,
-                                                    SlowRelaxationTime = slowRelaxationTime,
-                                                },
-                                                FinalTime = request.FinalTime,
-                                                TimeStep = request.TimeStep,
-                                                InitialTime = request.InitialTime
-                                            });
-                                        }
-                                    }
+                                        StrainRate = strainRate,
+                                        MaximumStrain = maximumStrain,
+                                        ElasticStressConstant = elasticStressConstant,
+                                        ElasticPowerConstant = elasticPowerConstant,
+                                        ReducedRelaxationFunctionInput = null,
+                                        SimplifiedReducedRelaxationFunctionInput = simplifiedReducedRelaxationFunctionData,
+                                        UseSimplifiedReducedRelaxationFunction = request.UseSimplifiedReducedRelaxationFunction,
+                                        FinalTime = request.FinalTime,
+                                        TimeStep = request.TimeStep,
+                                        InitialTime = request.InitialTime
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                foreach (var reducedRelaxationFunctionData in request.ReducedRelaxationFunctionDataList)
+                                {
+                                    inputList.Add(new FungModelInput
+                                    {
+                                        StrainRate = strainRate,
+                                        MaximumStrain = maximumStrain,
+                                        ElasticStressConstant = elasticStressConstant,
+                                        ElasticPowerConstant = elasticPowerConstant,
+                                        ReducedRelaxationFunctionInput = reducedRelaxationFunctionData,
+                                        SimplifiedReducedRelaxationFunctionInput =  null,
+                                        UseSimplifiedReducedRelaxationFunction = request.UseSimplifiedReducedRelaxationFunction,
+                                        FinalTime = request.FinalTime,
+                                        TimeStep = request.TimeStep,
+                                        InitialTime = request.InitialTime
+                                    });
                                 }
                             }
                         }
@@ -102,16 +108,8 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
 
             if (input.UseSimplifiedReducedRelaxationFunction == true)
             {
-                var variablesE = new List<double>();
-                var relaxationTimes = new List<double>();
-                foreach (var simplifiedReducedRelaxationFunctionInput in input.SimplifiedReducedRelaxationFunctionInputList)
-                {
-                    variablesE.Add(simplifiedReducedRelaxationFunctionInput.VariableE);
-                    relaxationTimes.Add(simplifiedReducedRelaxationFunctionInput.RelaxationTime);
-                }
-
-                streamWriter.WriteLine($"Variables E: {string.Join(";", variablesE)}");
-                streamWriter.WriteLine($"Relaxation Times: {string.Join(";", relaxationTimes)}");
+                streamWriter.WriteLine($"Variables E: {string.Join(";", input.SimplifiedReducedRelaxationFunctionInput.VariableEList)}");
+                streamWriter.WriteLine($"Relaxation Times: {string.Join(";", input.SimplifiedReducedRelaxationFunctionInput.RelaxationTimeList)}");
             }
             else
             {

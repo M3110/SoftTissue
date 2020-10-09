@@ -3,7 +3,7 @@ using SoftTissue.Core.Models.Viscoelasticity;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.OperationBase;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to calculate the stress to a quasi-linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateQuasiLinearViscoelasticityStress<TRequest, TInput, TResult> : CalculateResult<TRequest, CalculateFungModelStressResponse, CalculateFungModelStressResponseData, TInput>, ICalculateQuasiLinearViscoelasticityStress<TRequest, TInput>
+    public abstract class CalculateQuasiLinearViscoelasticityStress<TRequest, TInput, TResult> : CalculateResult<TRequest, CalculateQuasiLinearViscoelasticityStressResponse, CalculateQuasiLinearViscoelasticityStressResponseData, TInput>, ICalculateQuasiLinearViscoelasticityStress<TRequest, TInput, TResult>
         where TRequest : OperationRequestBase
         where TInput : QuasiLinearViscoelasticityModelInput, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
@@ -82,9 +82,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateFungModelStressResponse> ProcessOperation(TRequest request)
+        protected override Task<CalculateQuasiLinearViscoelasticityStressResponse> ProcessOperation(TRequest request)
         {
-            var response = new CalculateFungModelStressResponse { Data = new CalculateFungModelStressResponseData() };
+            var response = new CalculateQuasiLinearViscoelasticityStressResponse { Data = new CalculateQuasiLinearViscoelasticityStressResponseData() };
             response.SetSuccessCreated();
 
             List<TInput> inputList = this.BuildInputList(request);
@@ -133,7 +133,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateFungModelStressResponse> ValidateOperation(TRequest request)
+        protected override Task<CalculateQuasiLinearViscoelasticityStressResponse> ValidateOperation(TRequest request)
         {
             return base.ValidateOperation(request);
         }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers
@@ -18,11 +18,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("calculate-stress/fung-model")]
-        public async Task<ActionResult<CalculateFungModelStressResponse>> CalculateStress(
+        public async Task<ActionResult<CalculateQuasiLinearViscoelasticityStressResponse>> CalculateStress(
             [FromServices] ICalculateFungModelStress calculateFungModelStress,
-            [FromBody] CalculateFungModelStressRequest request)
+            [FromBody] CalculateQuasiLinearViscoelasticityStressRequest request)
         {
-            CalculateFungModelStressResponse response = await calculateFungModelStress.Process(request).ConfigureAwait(false);
+            CalculateQuasiLinearViscoelasticityStressResponse response = await calculateFungModelStress.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -31,11 +31,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("calculate-stress/fung-model/sensitivity-analysis")]
-        public async Task<ActionResult<CalculateFungModelStressResponse>> CalculateStressSensivityAnalysis(
+        public async Task<ActionResult<CalculateQuasiLinearViscoelasticityStressResponse>> CalculateStressSensivityAnalysis(
             [FromServices] ICalculateFungModelStressSentivityAnalysis calculateFungModelStressSentivityAnalysis,
-            [FromBody] CalculateFungModelStressSensitivityAnalysisRequest request)
+            [FromBody] CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest request)
         {
-            CalculateFungModelStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request).ConfigureAwait(false);
+            CalculateQuasiLinearViscoelasticityStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

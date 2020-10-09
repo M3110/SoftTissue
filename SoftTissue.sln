@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Core", "src\Soft
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.DataContract", "src\SoftTissue.DataContract\SoftTissue.DataContract.csproj", "{76BF62CE-C20E-468D-A231-459FEE227BE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftTissue.Infrastructure", "src\Infrastructure\SoftTissue.Infrastructure.csproj", "{3F5FFD1B-5F62-49E1-951F-658E75BF3E4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{76BF62CE-C20E-468D-A231-459FEE227BE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76BF62CE-C20E-468D-A231-459FEE227BE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76BF62CE-C20E-468D-A231-459FEE227BE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F5FFD1B-5F62-49E1-951F-658E75BF3E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F5FFD1B-5F62-49E1-951F-658E75BF3E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F5FFD1B-5F62-49E1-951F-658E75BF3E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F5FFD1B-5F62-49E1-951F-658E75BF3E4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{CE2F6AB1-A70E-4D13-BDD5-649CD573CA62} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
 		{60784354-AC13-4790-9F6F-45DAD94D4646} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
 		{76BF62CE-C20E-468D-A231-459FEE227BE5} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
+		{3F5FFD1B-5F62-49E1-951F-658E75BF3E4B} = {2D2CDBBD-8FC4-4F2E-A6B7-AB4CD9A247AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B473ED5-B2A2-4F4D-B6E5-50E19C4C88DA}

@@ -1,5 +1,4 @@
-﻿using SoftTissue.DataContract.Models;
-using System.Collections.Generic;
+﻿using SoftTissue.Infrastructure.Models;
 
 namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
 {
@@ -7,26 +6,8 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
     {
         public bool UseSimplifiedReducedRelaxationFunction { get; set; }
 
-        public ReducedRelaxationFunctionInput ReducedRelaxationFunctionInput { get; set; }
+        public ReducedRelaxationFunctionData ReducedRelaxationFunctionInput { get; set; }
 
-        public List<SimplifiedRelaxationFunctionRequestData> SimplifiedReducedRelaxationFunctionInputList { get; set; }
-    }
-
-    public class ReducedRelaxationFunctionInput
-    {
-        /// <summary>
-        /// Constant C.
-        /// </summary>
-        public double RelaxationIndex { get; set; }
-
-        /// <summary>
-        /// Tau 1.
-        /// </summary>
-        public double FastRelaxationTime { get; set; }
-
-        /// <summary>
-        /// Tau 2.
-        /// </summary>
-        public double SlowRelaxationTime { get; set; }
+        public SimplifiedReducedRelaxationFunctionData SimplifiedReducedRelaxationFunctionInput { get; set; }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using SoftTissue.DataContract.OperationBase;
+using SoftTissue.Infrastructure.Models;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
 {
-    public class CalculateFungModelStressRequestData : OperationRequestData
+    public class CalculateQuasiLinearViscoelasticityStressRequestData : OperationRequestData
     {
         public bool UseSimplifiedReducedRelaxationFunction { get; set; }
 
@@ -26,19 +27,8 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
         /// </summary>
         public double ElasticPowerConstant { get; set; }
 
-        /// <summary>
-        /// Constant C.
-        /// </summary>
-        public double RelaxationIndex { get; set; }
+        public ReducedRelaxationFunctionData ReducedRelaxationFunctionData { get; set; }
 
-        /// <summary>
-        /// Tau 1.
-        /// </summary>
-        public double FastRelaxationTime { get; set; }
-
-        /// <summary>
-        /// Tau 2.
-        /// </summary>
-        public double SlowRelaxationTime { get; set; }
+        public SimplifiedReducedRelaxationFunctionData SimplifiedReducedRelaxationFunctionData { get; set; }
     }
 }

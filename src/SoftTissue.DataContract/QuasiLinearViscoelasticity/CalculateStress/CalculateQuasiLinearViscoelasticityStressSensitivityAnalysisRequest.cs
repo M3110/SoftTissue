@@ -1,9 +1,10 @@
 ﻿using SoftTissue.DataContract.OperationBase;
+using SoftTissue.Infrastructure.Models;
 using System.Collections.Generic;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.FungModel
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
 {
-    public class CalculateFungModelStressSensitivityAnalysisRequest : OperationRequestBase
+    public class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest : OperationRequestBase
     {
         public bool UseSimplifiedReducedRelaxationFunction { get; set; }
 
@@ -15,10 +16,8 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
 
         public IEnumerable<double> ElasticPowerConstantList { get; set; }
 
-        public IEnumerable<double> RelaxationIndexList { get; set; }
+        public IEnumerable<ReducedRelaxationFunctionData> ReducedRelaxationFunctionDataList { get; set; }
 
-        public IEnumerable<double> FastRelaxationTimeList { get; set; }
-
-        public IEnumerable<double> SlowRelaxationTimeList { get; set; }
+        public IEnumerable<SimplifiedReducedRelaxationFunctionData> SimplifiedReducedRelaxationFunctionDataList { get; set; }
     }
 }
