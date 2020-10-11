@@ -309,7 +309,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 
             using (StreamWriter streamWriter = new StreamWriter(this.CreateInputFile()))
             {
-                this.WriteInputData(inputList, streamWriter);
+                this.WriteInputData(inputList, streamWriter, request.UseSimplifiedReducedRelaxationFunction);
             }
 
             this.CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
