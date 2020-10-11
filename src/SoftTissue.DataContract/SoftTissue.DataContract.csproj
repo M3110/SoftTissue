@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\SoftTissue.Infrastructure.csproj" />
+    <ProjectReference Include="..\SoftTissue.Infrastructure\SoftTissue.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

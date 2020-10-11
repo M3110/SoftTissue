@@ -53,7 +53,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.Maxwe
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public override string CreateInputDataFile(MaxwellModelInput input)
+        public override string CreateInputFile(MaxwellModelInput input)
         {
             var fileInfo = new FileInfo(Path.Combine(
                 TemplateBasePath,

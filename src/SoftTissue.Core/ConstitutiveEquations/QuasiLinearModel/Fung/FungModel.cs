@@ -53,7 +53,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <returns></returns>
         public override double CalculateStrain(FungModelInput input, double time)
         {
-            return input.StrainRate * time < input.MaximumStrain ? input.StrainRate * time : input.MaximumStrain;
+            return time < input.RampTime ? input.StrainRate * time : input.MaximumStrain;
         }
 
         /// <summary>
@@ -78,7 +78,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         public override double CalculateElasticResponseDerivative(FungModelInput input, double time)
         {
             double strain = this.CalculateStrain(input, time);
-            double strainDerivative = this._derivative.Calculate((derivativeTime) => this.CalculateStrain(input, derivativeTime), input.TimeStep, time);
+
+            // After the ramp time, the strain is constant, so the its derivative is zero.
+            double strainDerivative = time < input.RampTime ? input.StrainRate : 0;
+
             return input.ElasticStressConstant * input.ElasticPowerConstant * strainDerivative * Math.Exp(input.ElasticPowerConstant * strain);
         }
 
@@ -90,9 +93,14 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <returns></returns>
         public override double CalculateReducedRelaxationFunctionSimplified(FungModelInput input, double time)
         {
+            if (time <= Constants.Precision)
+            {
+                return 1;
+            }
+
             double result = 0;
 
-            for(int i = 0; i < input.SimplifiedReducedRelaxationFunctionInput.VariableEList.Count(); i++)
+            for (int i = 0; i < input.SimplifiedReducedRelaxationFunctionInput.VariableEList.Count(); i++)
             {
                 result += input.SimplifiedReducedRelaxationFunctionInput.VariableEList.ElementAt(i) * Math.Exp(-time / input.SimplifiedReducedRelaxationFunctionInput.RelaxationTimeList.ElementAt(i));
             }
@@ -113,14 +121,16 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
                 return 1;
             }
 
-            var inputG = input.ReducedRelaxationFunctionInput;
+            var reducedRelaxationFunctionInput = input.ReducedRelaxationFunctionInput;
 
+            // When the time is less than 1s, can be used a simplification of reduced relaxation function, exposed by Fung.
+            // In that case, is used an approximation to equation E1, because to short values ​​it tends to infinite.
             if (time <= 1)
             {
-                return (1 - inputG.RelaxationIndex * Constants.EulerMascheroniConstant - inputG.RelaxationIndex * Math.Log(time / inputG.SlowRelaxationTime)) / (1 + inputG.RelaxationIndex * Math.Log(inputG.SlowRelaxationTime / inputG.FastRelaxationTime));
+                return (1 - reducedRelaxationFunctionInput.RelaxationIndex * Constants.EulerMascheroniConstant - reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(time / reducedRelaxationFunctionInput.SlowRelaxationTime)) / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
             }
 
-            return (1 + inputG.RelaxationIndex * (this.CalculateE1(input, time / inputG.SlowRelaxationTime) - this.CalculateE1(input, time / inputG.FastRelaxationTime))) / (1 + inputG.RelaxationIndex * Math.Log(inputG.SlowRelaxationTime / inputG.FastRelaxationTime));
+            return (1 + reducedRelaxationFunctionInput.RelaxationIndex * (this.CalculateE1(input, time / reducedRelaxationFunctionInput.SlowRelaxationTime) - this.CalculateE1(input, time / reducedRelaxationFunctionInput.FastRelaxationTime))) / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
         }
 
         private double CalculateE1(FungModelInput input, double variable)
@@ -135,6 +145,12 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             return this._simpsonRuleIntegration.Calculate((parameter) => Math.Exp(-parameter) / parameter, integralInput);
         }
 
+        /// <summary>
+        /// This method calculates the stress using the equation 7 from Fung, at page 279.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public override double CalculateStress(FungModelInput input, double time)
         {
             FungModelEquation calculatedReducedRelaxationFunction = this.SetReducedRelaxationFunction(input);
@@ -142,34 +158,22 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             var integralInput = new IntegralInput
             {
                 InitialPoint = 0,
-                FinalPoint = time,
+                FinalPoint = time < input.RampTime ? time : input.RampTime,
                 Step = input.TimeStep
             };
 
-            return this.CalculateElasticResponse(input, time: 0) * calculatedReducedRelaxationFunction(input, time) +
-                this._simpsonRuleIntegration.Calculate((equationTime) => calculatedReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime), integralInput);
+            return this._simpsonRuleIntegration.Calculate(
+                (equationTime) => calculatedReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime), 
+                integralInput);
         }
 
-        public double CalculateStressByIntegrationDerivative(FungModelInput input, double time)
-        {
-            FungModelEquation calculatedReducedRelaxationFunction = this.SetReducedRelaxationFunction(input);
-
-            return this._derivative.Calculate((derivativeTime) =>
-            {
-                var integralInput = new IntegralInput
-                {
-                    InitialPoint = 0,
-                    FinalPoint = derivativeTime,
-                    Step = input.TimeStep
-                };
-
-                return this._simpsonRuleIntegration.Calculate(
-                    (integrationTime) => this.CalculateElasticResponse(input, time - integrationTime) * calculatedReducedRelaxationFunction(input, integrationTime),
-                    integralInput);
-            },
-            input.TimeStep, time);
-        }
-
+        /// <summary>
+        /// This method calculates the stress using the equation 8.a from Fung, at page 279.
+        /// That equation do not returns a satisfactory result.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public double CalculateStressByReducedRelaxationFunctionDerivative(FungModelInput input, double time)
         {
             FungModelEquation calculatedReducedRelaxationFunction = this.SetReducedRelaxationFunction(input);
@@ -190,6 +194,33 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
                         time);
                 },
                 integralInput);
+        }
+
+        /// <summary>
+        /// This method calculates the stress using the equation 8.b from Fung, at page 279.
+        /// That equation do not returns a satisfactory result.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public double CalculateStressByIntegrationDerivative(FungModelInput input, double time)
+        {
+            FungModelEquation calculatedReducedRelaxationFunction = this.SetReducedRelaxationFunction(input);
+
+            return this._derivative.Calculate((derivativeTime) =>
+            {
+                var integralInput = new IntegralInput
+                {
+                    InitialPoint = 0,
+                    FinalPoint = derivativeTime,
+                    Step = input.TimeStep
+                };
+
+                return this._simpsonRuleIntegration.Calculate(
+                    (integrationTime) => this.CalculateElasticResponse(input, time - integrationTime) * calculatedReducedRelaxationFunction(input, integrationTime),
+                    integralInput);
+            },
+            input.TimeStep, time);
         }
 
         private FungModelEquation SetReducedRelaxationFunction(FungModelInput input)

@@ -47,7 +47,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
             foreach (var input in inputs)
             {
                 string solutionFileName = this.CreateSolutionFile(input);
-                string inputDataFileName = this.CreateInputDataFile(input);
+                string inputDataFileName = this.CreateInputFile(input);
 
                 using (StreamWriter streamWriter = new StreamWriter(inputDataFileName))
                 {

@@ -15,13 +15,6 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
 
         public Value ElasticPowerConstantList { get; set; }
 
-        public ReducedRelaxationFunctionDataList ReducedRelaxationFunctionDataList { get; set; }
-
-        public IEnumerable<SimplifiedReducedRelaxationFunctionData> SimplifiedReducedRelaxationFunctionDataList { get; set; }
-    }
-
-    public class ReducedRelaxationFunctionDataList
-    {
         /// <summary>
         /// Constant C.
         /// </summary>
@@ -36,5 +29,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
         /// Tau 2.
         /// </summary>
         public Value SlowRelaxationTimeList { get; set; }
+
+        public IEnumerable<SimplifiedReducedRelaxationFunctionData> SimplifiedReducedRelaxationFunctionDataList { get; set; }
     }
 }

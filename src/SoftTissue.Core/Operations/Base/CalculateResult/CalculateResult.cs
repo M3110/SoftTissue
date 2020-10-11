@@ -27,7 +27,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public abstract string CreateInputDataFile(TInput input);
+        public abstract string CreateInputFile(TInput input);
 
         /// <summary>
         /// This method builds a list with the inputs based on the request.
