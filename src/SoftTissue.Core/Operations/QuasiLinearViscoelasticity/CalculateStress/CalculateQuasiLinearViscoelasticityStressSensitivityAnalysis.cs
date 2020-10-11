@@ -42,7 +42,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         public virtual List<TInput> BuildInputList(CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest request)
         {
             var inputList = new List<TInput>();
-            int index = 0;
 
             foreach (double strainRate in request.StrainRateList)
             {
@@ -65,10 +64,10 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                                         ReducedRelaxationFunctionInput = null,
                                         SimplifiedReducedRelaxationFunctionInput = simplifiedReducedRelaxationFunctionData,
                                         UseSimplifiedReducedRelaxationFunction = request.UseSimplifiedReducedRelaxationFunction,
-                                        Index = index
+                                        InitialTime = request.InitialTime,
+                                        TimeStep = request.TimeStep,
+                                        FinalTime = request.FinalTime
                                     });
-
-                                    index++;
                                 }
                             }
                             else
@@ -93,10 +92,10 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                                                 },
                                                 SimplifiedReducedRelaxationFunctionInput = null,
                                                 UseSimplifiedReducedRelaxationFunction = request.UseSimplifiedReducedRelaxationFunction,
-                                                Index = index
+                                                InitialTime = request.InitialTime,
+                                                TimeStep = request.TimeStep,
+                                                FinalTime = request.FinalTime
                                             });
-
-                                            index++;
                                         }
                                     }
                                 }
@@ -152,7 +151,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="input"></param>
         /// <param name="streamWriter"></param>
-        public virtual void WriteInputData(List<TInput> inputList, StreamWriter streamWriter)
+        public virtual void WriteInputData(List<TInput> inputList, StreamWriter streamWriter, bool useSimplifiedReducedRelaxationFunction)
         {
             List<double> initialTimeList = new List<double>();
             List<double> timeStepList = new List<double>();
@@ -161,6 +160,15 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             List<double> maximumStrainList = new List<double>();
             List<double> elasticStressConstantList = new List<double>();
             List<double> elasticPowerConstantList = new List<double>();
+
+            // That variables will be used if the parameter UseSimplifiedReducedRelaxationFunction was false.
+            List<double> relaxationIndexList = new List<double>();
+            List<double> fastRelaxationTimeList = new List<double>();
+            List<double> slowRelaxationTimeList = new List<double>();
+
+            // That variables will be used if the parameter UseSimplifiedReducedRelaxationFunction was true.
+            List<string> variablesEList = new List<string>();
+            List<string> relaxationTimesList = new List<string>();
 
             StringBuilder header = new StringBuilder("Parameter;");
             int index = 0;
@@ -175,6 +183,18 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                 elasticStressConstantList.Add(input.ElasticStressConstant);
                 elasticPowerConstantList.Add(input.ElasticPowerConstant);
 
+                if (useSimplifiedReducedRelaxationFunction == false)
+                {
+                    relaxationIndexList.Add(input.ReducedRelaxationFunctionInput.RelaxationIndex);
+                    fastRelaxationTimeList.Add(input.ReducedRelaxationFunctionInput.FastRelaxationTime);
+                    slowRelaxationTimeList.Add(input.ReducedRelaxationFunctionInput.SlowRelaxationTime);
+                }
+                else
+                {
+                    variablesEList.Add(string.Join('-', input.SimplifiedReducedRelaxationFunctionInput.VariableEList));
+                    relaxationTimesList.Add(string.Join('-', input.SimplifiedReducedRelaxationFunctionInput.RelaxationTimeList));
+                }
+
                 header.Append($"Input {index};");
                 index++;
             }
@@ -183,12 +203,24 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 
             streamWriter.WriteLine(header);
             streamWriter.WriteLine($"Initial Time;{string.Join(';', initialTimeList)};s");
-            streamWriter.WriteLine($"Time Step;{string.Join(';', initialTimeList)};s");
-            streamWriter.WriteLine($"Final Time;{string.Join(';', initialTimeList)};s");
-            streamWriter.WriteLine($"Strain Rate;{string.Join(';', initialTimeList)};/s");
-            streamWriter.WriteLine($"Maximum Strain;{string.Join(';', initialTimeList)};");
-            streamWriter.WriteLine($"Elastic Stress Constant (A);{string.Join(';', initialTimeList)};MPa");
-            streamWriter.WriteLine($"Elastic Power Constant (B);{string.Join(';', initialTimeList)};");
+            streamWriter.WriteLine($"Time Step;{string.Join(';', timeStepList)};s");
+            streamWriter.WriteLine($"Final Time;{string.Join(';', finalTimeList)};s");
+            streamWriter.WriteLine($"Strain Rate;{string.Join(';', strainRateList)};/s");
+            streamWriter.WriteLine($"Maximum Strain;{string.Join(';', maximumStrainList)};");
+            streamWriter.WriteLine($"Elastic Stress Constant (A);{string.Join(';', elasticStressConstantList)};MPa");
+            streamWriter.WriteLine($"Elastic Power Constant (B);{string.Join(';', elasticPowerConstantList)};");
+
+            if (useSimplifiedReducedRelaxationFunction == false)
+            {
+                streamWriter.WriteLine($"Relaxation Index (C);{string.Join(';', relaxationIndexList)};");
+                streamWriter.WriteLine($"Fast relaxation time (Tau 1);{string.Join(';', fastRelaxationTimeList)};s");
+                streamWriter.WriteLine($"Slow relaxation time (Tau 2);{string.Join(';', slowRelaxationTimeList)};s");
+            }
+            else
+            {
+                streamWriter.WriteLine($"Variables E;{string.Join(';', variablesEList)};");
+                streamWriter.WriteLine($"Relaxation Times;{string.Join(';', relaxationTimesList)};s");
+            }
         }
 
         /// <summary>

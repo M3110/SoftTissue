@@ -12,7 +12,5 @@
         public double TimeStep { get; set; }
 
         public double FinalTime { get; set; }
-
-        public double Index { get; set; }
     }
 }
