@@ -38,5 +38,18 @@ namespace SoftTissue.Application.Controllers
             CalculateQuasiLinearViscoelasticityStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
+
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("calculate-stress/fung-model/sensitivity-analysis/explicit")]
+        public async Task<ActionResult<CalculateQuasiLinearViscoelasticityStressResponse>> CalculateStressSensivityAnalysisExplicit(
+            [FromServices] ICalculateFungModelStressSentivityAnalysis calculateFungModelStressSentivityAnalysis,
+            [FromBody] CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisExplicitRequest request)
+        {
+            CalculateQuasiLinearViscoelasticityStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request.MapToSensitivityAnalysis()).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
     }
 }

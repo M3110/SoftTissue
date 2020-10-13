@@ -1,0 +1,11 @@
+Parameter;Input 0;Input 1;Input 2;Input 3;Input 4;Input 5;Input 6;Input 7;Unity
+Initial Time;0;0;0;0;0;0;0;0;s
+Time Step;0,1;0,1;0,1;0,1;0,1;0,1;0,1;0,1;s
+Final Time;300;300;300;300;300;300;300;300;s
+Strain Rate;0,001;0,001;0,001;0,001;0,001;0,001;0,001;0,001;/s
+Maximum Strain;0,05;0,05;0,05;0,05;0,05;0,05;0,05;0,05;
+Elastic Stress Constant (A);0,001;0,001;0,001;0,001;0,001;0,001;0,001;0,001;MPa
+Elastic Power Constant (B);0,1;0,1;0,1;0,1;0,1;0,1;0,1;0,1;
+Relaxation Index (C);0,005;0,032;0,05;0,089;0,099;0,9;0,146;2,06;
+Fast relaxation time (Tau 1);0,005;0,005;0,005;0,005;0,005;0,005;0,005;0,005;s
+Slow relaxation time (Tau 2);50;50;50;50;50;50;50;50;s

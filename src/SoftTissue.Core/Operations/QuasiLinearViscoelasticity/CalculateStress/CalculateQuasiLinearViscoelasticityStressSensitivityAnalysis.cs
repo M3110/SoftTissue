@@ -275,7 +275,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                         double strain = this._viscoelasticModel.CalculateStrain(input, time);
                         strainResults.Append($"{strain};");
 
-                        double reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
+                        double reducedRelaxationFunction;
+                        if (input.UseSimplifiedReducedRelaxationFunction == true) reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunctionSimplified(input, time);
+                        else reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
                         reducedRelaxationFunctionResults.Append($"{reducedRelaxationFunction};");
 
                         double elasticResponse = this._viscoelasticModel.CalculateElasticResponse(input, time);
