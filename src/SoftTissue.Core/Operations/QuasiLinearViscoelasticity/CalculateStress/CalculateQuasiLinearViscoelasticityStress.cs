@@ -3,10 +3,12 @@ using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResult;
+using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
@@ -189,20 +191,28 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                 double time = input.InitialTime;
                 var previousResult = this._viscoelasticModel.CalculateInitialConditions(input);
 
-                using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(input)))
+                try
                 {
-                    streamWriter.WriteLine(this.SolutionFileHeader);
-
-                    while (time <= input.FinalTime)
+                    using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(input)))
                     {
-                        TResult result = this.CalculateAndWriteResults(input, time, streamWriter);
+                        streamWriter.WriteLine(this.SolutionFileHeader);
 
-                        // It increases the time step when the stress is converging to its asymptote.
-                        if (Math.Abs((result.Stress - previousResult.Stress) / previousResult.Stress) < Constants.RelativePrecision) time += 10 * input.TimeStep;
-                        else time += input.TimeStep;
+                        while (time <= input.FinalTime)
+                        {
+                            TResult result = this.CalculateAndWriteResults(input, time, streamWriter);
 
-                        previousResult = result;
+                            // It increases the time step when the stress is converging to its asymptote.
+                            if (Math.Abs((result.Stress - previousResult.Stress) / previousResult.Stress) < Constants.RelativePrecision) time += 10 * input.TimeStep;
+                            else time += input.TimeStep;
+
+                            previousResult = result;
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    response.AddError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.", HttpStatusCode.InternalServerError);
+                    response.SetInternalServerError();
                 }
             });
 

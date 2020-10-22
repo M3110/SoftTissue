@@ -40,5 +40,3 @@ Fazer análise de sensibilidade para cada variável
 	- Cada gráfico deve ter um valor diferente para alguma variável.
 
 Para o caso do modelo de Maxwell, caso queira analisar a tensão, a deformação deve ser constante e vice-versa.
-
-Preparar o código para iterar cada variável

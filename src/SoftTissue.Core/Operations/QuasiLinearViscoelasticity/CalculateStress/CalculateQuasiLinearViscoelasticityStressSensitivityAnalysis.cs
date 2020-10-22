@@ -2,10 +2,13 @@
 using SoftTissue.Core.Models.Viscoelasticity;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base;
+using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
 using SoftTissue.Infrastructure.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -314,7 +317,15 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                 this.WriteInputData(inputList, streamWriter, request.UseSimplifiedReducedRelaxationFunction);
             }
 
-            this.CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
+            try
+            {
+                this.CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
+            }
+            catch (Exception ex)
+            {
+                response.AddError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.", HttpStatusCode.InternalServerError);
+                response.SetInternalServerError();
+            }
 
             return Task.FromResult(response);
         }

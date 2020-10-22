@@ -28,6 +28,11 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         public delegate double FungModelEquation(FungModelInput input, double time);
 
         /// <summary>
+        /// The time when the alternative and original reduced relaxation function converge.
+        /// </summary>
+        public double? ConvergenceTime { get; set; }
+
+        /// <summary>
         /// This method calculates the initial conditions for Fung model analysis.
         /// </summary>
         /// <param name="input"></param>
@@ -116,33 +121,32 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <returns></returns>
         public override double CalculateReducedRelaxationFunction(FungModelInput input, double time)
         {
+            // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
+            // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
+            // is called in another methods, that error must be considered to times near to zero.
             if (time <= Constants.Precision)
             {
                 return 1;
             }
 
+            // This step is necessary to find the time when the original and alternative reduced relaxation function converge.
+            if (this.ConvergenceTime.HasValue == false)
+            {
+                this.ConvergenceTime = this.CalculateConvergenceTimeToReducedRelaxationFunction(input);
+            }
+
             var reducedRelaxationFunctionInput = input.ReducedRelaxationFunctionInput;
 
-            // When the time is less than 1s, can be used a simplification of reduced relaxation function, exposed by Fung.
+            // When the time is in order of 1s, can be used a simplification of reduced relaxation function, exposed by Fung.
             // In that case, is used an approximation to equation E1, because to short values ​​it tends to infinite.
-            if (time <= 1)
+            if (time <= this.ConvergenceTime.Value)
             {
                 return (1 - reducedRelaxationFunctionInput.RelaxationIndex * Constants.EulerMascheroniConstant - reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(time / reducedRelaxationFunctionInput.SlowRelaxationTime)) / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
             }
 
-            return (1 + reducedRelaxationFunctionInput.RelaxationIndex * (this.CalculateE1(input, time / reducedRelaxationFunctionInput.SlowRelaxationTime) - this.CalculateE1(input, time / reducedRelaxationFunctionInput.FastRelaxationTime))) / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
-        }
-
-        private double CalculateE1(FungModelInput input, double variable)
-        {
-            var integralInput = new IntegralInput
-            {
-                InitialPoint = variable,
-                Precision = Constants.Precision,
-                Step = input.TimeStep
-            };
-
-            return this._simpsonRuleIntegration.Calculate((parameter) => Math.Exp(-parameter) / parameter, integralInput);
+            // The original equation was rewritten to simplify the E1 equation.
+            // Instead of calculate E1 twice, was unified the dominion of both integration. See the explanation on Equation.docx.
+            return (1 + reducedRelaxationFunctionInput.RelaxationIndex * this.CalculateI(reducedRelaxationFunctionInput.SlowRelaxationTime, reducedRelaxationFunctionInput.SlowRelaxationTime, input.TimeStep, time)) / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
         }
 
         /// <summary>
@@ -163,8 +167,57 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             };
 
             return this._simpsonRuleIntegration.Calculate(
-                (equationTime) => calculatedReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime), 
+                (equationTime) => calculatedReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime),
                 integralInput);
+        }
+
+        /// <summary>
+        /// This method calculates the equation I(t) where t is the time.
+        /// I(t) = E1(t/tau 2) - E1(t/tau 1)
+        /// E1(x) = integral(e^-x/x) from x to infinite.
+        /// </summary>
+        /// <param name="slowRelaxationTime"></param>
+        /// <param name="fastRelaxationTime"></param>
+        /// <param name="stepTime"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public double CalculateI(double slowRelaxationTime, double fastRelaxationTime, double stepTime, double time)
+        {
+            var integralInput = new IntegralInput
+            {
+                InitialPoint = time / slowRelaxationTime,
+                FinalPoint = time / fastRelaxationTime,
+                Step = stepTime
+            };
+
+            return this._simpsonRuleIntegration.Calculate((parameter) => Math.Exp(-parameter) / parameter, integralInput);
+        }
+
+        /// <summary>
+        /// This method calculates time when the alternative and original reduced relaxation function converge.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public double CalculateConvergenceTimeToReducedRelaxationFunction(FungModelInput input)
+        {
+            double original = this.CalculateI(input.ReducedRelaxationFunctionInput.SlowRelaxationTime, input.ReducedRelaxationFunctionInput.SlowRelaxationTime, input.TimeStep, input.InitialTime);
+            double simplified = -Constants.EulerMascheroniConstant - Math.Log(input.InitialTime / input.ReducedRelaxationFunctionInput.SlowRelaxationTime);
+            double time = input.InitialTime;
+
+            while (original - simplified <= Constants.Precision)
+            {
+                time += input.TimeStep;
+
+                if (time >= input.FinalTime)
+                {
+                    throw new IndexOutOfRangeException($"The original and alternative reduced relaxation function do not converge in the range of time: {input.InitialTime} - {input.FinalTime}, with slow relaxation time: {input.ReducedRelaxationFunctionInput.SlowRelaxationTime} and fast relaxation time: {input.ReducedRelaxationFunctionInput.FastRelaxationTime}.");
+                }
+
+                original = this.CalculateI(input.ReducedRelaxationFunctionInput.SlowRelaxationTime, input.ReducedRelaxationFunctionInput.SlowRelaxationTime, input.TimeStep, time);
+                simplified = -Constants.EulerMascheroniConstant - Math.Log(time / input.ReducedRelaxationFunctionInput.SlowRelaxationTime);
+            }
+
+            return time;
         }
 
         /// <summary>
@@ -223,7 +276,12 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             input.TimeStep, time);
         }
 
-        private FungModelEquation SetReducedRelaxationFunction(FungModelInput input)
+        /// <summary>
+        /// This method sets the correct Reduced Relaxation Function to be used.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public FungModelEquation SetReducedRelaxationFunction(FungModelInput input)
         {
             if (input.UseSimplifiedReducedRelaxationFunction == false)
                 return this.CalculateReducedRelaxationFunction;
