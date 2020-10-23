@@ -11,11 +11,11 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         where TInput : ViscoelasticModelInput, new()
     {
         /// <summary>
-        /// This method creates the path to save the solution on a file.
+        /// This method builds a list with the inputs based on the request.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        string CreateSolutionFile(TInput input);
+        List<TInput> BuildInputList(TRequest request);
 
         /// <summary>
         /// This method creates the path to save the input data on a file.
@@ -25,10 +25,10 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         string CreateInputFile(TInput input);
 
         /// <summary>
-        /// This method builds a list with the inputs based on the request.
+        /// This method creates the path to save the solution on a file.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        List<TInput> BuildInputList(TRequest request);
+        string CreateSolutionFile(TInput input);
     }
 }

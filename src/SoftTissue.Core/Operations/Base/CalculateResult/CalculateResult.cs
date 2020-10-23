@@ -10,17 +10,19 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         where TResponseData : OperationResponseData, new()
         where TInput : ViscoelasticModelInput, new()
     {
+        // Adicionar construtor recebendo o modelo viscoelástico desejado.
+
         /// <summary>
         /// The header to solution file.
         /// </summary>
         public abstract string SolutionFileHeader { get; }
 
         /// <summary>
-        /// This method creates the path to save the solution on a file.
+        /// This method builds a list with the inputs based on the request.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        public abstract string CreateSolutionFile(TInput input);
+        public abstract List<TInput> BuildInputList(TRequest request);
 
         /// <summary>
         /// This method creates the path to save the input data on a file.
@@ -30,10 +32,10 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         public abstract string CreateInputFile(TInput input);
 
         /// <summary>
-        /// This method builds a list with the inputs based on the request.
+        /// This method creates the path to save the solution on a file.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="input"></param>
         /// <returns></returns>
-        public abstract List<TInput> BuildInputList(TRequest request);
+        public abstract string CreateSolutionFile(TInput input);
     }
 }

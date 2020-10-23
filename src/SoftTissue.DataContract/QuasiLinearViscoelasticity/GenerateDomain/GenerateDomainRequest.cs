@@ -1,9 +1,9 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using SoftTissue.Infrastructure.Models;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDominium
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
 {
-    public class GenerateDominiumRequest : OperationRequestBase
+    public class GenerateDomainRequest : OperationRequestBase
     {
         /// <summary>
         /// Tau 1.

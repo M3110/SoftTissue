@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Operation CalculateResult with the generical methods and properties used in all operations that calculate some analysis.
 - Method to calculate the initial conditions for Quasi-Linear Viscoelasticity Model.
 - Validation to time step to increase it when stress is converging to asymptote.
+- Operation to generate the domain for Fung Model parameters.
 
 ## [1.0.1] - 2020-09-30
 ### Fixed
