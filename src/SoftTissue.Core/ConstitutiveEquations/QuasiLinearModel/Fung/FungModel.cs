@@ -183,11 +183,19 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <returns></returns>
         public double CalculateI(double slowRelaxationTime, double fastRelaxationTime, double stepTime, double time)
         {
+            double initialPoint = time / slowRelaxationTime;
+            double step;
+
+            if (initialPoint <= 0.5) step = 0.0001;
+            else if (initialPoint > 0.5 && initialPoint <= 1) step = 0.001;
+            else if (initialPoint > 1 && initialPoint <= 5) step = 0.01;
+            else step = 0.1;
+
             var integralInput = new IntegralInput
             {
                 InitialPoint = time / slowRelaxationTime,
                 FinalPoint = time / fastRelaxationTime,
-                Step = stepTime
+                Step = step
             };
 
             return this._simpsonRuleIntegration.Calculate((parameter) => Math.Exp(-parameter) / parameter, integralInput);
