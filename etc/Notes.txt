@@ -1,5 +1,7 @@
 Anotações - IC Viscoelasticidade
 
+Se os tempos de relaxação lento e rápido forem iguais, a Função Reduzida de Relaxação sempre vai dar 1.
+
 Nos primeiros tempos (de 0s a 100s)
 - Iterar de 0.1s
 De 100s a 1000s

@@ -21,7 +21,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         /// <summary>
         /// The base path to files.
         /// </summary>
-        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory());
+        private static readonly string TemplateBasePath = Path.Combine(
+            Directory.GetCurrentDirectory(), 
+            "sheets");
 
         /// <summary>
         /// The header to solution file.
@@ -106,20 +108,18 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
             {
                 domainStreamWriter.WriteLine(this.DomainFileHeader);
 
-                foreach (GenerateFungModelDomainInput input in this.BuildInputList(request))
+                Parallel.ForEach(this.BuildInputList(request), input =>
                 {
                     using (StreamWriter solutionStreamWriter = new StreamWriter(this.CreateSolutionFile(input)))
                     {
                         solutionStreamWriter.WriteLine(this.SolutionFileHeader);
 
                         double time = input.TimeStep;
-                        double finalTime = 0;
-
-                        bool continueVerifying = true;
+                        double finalTime = input.FinalTime;
 
                         // The inequation used to generate the domain:
                         // integral(e^-x/x) from time/slow relaxation time to time/fast relaxation time < ln(slow relaxation time/fast relaxation time)
-                        while (time < input.FinalTime)
+                        while (time <= input.FinalTime)
                         {
                             // The left size of equation.
                             double leftSize = this._fungModel.CalculateI(input.SlowRelaxationTime, input.FastRelaxationTime, input.TimeStep, time);
@@ -128,11 +128,10 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
 
                             solutionStreamWriter.WriteLine($"{time};{leftSize};{rightSize}");
 
-                            if (leftSize >= rightSize && continueVerifying == true)
+                            if (leftSize >= rightSize)
                             {
                                 finalTime = time;
-
-                                continueVerifying = false;
+                                break;
                             }
 
                             time += input.TimeStep;
@@ -140,7 +139,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
 
                         domainStreamWriter.WriteLine($"{input.FastRelaxationTime};{input.SlowRelaxationTime};{input.InitialTime};{finalTime}");
                     }
-                }
+                });
             }
 
             return Task.FromResult(response);
