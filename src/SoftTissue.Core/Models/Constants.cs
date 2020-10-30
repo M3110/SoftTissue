@@ -28,8 +28,28 @@ namespace SoftTissue.Core.Models
         public static string DirectoryBasePath = Directory.GetCurrentDirectory().Replace("\\src\\SoftTissue.Application", "\\");
 
         /// <summary>
-        /// The base path to Fung Model response files.
+        /// The base path to solution response files.
         /// </summary>
-        public static string FungModelBasePath = Path.Combine(Constants.DirectoryBasePath, "sheets\\Solutions\\Quasi-Linear Viscosity\\Fung Model");
+        public static string SolutionBasePath = Path.Combine(Constants.DirectoryBasePath, "sheets\\Solutions");
+
+        /// <summary>
+        /// The base path to response files of Quasi-Linear Model.
+        /// </summary>
+        public static string QuasiLinearModelBasePath = Path.Combine(Constants.SolutionBasePath, "Quasi-Linear Viscoelastic");
+
+        /// <summary>
+        /// The base path to response files of Fung Model.
+        /// </summary>
+        public static string FungModelBasePath = Path.Combine(Constants.QuasiLinearModelBasePath, "Fung Model");
+
+        /// <summary>
+        /// The base path to response files of Linear Viscoelastic Model.
+        /// </summary>
+        public static string LinearModelBasePath = Path.Combine(Constants.SolutionBasePath, "Linear Viscoelastic");
+
+        /// <summary>
+        /// The base path to response files of Maxwell Model.
+        /// </summary>
+        public static string MaxwellModelBasePath = Path.Combine(Constants.LinearModelBasePath, "Maxwell Model");
     }
 }
