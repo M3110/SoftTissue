@@ -30,8 +30,14 @@ namespace SoftTissue.Core.Operations.Base
         /// <returns></returns>
         protected virtual Task<TResponse> ValidateOperation(TRequest request)
         {
-            TResponse response = new TResponse();
+            var response = new TResponse();
             response.SetSuccessCreated();
+
+            if (request == null)
+            {
+                response.AddError(OperationErrorCode.RequestValidationError, "Request cannot be null");
+                response.SetBadRequestError();
+            }
 
             return Task.FromResult(response);
         }
@@ -44,7 +50,7 @@ namespace SoftTissue.Core.Operations.Base
         /// <returns></returns>
         public async Task<TResponse> Process(TRequest request)
         {
-            TResponse response = new TResponse();
+            var response = new TResponse();
 
             try
             {
