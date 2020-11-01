@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E192E424-B46A-4225-A7F5-18FC6EEDCCD6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E3669B78-1697-493A-9D3E-A2276A9277CE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{2F18C898-B68B-4ADE-B402-1B61384FADCF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{E468E120-4BDD-4C72-AD36-FA44CB23642E}"
 	ProjectSection(SolutionItems) = preProject
 		etc\CHANGELOG.md = etc\CHANGELOG.md
 		etc\Equations.docx = etc\Equations.docx
@@ -13,17 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{2F18C898-B68
 		etc\README.md = etc\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Application", "src\SoftTissue.Application\SoftTissue.Application.csproj", "{E7A9AC22-D930-4B87-ACE3-BB62F2C48845}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "request", "request", "{800A2B1C-918C-4FE6-9A30-5857E38AE44E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Core", "src\SoftTissue.Core\SoftTissue.Core.csproj", "{CA19B2D9-3822-4D21-9C82-967AB55E9F48}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.DataContract", "src\SoftTissue.DataContract\SoftTissue.DataContract.csproj", "{1945CE3D-A35D-4406-88E6-FBB6DD6709A7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Infrastructure", "src\SoftTissue.Infrastructure\SoftTissue.Infrastructure.csproj", "{2EE5F93C-7791-4904-973B-7DE74FCDA339}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "requests", "requests", "{F51DE718-7217-490D-9170-B377A1EE4CFF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FungModel", "FungModel", "{5313A5CD-3242-40CC-A00D-9D700668DC0E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FungModel", "FungModel", "{AB0244EC-0F89-4D3A-A983-5C7DFFD90FC0}"
 	ProjectSection(SolutionItems) = preProject
 		requests\Fung Model\Cervical spinal ligament.json = requests\Fung Model\Cervical spinal ligament.json
 		requests\Fung Model\Fung Model.json = requests\Fung Model\Fung Model.json
@@ -36,40 +28,48 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FungModel", "FungModel", "{
 		requests\Fung Model\Numerical Approximation.json = requests\Fung Model\Numerical Approximation.json
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Infrastructure", "src\SoftTissue.Infrastructure\SoftTissue.Infrastructure.csproj", "{B7FF86B2-22EE-403C-9240-3DBF59154382}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.DataContract", "src\SoftTissue.DataContract\SoftTissue.DataContract.csproj", "{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Core", "src\SoftTissue.Core\SoftTissue.Core.csproj", "{A213E321-0FB1-4F42-919C-7956DD4E328A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Application", "src\SoftTissue.Application\SoftTissue.Application.csproj", "{94B2841B-01F0-4A7B-A3F8-5723E0B26175}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E7A9AC22-D930-4B87-ACE3-BB62F2C48845}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7A9AC22-D930-4B87-ACE3-BB62F2C48845}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7A9AC22-D930-4B87-ACE3-BB62F2C48845}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7A9AC22-D930-4B87-ACE3-BB62F2C48845}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA19B2D9-3822-4D21-9C82-967AB55E9F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA19B2D9-3822-4D21-9C82-967AB55E9F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA19B2D9-3822-4D21-9C82-967AB55E9F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA19B2D9-3822-4D21-9C82-967AB55E9F48}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1945CE3D-A35D-4406-88E6-FBB6DD6709A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1945CE3D-A35D-4406-88E6-FBB6DD6709A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1945CE3D-A35D-4406-88E6-FBB6DD6709A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1945CE3D-A35D-4406-88E6-FBB6DD6709A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2EE5F93C-7791-4904-973B-7DE74FCDA339}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2EE5F93C-7791-4904-973B-7DE74FCDA339}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2EE5F93C-7791-4904-973B-7DE74FCDA339}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2EE5F93C-7791-4904-973B-7DE74FCDA339}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A213E321-0FB1-4F42-919C-7956DD4E328A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A213E321-0FB1-4F42-919C-7956DD4E328A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A213E321-0FB1-4F42-919C-7956DD4E328A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A213E321-0FB1-4F42-919C-7956DD4E328A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94B2841B-01F0-4A7B-A3F8-5723E0B26175}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94B2841B-01F0-4A7B-A3F8-5723E0B26175}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94B2841B-01F0-4A7B-A3F8-5723E0B26175}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94B2841B-01F0-4A7B-A3F8-5723E0B26175}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E7A9AC22-D930-4B87-ACE3-BB62F2C48845} = {E192E424-B46A-4225-A7F5-18FC6EEDCCD6}
-		{CA19B2D9-3822-4D21-9C82-967AB55E9F48} = {E192E424-B46A-4225-A7F5-18FC6EEDCCD6}
-		{1945CE3D-A35D-4406-88E6-FBB6DD6709A7} = {E192E424-B46A-4225-A7F5-18FC6EEDCCD6}
-		{2EE5F93C-7791-4904-973B-7DE74FCDA339} = {E192E424-B46A-4225-A7F5-18FC6EEDCCD6}
-		{5313A5CD-3242-40CC-A00D-9D700668DC0E} = {F51DE718-7217-490D-9170-B377A1EE4CFF}
+		{AB0244EC-0F89-4D3A-A983-5C7DFFD90FC0} = {800A2B1C-918C-4FE6-9A30-5857E38AE44E}
+		{B7FF86B2-22EE-403C-9240-3DBF59154382} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
+		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
+		{A213E321-0FB1-4F42-919C-7956DD4E328A} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
+		{94B2841B-01F0-4A7B-A3F8-5723E0B26175} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {247FDFEC-5340-4947-AB09-65E6A39B6859}
+		SolutionGuid = {8EB3BFD4-D84B-40E2-AAC1-B5DC59B9923F}
 	EndGlobalSection
 EndGlobal
