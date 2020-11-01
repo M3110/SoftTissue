@@ -193,7 +193,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 
             var integralInput = new IntegralInput
             {
-                InitialPoint = time / slowRelaxationTime,
+                InitialPoint = initialPoint,
                 FinalPoint = time / fastRelaxationTime,
                 Step = step
             };
