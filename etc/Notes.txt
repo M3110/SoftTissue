@@ -1,5 +1,7 @@
 Anotações - IC Viscoelasticidade
 
+Se os tempos de relaxação lento e rápido forem iguais, a Função Reduzida de Relaxação sempre vai dar 1.
+
 Nos primeiros tempos (de 0s a 100s)
 - Iterar de 0.1s
 De 100s a 1000s
@@ -40,5 +42,3 @@ Fazer análise de sensibilidade para cada variável
 	- Cada gráfico deve ter um valor diferente para alguma variável.
 
 Para o caso do modelo de Maxwell, caso queira analisar a tensão, a deformação deve ser constante e vice-versa.
-
-Preparar o código para iterar cada variável

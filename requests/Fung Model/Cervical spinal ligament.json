@@ -1,0 +1,28 @@
+{
+  "useSimplifiedReducedRelaxationFunction": true,
+  "strainRateList": [
+    0.005
+  ],
+  "maximumStrainList": [
+    0.04,0.25
+  ],
+  "elasticStressConstantList": [
+    0.094,0.203,1.31
+  ],
+  "elasticPowerConstantList": [
+    7.359,8.380,13.716
+  ],
+  "simplifiedReducedRelaxationFunctionDataList": [
+    {
+      "variableEList": [
+        0.082,0.048,0.063,0.075
+      ],
+      "relaxationTimeList": [
+        0.178,0.092,0.125,0.195
+      ]
+    }
+  ],
+  "initialTime": 0,
+  "timeStep": 0.1,
+  "finalTime": 300
+}

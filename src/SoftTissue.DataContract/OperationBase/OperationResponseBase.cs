@@ -38,7 +38,6 @@ namespace SoftTissue.DataContract.OperationBase
         /// </summary>
         public TResponseData Data { get; set; }
 
-
         /// <summary>
         /// This method adds error on list of errors.
         /// </summary>

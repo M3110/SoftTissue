@@ -17,8 +17,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
         {
             // The equation to be used to calculate the reduced relaxation function.
             // G(t) = mi * e^(-t/tau)
-            double value
-                = input.Stiffness * Math.Exp(-time / input.RelaxationTime);
+            double value = input.Stiffness * Math.Exp(-time / input.RelaxationTime);
 
             return value;
         }
@@ -61,8 +60,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
             // The equation to be used to calculate the strain.
             // epsilon(t) = (sigma0 / mi) * J(t)
             // J(t) = (1 / mi) + (time / ni)
-            double result
-                = input.InitialStress / input.Stiffness * this.CalculateCreepCompliance(input, time);
+            double result = input.InitialStress / input.Stiffness * this.CalculateCreepCompliance(input, time);
 
             return result;
         }

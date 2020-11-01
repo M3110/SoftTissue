@@ -66,6 +66,12 @@ namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
 
             double numberOfDivisions = (finalPoint - integralInput.InitialPoint) / integralInput.Step;
 
+            // If the number of divisions is equals to zero, it means that the interval is null, so the integral must be zero.
+            if (numberOfDivisions == 0)
+            {
+                return 0;
+            }
+
             double result = 0;
 
             for (int i = 0; i <= numberOfDivisions; i++)
@@ -78,7 +84,7 @@ namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
                 {
                     result += 4 * Equation(integralInput.InitialPoint + i * integralInput.Step);
                 }
-                else
+                else if (i % 2 == 0)
                 {
                     result += 2 * Equation(integralInput.InitialPoint + i * integralInput.Step);
                 }
