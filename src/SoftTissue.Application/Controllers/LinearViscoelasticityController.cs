@@ -15,6 +15,16 @@ namespace SoftTissue.Application.Controllers
     [Route("api/v1/linear-viscoelasticity")]
     public class LinearViscoelasticityController : ControllerBase
     {
+        /// <summary>
+        /// It is responsible to execute an analysis to calculate the stress considering Maxwell Model.
+        /// </summary>
+        /// <param name="calculateMaxwellModelStress"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -28,6 +38,16 @@ namespace SoftTissue.Application.Controllers
             return response.BuildHttpResponse();
         }
 
+        /// <summary>
+        /// It is responsible to execute a sensitivity analysis while calculating the stress considering Maxwell Model.
+        /// </summary>
+        /// <param name="calculateMaxwellModelStressSensitivityAnalysis"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -41,6 +61,16 @@ namespace SoftTissue.Application.Controllers
             return response.BuildHttpResponse();
         }
 
+        /// <summary>
+        /// It is responsible to execute an analysis to calculate the strain considering Maxwell Model.
+        /// </summary>
+        /// <param name="calculateMaxwellModelStrain"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -54,6 +84,16 @@ namespace SoftTissue.Application.Controllers
             return response.BuildHttpResponse();
         }
 
+        /// <summary>
+        /// It is responsible to execute a sensitivity analysis while calculating the strain considering Maxwell Model.
+        /// </summary>
+        /// <param name="calculateMaxwellModelStrainSensitivityAnalysis"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

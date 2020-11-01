@@ -15,6 +15,16 @@ namespace SoftTissue.Application.Controllers
     [Route("api/v1/quasi-linear-viscoelasticity")]
     public class QuasiLinearViscoelasticityController : ControllerBase
     {
+        /// <summary>
+        /// It is responsible to execute an analysis to calculate the stress considering Fung Model.
+        /// </summary>
+        /// <param name="calculateFungModelStress"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -28,6 +38,16 @@ namespace SoftTissue.Application.Controllers
             return response.BuildHttpResponse();
         }
 
+        /// <summary>
+        /// It is responsible to execute a sensitivity analysis while calculating the stress considering Fung Model.
+        /// </summary>
+        /// <param name="calculateFungModelStressSentivityAnalysis"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -41,6 +61,16 @@ namespace SoftTissue.Application.Controllers
             return response.BuildHttpResponse();
         }
 
+        /// <summary>
+        /// It is responsible to execute a sensitivity analysis while calculating the stress considering Fung Model.
+        /// </summary>
+        /// <param name="calculateFungModelStressSentivityAnalysis"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -54,6 +84,17 @@ namespace SoftTissue.Application.Controllers
             return response.BuildHttpResponse();
         }
 
+        /// <summary>
+        /// It is responsible to generate the domain for Fung Model parameters.
+        /// Here is just considered the fast and slow relaxation times, because the another parameters is avaiable for all real and positive domain.
+        /// </summary>
+        /// <param name="generateFungModelDomain"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
