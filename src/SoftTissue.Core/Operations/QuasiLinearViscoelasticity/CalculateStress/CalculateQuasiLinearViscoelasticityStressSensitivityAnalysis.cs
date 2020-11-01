@@ -1,7 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel;
 using SoftTissue.Core.Models.Viscoelasticity;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
-using SoftTissue.Core.Operations.Base;
+using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
 using SoftTissue.Infrastructure.Models;
@@ -17,22 +17,18 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to do a sensitivity analysis while calculating the stress to quasi-linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult> : OperationBase<CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest, CalculateQuasiLinearViscoelasticityStressResponse, CalculateQuasiLinearViscoelasticityStressResponseData>, ICalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult>
+    public abstract class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult> : CalculateResultSensitivityAnalysis<CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest, CalculateQuasiLinearViscoelasticityStressResponse, CalculateQuasiLinearViscoelasticityStressResponseData, TInput>, ICalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult>
         where TInput : QuasiLinearViscoelasticityModelInput, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
         private readonly IQuasiLinearViscoelasticityModel<TInput, TResult> _viscoelasticModel;
 
         /// <summary>
-        /// The base path to files.
-        /// </summary>
-        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory(), "Solutions");
-
-        /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis(IQuasiLinearViscoelasticityModel<TInput, TResult> viscoelasticModel)
+        public CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis(IQuasiLinearViscoelasticityModel<TInput, TResult> viscoelasticModel) 
+            : base(viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
         }
@@ -42,7 +38,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public virtual List<TInput> BuildInputList(CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest request)
+        public override List<TInput> BuildInputList(CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest request)
         {
             var inputList = new List<TInput>();
 
@@ -112,48 +108,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         }
 
         /// <summary>
-        /// This method creates the path to save all inputs on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public virtual string CreateInputFile()
-        {
-            var fileInfo = new FileInfo(Path.Combine(
-                TemplateBasePath,
-                $"InputData.csv"));
-
-            if (fileInfo.Directory.Exists == false)
-            {
-                fileInfo.Directory.Create();
-            }
-
-            return fileInfo.FullName;
-        }
-
-        /// <summary>
-        /// This method creates the path to save the solution on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public virtual string CreateSolutionFile(string functionName)
-        {
-            var fileInfo = new FileInfo(Path.Combine(
-                TemplateBasePath,
-                $"Solution_{functionName}.csv"));
-
-            if (fileInfo.Directory.Exists == false)
-            {
-                fileInfo.Directory.Create();
-            }
-
-            return fileInfo.FullName;
-        }
-
-        /// <summary>
         /// This method writes the input data into a file.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="inputList"></param>
         /// <param name="streamWriter"></param>
+        /// <param name="useSimplifiedReducedRelaxationFunction"></param>
         public virtual void WriteInputData(List<TInput> inputList, StreamWriter streamWriter, bool useSimplifiedReducedRelaxationFunction)
         {
             List<double> initialTimeList = new List<double>();
@@ -174,7 +133,8 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             List<string> relaxationTimesList = new List<string>();
 
             StringBuilder header = new StringBuilder("Parameter;");
-            int index = 0;
+            
+            int index = 1;
 
             foreach (var input in inputList)
             {
@@ -227,30 +187,13 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         }
 
         /// <summary>
-        /// This method creates the file header.
-        /// </summary>
-        /// <param name="inputList"></param>
-        /// <returns></returns>
-        public virtual StringBuilder CreteFileHeader(List<TInput> inputList)
-        {
-            StringBuilder fileHeader = new StringBuilder("Time;");
-
-            for (int i = 0; i < inputList.Count; i++)
-            {
-                fileHeader.Append($"Input {i};");
-            }
-
-            return fileHeader;
-        }
-
-        /// <summary>
         /// This method calculates the results and writes them in a file.
         /// </summary>
         /// <param name="inputList"></param>
         /// <param name="initialTime"></param>
         /// <param name="finalTime"></param>
         /// <param name="timeStep"></param>
-        public virtual void CalculateAndWriteResults(List<TInput> inputList, double initialTime, double finalTime, double timeStep)
+        public override void CalculateAndWriteResults(List<TInput> inputList, double initialTime, double finalTime, double timeStep)
         {
             using (StreamWriter strainStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "Strain")))
             using (StreamWriter reducedRelaxationFunctionStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "ReducedRelaxationFunction")))

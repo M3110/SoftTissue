@@ -23,24 +23,19 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         private readonly IQuasiLinearViscoelasticityModel<TInput, TResult> _viscoelasticModel;
 
         /// <summary>
-        /// The base path to files.
+        /// Class constructor.
         /// </summary>
-        private static readonly string TemplateBasePath = Path.Combine(Directory.GetCurrentDirectory());
+        /// <param name="viscoelasticModel"></param>
+        public CalculateQuasiLinearViscoelasticityStress(IQuasiLinearViscoelasticityModel<TInput, TResult> viscoelasticModel) : base(viscoelasticModel)
+        {
+            this._viscoelasticModel = viscoelasticModel;
+        }
 
         /// <summary>
         /// The header to solution file.
         /// This property depends on what is calculated on method <see cref="CalculateAndWriteResults"/>.
         /// </summary>
-        public override string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
-
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="viscoelasticModel"></param>
-        public CalculateQuasiLinearViscoelasticityStress(IQuasiLinearViscoelasticityModel<TInput, TResult> viscoelasticModel)
-        {
-            this._viscoelasticModel = viscoelasticModel;
-        }
+        protected override string SolutionFileHeader => $"Time;Strain;Reduced Relaxation Function;Elastic Response;Stress";
 
         /// <summary>
         /// This method builds a list with the inputs based on the request.
@@ -81,44 +76,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             }
 
             return inputList;
-        }
-
-        /// <summary>
-        /// This method creates the path to save the input data on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public override string CreateInputFile(TInput input)
-        {
-            var fileInfo = new FileInfo(Path.Combine(
-                TemplateBasePath,
-                $"InputData_{input.SoftTissueType}.csv"));
-
-            if (fileInfo.Directory.Exists == false)
-            {
-                fileInfo.Directory.Create();
-            }
-
-            return fileInfo.FullName;
-        }
-
-        /// <summary>
-        /// This method creates the path to save the solution on a file.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public override string CreateSolutionFile(TInput input)
-        {
-            var fileInfo = new FileInfo(Path.Combine(
-                TemplateBasePath,
-                $"Solution_{input.SoftTissueType}.csv"));
-
-            if (fileInfo.Directory.Exists == false)
-            {
-                fileInfo.Directory.Create();
-            }
-
-            return fileInfo.FullName;
         }
 
         /// <summary>

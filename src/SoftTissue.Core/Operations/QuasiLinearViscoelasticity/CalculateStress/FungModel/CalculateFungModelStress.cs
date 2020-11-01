@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
+using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using System.IO;
 
@@ -21,9 +22,14 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         }
 
         /// <summary>
+        /// The base path to files.
+        /// </summary>
+        protected override string TemplateBasePath => Constants.FungModelBasePath;
+
+        /// <summary>
         /// The header to solution file.
         /// </summary>
-        public override string SolutionFileHeader => "Time;Strain;Reduced Relaxation Function;Elastic Response;Stress with dSigma;Stress with dG;Stress with integral derivative";
+        protected override string SolutionFileHeader => "Time;Strain;Reduced Relaxation Function;Elastic Response;Stress with dSigma;Stress with dG;Stress with integral derivative";
 
         /// <summary>
         /// This method writes the input data into a file.

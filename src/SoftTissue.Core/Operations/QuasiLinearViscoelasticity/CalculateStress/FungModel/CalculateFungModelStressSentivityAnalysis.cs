@@ -1,5 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
+using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
+using System.IO;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel
 {
@@ -13,5 +15,10 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
         public CalculateFungModelStressSentivityAnalysis(IFungModel viscoelasticModel) : base(viscoelasticModel) { }
+
+        /// <summary>
+        /// The base path to files.
+        /// </summary>
+        protected override string TemplateBasePath => Path.Combine(Constants.FungModelBasePath, "Sensitivity Analysis");
     }
 }
