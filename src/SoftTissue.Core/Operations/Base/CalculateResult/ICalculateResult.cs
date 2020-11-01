@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 namespace SoftTissue.Core.Operations.Base.CalculateResult
 {
+    /// <summary>
+    /// It contains methods and parameters shared between operations to calculate a result.
+    /// </summary>
+    /// <typeparam name="TRequest"></typeparam>
+    /// <typeparam name="TResponse"></typeparam>
+    /// <typeparam name="TResponseData"></typeparam>
+    /// <typeparam name="TInput"></typeparam>
     public interface ICalculateResult<TRequest, TResponse, TResponseData, TInput> : IOperationBase<TRequest, TResponse, TResponseData>
         where TRequest : OperationRequestBase
         where TResponse : OperationResponseBase<TResponseData>, new()
