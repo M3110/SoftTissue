@@ -2,7 +2,6 @@
 using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
-using SoftTissue.DataContract.OperationBase;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,24 +11,49 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
     /// <summary>
     /// It is responsible to calculate the strain to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStrain<TRequest, TInput> : CalculateResult<TRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>, ICalculateLinearViscosityStrain<TRequest, TInput>
-        where TRequest : OperationRequestBase
+    public abstract class CalculateLinearViscosityStrain<TInput> : CalculateResult<CalculateStrainRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>, ICalculateLinearViscosityStrain<TInput>
         where TInput : LinearViscoelasticityModelInput, new()
     {
         private readonly ILinearViscoelasticityModel<TInput> _viscoelasticModel;
 
         /// <summary>
-        /// The header to solution file.
-        /// </summary>
-        public override string SolutionFileHeader => "Time;Creep Compliance;Strain";
-
-        /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateLinearViscosityStrain(ILinearViscoelasticityModel<TInput> viscoelasticModel)
+        public CalculateLinearViscosityStrain(ILinearViscoelasticityModel<TInput> viscoelasticModel) : base(viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
+        }
+
+        /// <summary>
+        /// The header to solution file.
+        /// </summary>
+        protected override string SolutionFileHeader => "Time;Creep Compliance;Strain";
+
+        /// <summary>
+        /// This method builds a list with the inputs based on the request.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public override List<TInput> BuildInputList(CalculateStrainRequest request)
+        {
+            var inputList = new List<TInput>();
+
+            foreach (var requestData in request.RequestDataList)
+            {
+                inputList.Add(new TInput
+                {
+                    FinalTime = requestData.FinalTime ?? request.FinalTime,
+                    TimeStep = requestData.TimeStep ?? request.TimeStep,
+                    InitialTime = requestData.InitialTime ?? request.InitialTime,
+                    InitialStress = requestData.InitialStress,
+                    Stiffness = requestData.Stiffness,
+                    Viscosity = requestData.Viscosity,
+                    SoftTissueType = requestData.SoftTissueType
+                });
+            }
+
+            return inputList;
         }
 
         /// <summary>
@@ -37,7 +61,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateStrainResponse> ProcessOperation(TRequest request)
+        protected override Task<CalculateStrainResponse> ProcessOperation(CalculateStrainRequest request)
         {
             var response = new CalculateStrainResponse { Data = new CalculateStrainResponseData() };
             response.SetSuccessCreated();
@@ -46,10 +70,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
 
             foreach (var input in inputs)
             {
-                string solutionFileName = this.CreateSolutionFile(input);
-                string inputDataFileName = this.CreateInputFile(input);
-
-                using (StreamWriter streamWriter = new StreamWriter(inputDataFileName))
+                using (StreamWriter streamWriter = new StreamWriter(this.CreateInputFile(input)))
                 {
                     streamWriter.WriteLine($"Initial Time: {input.InitialTime} s");
                     streamWriter.WriteLine($"Time Step: {input.TimeStep} s");
@@ -61,7 +82,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
                 }
 
                 double time = input.InitialTime;
-                using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
+                using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(input)))
                 {
                     streamWriter.WriteLine(this.SolutionFileHeader);
 

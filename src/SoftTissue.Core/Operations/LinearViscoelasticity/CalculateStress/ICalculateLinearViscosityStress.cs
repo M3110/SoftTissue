@@ -8,8 +8,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
     /// </summary>
-    public interface ICalculateLinearViscosityStress<TRequest, TInput> : ICalculateResult<TRequest, CalculateStressResponse, CalculateStressResponseData, TInput>
-        where TRequest : OperationRequestBase
+    public interface ICalculateLinearViscosityStress<TInput> : ICalculateResult<CalculateStressRequest, CalculateStressResponse, CalculateStressResponseData, TInput>
         where TInput : LinearViscoelasticityModelInput, new()
     { }
 }
