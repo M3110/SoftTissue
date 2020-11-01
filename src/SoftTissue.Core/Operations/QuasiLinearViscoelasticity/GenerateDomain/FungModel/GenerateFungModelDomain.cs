@@ -1,5 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.ExtensionMethods;
+using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain;
@@ -19,23 +20,26 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         private readonly IFungModel _fungModel;
 
         /// <summary>
-        /// The base path to files.
+        /// The base path to domain analysis.
         /// </summary>
-        private static readonly string TemplateBasePath = Path.Combine(
-            Directory.GetCurrentDirectory(), 
-            "sheets");
+        public virtual string TemplateBasePath => Path.Combine(Constants.FungModelBasePath, "Domain");
 
         /// <summary>
         /// The header to solution file.
-        /// This property depends on what is calculated on method <see cref="CalculateAndWriteResults"/>.
+        /// This property depends on what wants to write on file.
         /// </summary>
         public virtual string DomainFileHeader => $"Fast Relaxation Time;Solw Relaxation Time;Initial Time;Final Time";
 
         /// <summary>
         /// The header to solution file.
-        /// This property depends on what is calculated on method <see cref="CalculateAndWriteResults"/>.
+        /// This property depends on what wants to write on file.
         /// </summary>
         public virtual string SolutionFileHeader => $"Time;Left Size/Right Size";
+
+        /// <summary>
+        /// The main folder for each analysis.
+        /// </summary>
+        public string MainFolder { get; set; }
 
         /// <summary>
         /// Class constructor.
@@ -46,6 +50,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
             this._fungModel = fungModel;
         }
 
+        /// <summary>
+        /// This method builds the input list.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public virtual List<GenerateFungModelDomainInput> BuildInputList(GenerateDomainRequest request)
         {
             var inputList = new List<GenerateFungModelDomainInput>();
@@ -71,11 +80,19 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
             return inputList;
         }
 
-        public virtual string CreateDomainFile()
+        /// <summary>
+        /// This method creates the domain file.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public virtual string CreateDomainFile(GenerateDomainRequest request)
         {
+            this.MainFolder = $"Tau1={request.FastRelaxationTimeList.InitialPoint}; {request.FastRelaxationTimeList.FinalPoint} - Tau2={request.SlowRelaxationTimeList.InitialPoint}; {request.SlowRelaxationTimeList.FinalPoint}";
+
             var fileInfo = new FileInfo(Path.Combine(
-                TemplateBasePath,
-                $"Domain.csv"));
+                this.TemplateBasePath,
+                this.MainFolder,
+                $"Domain - {this.MainFolder}.csv"));
 
             if (fileInfo.Directory.Exists == false)
             {
@@ -85,10 +102,16 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
             return fileInfo.FullName;
         }
 
+        /// <summary>
+        /// This method creates the solution file.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public virtual string CreateSolutionFile(GenerateFungModelDomainInput input)
         {
             var fileInfo = new FileInfo(Path.Combine(
-                TemplateBasePath,
+                this.TemplateBasePath,
+                this.MainFolder,
                 $"Solution_Tau1={input.FastRelaxationTime}_Tau2={input.SlowRelaxationTime}.csv"));
 
             if (fileInfo.Directory.Exists == false)
@@ -99,15 +122,22 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
             return fileInfo.FullName;
         }
 
+        /// <summary>
+        /// This method generates the domain for slow and fast relaxation times.
+        /// The valid domain is where the variables usaed for slow and fast relaxation times obey the inequation below for all times.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected override Task<GenerateDomainResponse> ProcessOperation(GenerateDomainRequest request)
         {
             var response = new GenerateDomainResponse { Data = new GenerateDomainResponseData() };
             response.SetSuccessCreated();
 
-            using (StreamWriter domainStreamWriter = new StreamWriter(this.CreateDomainFile()))
+            using (StreamWriter domainStreamWriter = new StreamWriter(this.CreateDomainFile(request)))
             {
                 domainStreamWriter.WriteLine(this.DomainFileHeader);
 
+                // TODO: Usar SemaphoreSlim para ter no máximo 100 threads
                 Parallel.ForEach(this.BuildInputList(request), input =>
                 {
                     using (StreamWriter solutionStreamWriter = new StreamWriter(this.CreateSolutionFile(input)))
