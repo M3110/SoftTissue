@@ -3,7 +3,7 @@ using SoftTissue.DataContract.OperationBase;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SoftTissue.Core.Operations.Base.CalculateResult
+namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
 {
     /// <summary>
     /// It contains methods and parameters shared between operations to calculate a result.

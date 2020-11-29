@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace SoftTissue.Core.Operations.Base.CalculateResult
+namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
 {
     /// <summary>
     /// It contains methods and parameters shared between operations to calculate a result.
@@ -72,7 +72,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         public virtual string CreateInputFile()
         {
             var fileInfo = new FileInfo(Path.Combine(
-                this.TemplateBasePath,
+                TemplateBasePath,
                 $"InputData.csv"));
 
             if (fileInfo.Directory.Exists == false)
@@ -91,7 +91,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         public virtual string CreateSolutionFile(string functionName)
         {
             var fileInfo = new FileInfo(Path.Combine(
-                this.TemplateBasePath,
+                TemplateBasePath,
                 $"Solution_{functionName}.csv"));
 
             if (fileInfo.Directory.Exists == false)
