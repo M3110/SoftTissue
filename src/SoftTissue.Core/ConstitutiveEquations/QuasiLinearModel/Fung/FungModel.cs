@@ -98,16 +98,19 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <returns></returns>
         public override double CalculateReducedRelaxationFunctionSimplified(FungModelInput input, double time)
         {
+            // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
+            // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
+            // is called in another methods, that error must be considered to times near to zero.
             if (time <= Constants.Precision)
             {
                 return 1;
             }
 
-            double result = 0;
+            double result = input.SimplifiedReducedRelaxationFunctionInput.IndependentVariable;
 
-            for (int i = 0; i < input.SimplifiedReducedRelaxationFunctionInput.VariableEList.Count(); i++)
+            for (int i = 0; i < input.SimplifiedReducedRelaxationFunctionInput.NumberOfVariables; i++)
             {
-                result += input.SimplifiedReducedRelaxationFunctionInput.VariableEList.ElementAt(i) * Math.Exp(-time / input.SimplifiedReducedRelaxationFunctionInput.RelaxationTimeList.ElementAt(i));
+                result += input.SimplifiedReducedRelaxationFunctionInput.VariableEList[i] * Math.Exp(-time / input.SimplifiedReducedRelaxationFunctionInput.RelaxationTimeList[i]);
             }
 
             return result;
