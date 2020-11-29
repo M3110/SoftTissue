@@ -34,7 +34,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         /// The header to solution file.
         /// This property depends on what wants to write on file.
         /// </summary>
-        public virtual string SolutionFileHeader => $"Time;Left Size/Right Size";
+        public virtual string SolutionFileHeader => $"Time;Left Size;Right Size";
 
         /// <summary>
         /// The main folder for each analysis.
