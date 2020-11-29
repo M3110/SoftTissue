@@ -2,6 +2,7 @@
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
