@@ -1,6 +1,7 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
+using SoftTissue.DataContract.LinearViscoelasticity.CalculateStressSensitivityAnalysis;
 using System.Collections.Generic;
 using System.IO;
 

@@ -4,7 +4,7 @@ using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis;
 using SoftTissue.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressS
     /// <summary>
     /// It is responsible to do a sensitivity analysis while calculating the stress to quasi-linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult> : CalculateResultSensitivityAnalysis<CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest, CalculateQuasiLinearViscoelasticityStressResponse, CalculateQuasiLinearViscoelasticityStressResponseData, TInput>, ICalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult>
+    public abstract class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult> : CalculateResultSensitivityAnalysis<CalculateStressSensitivityAnalysisRequest, CalculateStressResponse, CalculateStressResponseData, TInput>, ICalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult>
         where TInput : QuasiLinearViscoelasticityModelInput, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
@@ -39,7 +39,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressS
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override List<TInput> BuildInputList(CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest request)
+        public override List<TInput> BuildInputList(CalculateStressSensitivityAnalysisRequest request)
         {
             var inputList = new List<TInput>();
 
@@ -249,9 +249,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressS
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateQuasiLinearViscoelasticityStressResponse> ProcessOperation(CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest request)
+        protected override Task<CalculateStressResponse> ProcessOperation(CalculateStressSensitivityAnalysisRequest request)
         {
-            var response = new CalculateQuasiLinearViscoelasticityStressResponse { Data = new CalculateQuasiLinearViscoelasticityStressResponseData() };
+            var response = new CalculateStressResponse { Data = new CalculateStressResponseData() };
             response.SetSuccessCreated();
 
             List<TInput> inputList = BuildInputList(request);

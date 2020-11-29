@@ -4,7 +4,7 @@ using System.Net;
 namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
-    /// It contains the content of response for all operations.
+    /// It represents the response content for all operations.
     /// </summary>
     /// <typeparam name="TResponseData"></typeparam>
     public class OperationResponseBase<TResponseData>

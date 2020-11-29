@@ -2,7 +2,7 @@
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,7 +12,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressS
     /// <summary>
     /// It is responsible to do a sensitivity analysis while calculating the stress to quasi-linear viscoelastic model.
     /// </summary>
-    public interface ICalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult> : ICalculateResultSensitivityAnalysis<CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest, CalculateQuasiLinearViscoelasticityStressResponse, CalculateQuasiLinearViscoelasticityStressResponseData, TInput>
+    public interface ICalculateQuasiLinearViscoelasticityStressSensitivityAnalysis<TInput, TResult> : ICalculateResultSensitivityAnalysis<CalculateStressSensitivityAnalysisRequest, CalculateStressResponse, CalculateStressResponseData, TInput>
         where TInput : QuasiLinearViscoelasticityModelInput, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {

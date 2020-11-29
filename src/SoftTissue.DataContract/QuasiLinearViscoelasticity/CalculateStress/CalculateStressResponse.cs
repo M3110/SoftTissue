@@ -1,9 +1,9 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 
-namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
 {
     /// <summary>
-    /// It represents the response content for CalculateStress operation of Linear Viscoelasticity Model.
+    /// It represents the response content to CalculateStress operation of Quasi-Linear Viscoelasticity Model.
     /// </summary>
     public class CalculateStressResponse : OperationResponseBase<CalculateStressResponseData> { }
 }

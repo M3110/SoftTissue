@@ -2,9 +2,12 @@
 using SoftTissue.Infrastructure.Models;
 using System.Collections.Generic;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis
 {
-    public class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisExplicitRequest : OperationRequestBase
+    /// <summary>
+    /// It represents the request content to CalculateStressSensitivityAnalysisExplicit operation of Quasi-Linear Viscoelasticity Model.
+    /// </summary>
+    public class CalculateStressSensitivityAnalysisExplicitRequest : OperationRequestBase
     {
         public bool UseSimplifiedReducedRelaxationFunction { get; set; }
 

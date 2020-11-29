@@ -2,11 +2,23 @@
 using SoftTissue.Infrastructure.Models;
 using System.Collections.Generic;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis
 {
-    public class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest : OperationRequestBase
+    /// <summary>
+    /// It represents the request content to CalculateStressSensitivityAnalysis operation of Quasi-Linear Viscoelasticity Model.
+    /// </summary>
+    public class CalculateStressSensitivityAnalysisRequest : OperationRequestBase
     {
+        /// <summary>
+        /// True, if have to use the simplified Reduced Relaxation Function.
+        /// False, otherwise.
+        /// </summary>
         public bool UseSimplifiedReducedRelaxationFunction { get; set; }
+
+        /// <summary>
+        /// The viscoelasctic consideration.
+        /// </summary>
+        public ViscoelasticConsideration ViscoelasticConsideration { get; set; }
 
         public IEnumerable<double> StrainRateList { get; set; }
 

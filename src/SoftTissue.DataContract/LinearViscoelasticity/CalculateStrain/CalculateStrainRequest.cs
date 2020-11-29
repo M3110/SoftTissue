@@ -4,10 +4,7 @@ using System.Collections.Generic;
 namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain
 {
     /// <summary>
-    /// It represents the request content to CalculateStrain operation.
+    /// It represents the request content to CalculateStrain operation of Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStrainRequest : OperationRequestBase
-    {
-        public List<CalculateStrainRequestData> RequestDataList { get; set; }
-    }
+    public class CalculateStrainRequest : OperationRequestBase<List<CalculateStrainRequestData>> { }
 }

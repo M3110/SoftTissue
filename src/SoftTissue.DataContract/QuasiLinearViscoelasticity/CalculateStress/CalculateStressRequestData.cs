@@ -1,9 +1,12 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using SoftTissue.Infrastructure.Models;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
 {
-    public class CalculateQuasiLinearViscoelasticityStressRequestData : OperationRequestData
+    /// <summary>
+    /// It represents the 'data' content to CalculateStress operation request of Quasi-Linear Viscoelasticity Model.
+    /// </summary>
+    public class CalculateStressRequestData : OperationRequestData
     {
         public bool UseSimplifiedReducedRelaxationFunction { get; set; }
 

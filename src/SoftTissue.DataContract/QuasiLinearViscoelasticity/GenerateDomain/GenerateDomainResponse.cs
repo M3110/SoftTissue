@@ -2,7 +2,8 @@
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
 {
-    public class GenerateDomainResponse : OperationResponseBase<GenerateDomainResponseData>
-    {
-    }
+    /// <summary>
+    /// It represents the response content to GenerateDomain operation of Quasi-Linear Viscoelasticity Model.
+    /// </summary>
+    public class GenerateDomainResponse : OperationResponseBase<GenerateDomainResponseData> { }
 }

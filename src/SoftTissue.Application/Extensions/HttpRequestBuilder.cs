@@ -1,5 +1,6 @@
 ﻿using SoftTissue.Core.ExtensionMethods;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis;
 using SoftTissue.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
@@ -9,18 +10,18 @@ namespace SoftTissue.Application.Extensions
     public static class HttpRequestBuilder
     {
         /// <summary>
-        /// This method creates <see cref="CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest"/> based on <see cref="CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisExplicitRequest"/>.
+        /// This method creates <see cref="CalculateStressSensitivityAnalysisRequest"/> based on <see cref="CalculateStressSensitivityAnalysisExplicitRequest"/>.
         /// </summary>
         /// <param name="analysisExplicitRequest"></param>
         /// <returns></returns>
-        public static CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest MapToSensitivityAnalysis(this CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisExplicitRequest analysisExplicitRequest)
+        public static CalculateStressSensitivityAnalysisRequest MapToSensitivityAnalysis(this CalculateStressSensitivityAnalysisExplicitRequest analysisExplicitRequest)
         {
             if(analysisExplicitRequest == null)
             {
                 return null;
             }
 
-            return new CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisRequest
+            return new CalculateStressSensitivityAnalysisRequest
             {
                 InitialTime = analysisExplicitRequest.InitialTime,
                 TimeStep = analysisExplicitRequest.TimeStep,
@@ -38,23 +39,23 @@ namespace SoftTissue.Application.Extensions
         }
 
         /// <summary>
-        /// This method creates <see cref="CalculateQuasiLinearViscoelasticityStressRequest"/> based on <see cref="CalculateQuasiLinearViscoelasticityStressToExperimentalModelRequest"/>.
+        /// This method creates <see cref="CalculateStressRequest"/> based on <see cref="CalculateStressToExperimentalModelRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static CalculateQuasiLinearViscoelasticityStressRequest CreateQuasiLinearRequest(this CalculateQuasiLinearViscoelasticityStressToExperimentalModelRequest request)
+        public static CalculateStressRequest CreateQuasiLinearRequest(this CalculateStressToExperimentalModelRequest request)
         {
-            var calculateQuasiLinearViscoelasticityStressRequest = new CalculateQuasiLinearViscoelasticityStressRequest
+            var calculateQuasiLinearViscoelasticityStressRequest = new CalculateStressRequest
             {
                 InitialTime = request.InitialTime,
                 TimeStep = request.TimeStep,
                 FinalTime = request.FinalTime,
-                RequestDataList = new List<CalculateQuasiLinearViscoelasticityStressRequestData>()
+                RequestData = new List<CalculateStressRequestData>()
             };
 
             if (request.ExperimentalModel == ExperimentalModel.AnteriorCruciateLigamentFirstRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.AnteriorCruciateLigamentFirstRelaxation.ToString(),
                     StrainRate = request.StrainRate,
@@ -73,7 +74,7 @@ namespace SoftTissue.Application.Extensions
             }
             else if (request.ExperimentalModel == ExperimentalModel.AnteriorCruciateLigamentSecondRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.AnteriorCruciateLigamentSecondRelaxation.ToString(),
                     StrainRate = request.StrainRate,
@@ -92,7 +93,7 @@ namespace SoftTissue.Application.Extensions
             }
             else if (request.ExperimentalModel == ExperimentalModel.LateralCollateralLigamentFirstRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.LateralCollateralLigamentFirstRelaxation.ToString(),
                     StrainRate = request.StrainRate,
@@ -111,7 +112,7 @@ namespace SoftTissue.Application.Extensions
             }
             else if (request.ExperimentalModel == ExperimentalModel.LateralCollateralLigamentSecondRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.LateralCollateralLigamentSecondRelaxation.ToString(),
                     StrainRate = request.StrainRate,
@@ -130,7 +131,7 @@ namespace SoftTissue.Application.Extensions
             }
             else if (request.ExperimentalModel == ExperimentalModel.MedialCollateralLigamentFirstRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.MedialCollateralLigamentFirstRelaxation.ToString(),
                     StrainRate = request.StrainRate,
@@ -149,7 +150,7 @@ namespace SoftTissue.Application.Extensions
             }
             else if (request.ExperimentalModel == ExperimentalModel.MedialCollateralLigamentSecondRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.MedialCollateralLigamentSecondRelaxation.ToString(),
                     StrainRate = request.StrainRate,
@@ -168,7 +169,7 @@ namespace SoftTissue.Application.Extensions
             }
             else if (request.ExperimentalModel == ExperimentalModel.PosteriorCruciateLigamentFirstRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.PosteriorCruciateLigamentFirstRelaxation.ToString(),
                     StrainRate = request.StrainRate,
@@ -187,7 +188,7 @@ namespace SoftTissue.Application.Extensions
             }
             else if (request.ExperimentalModel == ExperimentalModel.PosteriorCruciateLigamentSecondRelaxation)
             {
-                calculateQuasiLinearViscoelasticityStressRequest.RequestDataList.Add(new CalculateQuasiLinearViscoelasticityStressRequestData
+                calculateQuasiLinearViscoelasticityStressRequest.RequestData.Add(new CalculateStressRequestData
                 {
                     SoftTissueType = ExperimentalModel.PosteriorCruciateLigamentSecondRelaxation.ToString(),
                     StrainRate = request.StrainRate,
