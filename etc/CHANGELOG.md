@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## UNRELEASED
+### Added
+- Operations CalculateStressToExperimentalModel and CalculateConvergenceTime.
+- Property IndependetVariable in SimplifiedReducedRelaxationFunctionData.
+### Changed
+- RelavativePrecision from 5e-3 to 1e-3 and Precision from 1e-10 to 1e-7.
+
 ## [1.1.0] - 2020-11-01
 ### Added
 - Operation CalculateResult and CalculateResultSensitivityAnalysis with the generical methods and properties shared between operations.
