@@ -2,7 +2,7 @@
 using SoftTissue.Infrastructure.Models;
 using System.Collections.Generic;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request
 {
     public class CalculateQuasiLinearViscoelasticityStressSensitivityAnalysisExplicitRequest : OperationRequestBase
     {

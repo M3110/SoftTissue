@@ -1,7 +1,7 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using SoftTissue.Infrastructure.Models;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Request
 {
     public class CalculateQuasiLinearViscoelasticityStressRequestData : OperationRequestData
     {
