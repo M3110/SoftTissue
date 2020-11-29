@@ -12,6 +12,7 @@ using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellMo
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis.FungModel;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
 
 namespace SoftTissue.Application

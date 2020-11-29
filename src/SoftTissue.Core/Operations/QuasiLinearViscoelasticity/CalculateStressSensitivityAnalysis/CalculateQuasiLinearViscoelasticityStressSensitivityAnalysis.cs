@@ -13,7 +13,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
+namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis
 {
     /// <summary>
     /// It is responsible to do a sensitivity analysis while calculating the stress to quasi-linear viscoelastic model.
@@ -28,10 +28,10 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis(IQuasiLinearViscoelasticityModel<TInput, TResult> viscoelasticModel) 
+        public CalculateQuasiLinearViscoelasticityStressSensitivityAnalysis(IQuasiLinearViscoelasticityModel<TInput, TResult> viscoelasticModel)
             : base(viscoelasticModel)
         {
-            this._viscoelasticModel = viscoelasticModel;
+            _viscoelasticModel = viscoelasticModel;
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             List<string> relaxationTimesList = new List<string>();
 
             StringBuilder header = new StringBuilder("Parameter;");
-            
+
             int index = 1;
 
             foreach (var input in inputList)
@@ -196,12 +196,12 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// <param name="timeStep"></param>
         public override void CalculateAndWriteResults(List<TInput> inputList, double initialTime, double finalTime, double timeStep)
         {
-            using (StreamWriter strainStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "Strain")))
-            using (StreamWriter reducedRelaxationFunctionStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "ReducedRelaxationFunction")))
-            using (StreamWriter elasticResponseStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "ElasticResponse")))
-            using (StreamWriter stressStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "Stress")))
+            using (StreamWriter strainStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Strain")))
+            using (StreamWriter reducedRelaxationFunctionStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "ReducedRelaxationFunction")))
+            using (StreamWriter elasticResponseStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "ElasticResponse")))
+            using (StreamWriter stressStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Stress")))
             {
-                StringBuilder fileHeader = this.CreteFileHeader(inputList);
+                StringBuilder fileHeader = CreteFileHeader(inputList);
 
                 strainStreamWriter.WriteLine(fileHeader);
                 reducedRelaxationFunctionStreamWriter.WriteLine(fileHeader);
@@ -219,18 +219,18 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 
                     foreach (var input in inputList)
                     {
-                        double strain = this._viscoelasticModel.CalculateStrain(input, time);
+                        double strain = _viscoelasticModel.CalculateStrain(input, time);
                         strainResults.Append($"{strain};");
 
                         double reducedRelaxationFunction;
-                        if (input.UseSimplifiedReducedRelaxationFunction == true) reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunctionSimplified(input, time);
-                        else reducedRelaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
+                        if (input.UseSimplifiedReducedRelaxationFunction == true) reducedRelaxationFunction = _viscoelasticModel.CalculateReducedRelaxationFunctionSimplified(input, time);
+                        else reducedRelaxationFunction = _viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
                         reducedRelaxationFunctionResults.Append($"{reducedRelaxationFunction};");
 
-                        double elasticResponse = this._viscoelasticModel.CalculateElasticResponse(input, time);
+                        double elasticResponse = _viscoelasticModel.CalculateElasticResponse(input, time);
                         elasticResponseResults.Append($"{elasticResponse};");
 
-                        double stress = this._viscoelasticModel.CalculateStress(input, time);
+                        double stress = _viscoelasticModel.CalculateStress(input, time);
                         stressResults.Append($"{stress};");
                     }
 
@@ -254,16 +254,16 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             var response = new CalculateQuasiLinearViscoelasticityStressResponse { Data = new CalculateQuasiLinearViscoelasticityStressResponseData() };
             response.SetSuccessCreated();
 
-            List<TInput> inputList = this.BuildInputList(request);
+            List<TInput> inputList = BuildInputList(request);
 
-            using (StreamWriter streamWriter = new StreamWriter(this.CreateInputFile()))
+            using (StreamWriter streamWriter = new StreamWriter(CreateInputFile()))
             {
-                this.WriteInputData(inputList, streamWriter, request.UseSimplifiedReducedRelaxationFunction);
+                WriteInputData(inputList, streamWriter, request.UseSimplifiedReducedRelaxationFunction);
             }
 
             try
             {
-                this.CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
+                CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
             }
             catch (Exception ex)
             {

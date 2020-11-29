@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Property IndependetVariable in SimplifiedReducedRelaxationFunctionData.
 ### Changed
 - RelavativePrecision from 5e-3 to 1e-3 and Precision from 1e-10 to 1e-7.
+- Moved sensitivity analysis operations to a new folder.
 
 ## [1.1.0] - 2020-11-01
 ### Added

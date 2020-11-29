@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
+namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis
 {
     /// <summary>
     /// It is responsible to do a sensitivity analysis while calculating the stress to quasi-linear viscoelastic model.

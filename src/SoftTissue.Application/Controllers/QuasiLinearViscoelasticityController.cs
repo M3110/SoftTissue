@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis.FungModel;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime_;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;

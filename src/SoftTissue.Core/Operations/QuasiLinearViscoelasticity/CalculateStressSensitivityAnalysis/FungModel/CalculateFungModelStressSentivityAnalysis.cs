@@ -1,9 +1,10 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis;
 using System.IO;
 
-namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel
+namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis.FungModel
 {
     /// <summary>
     /// It is responsible to do a sensitivity analysis while calculating the stress to Fung model.
