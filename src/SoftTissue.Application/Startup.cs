@@ -10,6 +10,7 @@ using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
 
@@ -52,6 +53,7 @@ namespace SoftTissue.Application
             services.AddScoped<ICalculateFungModelStress, CalculateFungModelStress>();
             services.AddScoped<ICalculateFungModelStressSentivityAnalysis, CalculateFungModelStressSentivityAnalysis>();
             services.AddScoped<IGenerateFungModelDomain, GenerateFungModelDomain>();
+            services.AddScoped<ICalculateConvergenceTime, CalculateConvergenceTime>();
 
             // Register Numerical Methods
             services.AddTransient<ISimpsonRuleIntegration, SimpsonRuleIntegration>();
