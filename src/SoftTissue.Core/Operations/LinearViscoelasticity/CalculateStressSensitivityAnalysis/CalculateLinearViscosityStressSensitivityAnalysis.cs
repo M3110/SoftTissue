@@ -10,7 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
+namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensitivityAnalysis
 {
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
@@ -26,7 +26,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         /// <param name="viscoelasticModel"></param>
         public CalculateLinearViscosityStressSensitivityAnalysis(ILinearViscoelasticityModel<TInput> viscoelasticModel) : base(viscoelasticModel)
         {
-            this._viscoelasticModel = viscoelasticModel;
+            _viscoelasticModel = viscoelasticModel;
         }
 
         /// <summary>
@@ -114,10 +114,10 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         /// <param name="timeStep"></param>
         public override void CalculateAndWriteResults(List<TInput> inputList, double initialTime, double finalTime, double timeStep)
         {
-            using (StreamWriter relaxationFunctionStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "Relaxation Function")))
-            using (StreamWriter stressStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "Stress")))
+            using (StreamWriter relaxationFunctionStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Relaxation Function")))
+            using (StreamWriter stressStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Stress")))
             {
-                StringBuilder fileHeader = this.CreteFileHeader(inputList);
+                StringBuilder fileHeader = CreteFileHeader(inputList);
 
                 relaxationFunctionStreamWriter.WriteLine(fileHeader);
                 stressStreamWriter.WriteLine(fileHeader);
@@ -131,10 +131,10 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
 
                     foreach (var input in inputList)
                     {
-                        double relaxationFunction = this._viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
+                        double relaxationFunction = _viscoelasticModel.CalculateReducedRelaxationFunction(input, time);
                         relaxationFunctionResults.Append($"{relaxationFunction};");
 
-                        double stress = this._viscoelasticModel.CalculateStress(input, time);
+                        double stress = _viscoelasticModel.CalculateStress(input, time);
                         stressResults.Append($"{stress};");
                     }
 
@@ -156,16 +156,16 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
             var response = new CalculateStressResponse { Data = new CalculateStressResponseData() };
             response.SetSuccessCreated();
 
-            List<TInput> inputList = this.BuildInputList(request);
+            List<TInput> inputList = BuildInputList(request);
 
-            using (StreamWriter streamWriter = new StreamWriter(this.CreateInputFile()))
+            using (StreamWriter streamWriter = new StreamWriter(CreateInputFile()))
             {
-                this.WriteInputData(inputList, streamWriter);
+                WriteInputData(inputList, streamWriter);
             }
 
             try
             {
-                this.CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
+                CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
             }
             catch (Exception ex)
             {

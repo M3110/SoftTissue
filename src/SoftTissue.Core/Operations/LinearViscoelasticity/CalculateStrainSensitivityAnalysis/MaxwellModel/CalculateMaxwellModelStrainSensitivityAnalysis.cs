@@ -3,7 +3,7 @@ using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using System.IO;
 
-namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel
+namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel
 {
     /// <summary>
     /// It is responsible to do a semsitivity analysis while calculating the strain to Maxwell model.

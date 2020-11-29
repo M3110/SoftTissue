@@ -10,7 +10,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
+namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis
 {
     /// <summary>
     /// It is responsible to calculate the strain to a linear viscoelastic model.
@@ -26,7 +26,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
         /// <param name="viscoelasticModel"></param>
         public CalculateLinearViscosityStrainSensitivityAnalysis(ILinearViscoelasticityModel<TInput> viscoelasticModel) : base(viscoelasticModel)
         {
-            this._viscoelasticModel = viscoelasticModel;
+            _viscoelasticModel = viscoelasticModel;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
             List<double> viscosityList = new List<double>();
 
             StringBuilder header = new StringBuilder("Parameter;");
-            
+
             int index = 1;
 
             foreach (var input in inputList)
@@ -114,10 +114,10 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
         /// <param name="timeStep"></param>
         public override void CalculateAndWriteResults(List<TInput> inputList, double initialTime, double finalTime, double timeStep)
         {
-            using (StreamWriter creepComplianceStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "Creep Compliance")))
-            using (StreamWriter strainStreamWriter = new StreamWriter(this.CreateSolutionFile(functionName: "Strain")))
+            using (StreamWriter creepComplianceStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Creep Compliance")))
+            using (StreamWriter strainStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Strain")))
             {
-                StringBuilder fileHeader = this.CreteFileHeader(inputList);
+                StringBuilder fileHeader = CreteFileHeader(inputList);
 
                 creepComplianceStreamWriter.WriteLine(fileHeader);
                 strainStreamWriter.WriteLine(fileHeader);
@@ -131,10 +131,10 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
 
                     foreach (var input in inputList)
                     {
-                        double creepCompliance = this._viscoelasticModel.CalculateCreepCompliance(input, time);
+                        double creepCompliance = _viscoelasticModel.CalculateCreepCompliance(input, time);
                         creepComplianceResults.Append($"{creepCompliance};");
-                        
-                        double strain = this._viscoelasticModel.CalculateStrain(input, time);
+
+                        double strain = _viscoelasticModel.CalculateStrain(input, time);
                         strainResults.Append($"{strain};");
                     }
 
@@ -156,16 +156,16 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
             var response = new CalculateStrainResponse { Data = new CalculateStrainResponseData() };
             response.SetSuccessCreated();
 
-            List<TInput> inputList = this.BuildInputList(request);
+            List<TInput> inputList = BuildInputList(request);
 
-            using (StreamWriter streamWriter = new StreamWriter(this.CreateInputFile()))
+            using (StreamWriter streamWriter = new StreamWriter(CreateInputFile()))
             {
-                this.WriteInputData(inputList, streamWriter);
+                WriteInputData(inputList, streamWriter);
             }
 
             try
             {
-                this.CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
+                CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
             }
             catch (Exception ex)
             {
