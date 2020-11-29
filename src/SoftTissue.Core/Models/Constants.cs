@@ -15,12 +15,12 @@ namespace SoftTissue.Core.Models
         /// <summary>
         /// The double-point precision accepted.
         /// </summary>
-        public static double Precision = 1e-10;
+        public static double Precision = 1e-7;
 
         /// <summary>
         /// The relative double-point precision accepted.
         /// </summary>
-        public static double RelativePrecision = 5e-3;
+        public static double RelativePrecision = 1e-3;
 
         /// <summary>
         /// The application base path.
