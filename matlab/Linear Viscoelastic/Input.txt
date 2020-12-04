@@ -1,0 +1,8 @@
+Parameter,Value
+ViscoelasticModel,Maxwell
+Stiffness,3
+Viscosity,32
+InitialStrain,25
+InitialTime,0
+TimeStep,0.01
+FinalTime,10
