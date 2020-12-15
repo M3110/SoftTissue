@@ -7,8 +7,8 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// <summary>
     /// It is responsible to calculate the stress disregarding the ramp time and considering the Simplified Reduced Relaxation Function to Fung Model.
     /// </summary>
-    public interface ICalculateSimplifiedFungModelStressDisregardRampTime : 
-        ICalculateFungModelStress<
+    public interface ICalculateSimplifiedFungModelStressDisregardRampTime :
+        ICalculateQuasiLinearViscoelasticityStress<
             CalculateSimplifiedFungModelStressDisregardRampTimeRequest,
             CalculateSimplifiedFungModelStressDisregardRampTimeResponse,
             CalculateSimplifiedFungModelStressDisregardRampTimeResponseData,
