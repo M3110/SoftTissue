@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
+using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.Infrastructure.Models;
@@ -20,6 +21,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
             SimplifiedFungModelResult>, 
         ICalculateSimplifiedFungModelStressDisregardRampTime
     {
+        /// <summary>
+        /// The base path to files.
+        /// </summary>
+        protected override string TemplateBasePath => Path.Combine(Constants.SimplifiedFungModelBasePath, "Disregard Ramp Time");
+
         /// <summary>
         /// Class constructor.
         /// </summary>

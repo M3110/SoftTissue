@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
+using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderRelaxationFunction;
@@ -22,6 +23,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
             FungModelResult>, 
         ICalculateFungModelStressConsiderRampTime
     {
+        /// <summary>
+        /// The base path to files.
+        /// </summary>
+        protected override string TemplateBasePath => Path.Combine(Constants.FungModelBasePath, "Consider Ramp Time");
+
         /// <summary>
         /// Class constructor.
         /// </summary>

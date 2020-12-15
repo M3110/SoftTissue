@@ -43,6 +43,11 @@ namespace SoftTissue.Core.Models
         public static string FungModelBasePath = Path.Combine(Constants.QuasiLinearModelBasePath, "Fung Model");
 
         /// <summary>
+        /// The base path to response files of Simplified Fung Model.
+        /// </summary>
+        public static string SimplifiedFungModelBasePath = Path.Combine(Constants.QuasiLinearModelBasePath, "Simplified Fung Model");
+
+        /// <summary>
         /// The base path to response files of Linear Viscoelastic Model.
         /// </summary>
         public static string LinearModelBasePath = Path.Combine(Constants.SolutionBasePath, "Linear Viscoelastic");
