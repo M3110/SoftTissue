@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell;
 using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
+using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
@@ -49,6 +50,7 @@ namespace SoftTissue.Application
             // Register Constitutive Equations to Viscoelastic Models
             services.AddScoped<IMaxwellModel, MaxwellModel>();
             services.AddScoped<IFungModel, FungModel>();
+            services.AddScoped<ISimplifiedFungModel, SimplifiedFungModel>();
 
             // Register Operations for Linear Viscoelastic Model
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
