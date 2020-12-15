@@ -7,19 +7,19 @@
     {
         /// <summary>
         /// Initial time.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double InitialTime { get; set; }
 
         /// <summary>
         /// Time step.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double TimeStep { get; set; }
 
         /// <summary>
         /// Final time.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double FinalTime { get; set; }
     }
@@ -33,6 +33,6 @@
         /// <summary>
         /// Request data.
         /// </summary>
-        public T RequestData { get; set; }
+        public T Data { get; set; }
     }
 }

@@ -1,24 +1,26 @@
-﻿using SoftTissue.Core.Models.Viscoelasticity;
-using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
+﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResult;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress;
+using SoftTissue.DataContract.OperationBase;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 {
     /// <summary>
     /// It is responsible to calculate the stress to a quasi-linear viscoelastic model.
     /// </summary>
-    public interface ICalculateQuasiLinearViscoelasticityStress<TInput, TResult> : ICalculateResult<CalculateStressRequest, CalculateStressResponse, CalculateStressResponseData, TInput>
-        where TInput : QuasiLinearViscoelasticityModelInput, new()
+    public interface ICalculateQuasiLinearViscoelasticityStress<TRequest, TResponse, TResponseData, TInput, TReducedRelaxation, TResult> : ICalculateResult<TRequest, TResponse, TResponseData, TInput>
+        where TRequest : OperationRequestBase
+        where TResponse : OperationResponseBase<TResponseData>, new()
+        where TResponseData : OperationResponseData, new()
+        where TInput : QuasiLinearViscoelasticityModelInput<TReducedRelaxation>, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
         /// <summary>
         /// This method writes the input data into a file.
         /// </summary>
         /// <param name="input"></param>
-        /// <param name="streamWriter"></param>
-        void WriteInput(TInput input, StreamWriter streamWriter);
+        void WriteInput(TInput input);
 
         /// <summary>
         /// This method calculates the results and writes them to a file.
@@ -26,6 +28,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <param name="streamWriter"></param>
-        TResult CalculateAndWriteResults(TInput input, double time, StreamWriter streamWriter);
+        Task<TResult> CalculateAndWriteResults(TInput input, double time, StreamWriter streamWriter);
     }
 }

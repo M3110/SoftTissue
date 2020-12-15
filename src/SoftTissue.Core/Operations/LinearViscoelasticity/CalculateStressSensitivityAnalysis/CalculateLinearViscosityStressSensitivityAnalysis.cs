@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
+using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
@@ -39,11 +40,11 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
         {
             var inputList = new List<TInput>();
 
-            foreach (var initialStrain in request.InitialStrainList)
+            foreach (var initialStrain in request.InitialStrainList.ToEnumerable())
             {
-                foreach (var stiffness in request.StiffnessList)
+                foreach (var stiffness in request.StiffnessList.ToEnumerable())
                 {
-                    foreach (var viscosity in request.ViscosityList)
+                    foreach (var viscosity in request.ViscosityList.ToEnumerable())
                     {
                         inputList.Add(new TInput
                         {
@@ -94,7 +95,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
                 index++;
             }
 
-            header.Append("Unity");
+            header.Append("Unit");
 
             streamWriter.WriteLine(header);
             streamWriter.WriteLine($"Initial Time;{string.Join(';', initialTimeList)};s");

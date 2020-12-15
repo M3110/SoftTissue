@@ -9,19 +9,19 @@ namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain
     {
         /// <summary>
         /// Stiffness.
-        /// Unity: Pa (Pascal).
+        /// Unit: Pa (Pascal).
         /// </summary>
         public double Stiffness { get; set; }
 
         /// <summary>
         /// Inital stress.
-        /// Unity: Pa (Pascal).
+        /// Unit: Pa (Pascal).
         /// </summary>
         public double InitialStress { get; set; }
 
         /// <summary>
         /// Viscosity.
-        /// Unity: N.s/m (Newton-second per meter).
+        /// Unit: N.s/m (Newton-second per meter).
         /// </summary>
         public double Viscosity { get; set; }
     }

@@ -1,9 +1,9 @@
-﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
-using static SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung.FungModel;
+﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
+using SoftTissue.Infrastructure.Models;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
-    public interface IFungModel : IQuasiLinearViscoelasticityModel<FungModelInput, FungModelResult>
+    public interface IFungModel : IQuasiLinearViscoelasticityModel<FungModelInput, FungModelResult, ReducedRelaxationFunctionData>
     {
         /// <summary>
         /// This method calculates the equation I(t) where t is the time.
@@ -23,30 +23,5 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <param name="input"></param>
         /// <returns></returns>
         double CalculateConvergenceTimeToReducedRelaxationFunction(FungModelInput input);
-
-        /// <summary>
-        /// This method calculates the stress using the equation 8.a from Fung, at page 279.
-        /// That equation do not returns a satisfactory result.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        double CalculateStressByReducedRelaxationFunctionDerivative(FungModelInput input, double time);
-
-        /// <summary>
-        /// This method calculates the stress using the equation 8.b from Fung, at page 279.
-        /// That equation do not returns a satisfactory result.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        double CalculateStressByIntegrationDerivative(FungModelInput input, double time);
-
-        /// <summary>
-        /// This method sets the correct Reduced Relaxation Function to be used.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        FungModelEquation SetReducedRelaxationFunction(FungModelInput input);
     }
 }

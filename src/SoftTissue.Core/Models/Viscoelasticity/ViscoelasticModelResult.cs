@@ -8,8 +8,6 @@
 
         public double CreepCompliance { get; set; }
 
-        public double ElasticResponse { get; set; }
-
         public double Stress { get; set; }
     }
 }

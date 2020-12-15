@@ -9,7 +9,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenc
     {
         /// <summary>
         /// The convergence time.
-        /// Unity: s (second).'
+        /// Unit: s (second).'
         /// </summary>
         public double ConvergenceTime { get; set; }
     }

@@ -12,4 +12,8 @@
     <ProjectReference Include="..\SoftTissue.DataContract\SoftTissue.DataContract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Operations\QuasiLinearViscoelasticity\CalculateStressSensitivityAnalysis\FungModel\" />
+  </ItemGroup>
+
 </Project>

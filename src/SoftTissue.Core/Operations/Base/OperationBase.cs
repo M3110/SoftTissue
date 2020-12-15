@@ -24,7 +24,7 @@ namespace SoftTissue.Core.Operations.Base
         protected abstract Task<TResponse> ProcessOperation(TRequest request);
 
         /// <summary>
-        /// This method validates the operation.
+        /// This method validates the request sent to operation.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

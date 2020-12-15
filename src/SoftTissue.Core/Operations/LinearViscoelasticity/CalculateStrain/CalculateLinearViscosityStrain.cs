@@ -39,7 +39,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
         {
             var inputList = new List<TInput>();
 
-            foreach (var requestData in request.RequestData)
+            foreach (var requestData in request.Data)
             {
                 inputList.Add(new TInput
                 {

@@ -36,7 +36,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         protected abstract string SolutionFileHeader { get; }
 
         /// <summary>
-        /// This method builds a list with the inputs based on the request.
+        /// This method builds a list of inputs based on the request.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

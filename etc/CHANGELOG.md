@@ -6,11 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## UNRELEASED
 ### Added
-- Operations CalculateStressToExperimentalModel and CalculateConvergenceTime.
-- Property IndependetVariable in SimplifiedReducedRelaxationFunctionData.
+- Operations CalculateConvergenceTime.
+- Operation to calculate stress for experimental models.
+- Enum ViscoelasticConsideration with each viscoelastic consideration.
 ### Changed
 - RelavativePrecision from 5e-3 to 1e-3 and Precision from 1e-10 to 1e-7.
 - Moved sensitivity analysis operations to a new folder.
+- CalculateStress operations for Quasi-Linear Viscoelastic model to process considering ramp time or not, or considering Reduced Relaxation Function or Simplified Reduced Relaxation Function.
 
 ## [1.1.0] - 2020-11-01
 ### Added

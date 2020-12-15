@@ -5,15 +5,13 @@
 global stiffness viscosity relaxationTime initialStrain
 global stress viscoelasticModel
 
-input = readtable('Input.txt');
-
-viscoelasticModel = cell2mat(table2array(input(1,2)));
-stiffness = str2double(cell2mat(table2array(input(2,2))));
-viscosity = str2double(cell2mat(table2array(input(3,2))));
-initialStrain = str2double(cell2mat(table2array(input(4,2))));
-initialTime = str2double(cell2mat(table2array(input(5,2))));
-timeStep = str2double(cell2mat(table2array(input(6,2))));
-finalTime = str2double(cell2mat(table2array(input(7,2))));
+viscoelasticModel = 'Maxwell';
+stiffness = 3;
+viscosity = 32;
+initialStrain = 25;
+initialTime = 0;
+timeStep = 0.1;
+finalTime = 300;
 
 relaxationTime = viscosity/stiffness;
 

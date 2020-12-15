@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SoftTissue.Infrastructure.Models
 {
+    /// <summary>
+    /// It contains the input data to Simplified Reduced Relaxation Function.
+    /// </summary>
     public class SimplifiedReducedRelaxationFunctionData
     {
-        public int NumberOfVariables => this.VariableEList.Count == this.RelaxationTimeList.Count 
-            ? this.VariableEList.Count
-            : throw new Exception($"Number of variables E: {this.VariableEList.Count} must be equals to number of relaxation times: {this.RelaxationTimeList.Count}.");
+        /// <summary>
+        /// The first viscoelastic stiffness. This variable is independent.
+        /// </summary>
+        public double FirstViscoelasticStiffness { get; set; }
 
-        public double IndependentVariable { get; set; }
-
-        public List<double> VariableEList { get; set; }
-
-        public List<double> RelaxationTimeList { get; set; }
+        /// <summary>
+        /// The values for each iteration to Simplified Reduced Relaxation Function.
+        /// </summary>
+        public IEnumerable<SimplifiedReducedRelaxationFunctionIteratorValues> IteratorValues { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel;
+using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
@@ -27,7 +28,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
         /// <param name="viscoelasticModel"></param>
         public CalculateLinearViscosityStrainSensitivityAnalysis(ILinearViscoelasticityModel<TInput> viscoelasticModel) : base(viscoelasticModel)
         {
-            _viscoelasticModel = viscoelasticModel;
+            this._viscoelasticModel = viscoelasticModel;
         }
 
         /// <summary>
@@ -39,11 +40,11 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
         {
             var inputList = new List<TInput>();
 
-            foreach (var initialStress in request.InitialStressList)
+            foreach (var initialStress in request.InitialStressList.ToEnumerable())
             {
-                foreach (var stiffness in request.StiffnessList)
+                foreach (var stiffness in request.StiffnessList.ToEnumerable())
                 {
-                    foreach (var viscosity in request.ViscosityList)
+                    foreach (var viscosity in request.ViscosityList.ToEnumerable())
                     {
                         inputList.Add(new TInput
                         {
@@ -94,7 +95,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
                 index++;
             }
 
-            header.Append("Unity");
+            header.Append("Unit");
 
             streamWriter.WriteLine(header);
             streamWriter.WriteLine($"Initial Time;{string.Join(';', initialTimeList)};s");
@@ -132,10 +133,10 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
 
                     foreach (var input in inputList)
                     {
-                        double creepCompliance = _viscoelasticModel.CalculateCreepCompliance(input, time);
+                        double creepCompliance = this._viscoelasticModel.CalculateCreepCompliance(input, time);
                         creepComplianceResults.Append($"{creepCompliance};");
 
-                        double strain = _viscoelasticModel.CalculateStrain(input, time);
+                        double strain = this._viscoelasticModel.CalculateStrain(input, time);
                         strainResults.Append($"{strain};");
                     }
 

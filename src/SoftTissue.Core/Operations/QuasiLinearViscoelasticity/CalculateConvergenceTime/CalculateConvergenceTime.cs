@@ -88,7 +88,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConverg
 
         public Task<CalculateConvergenceTimeResponse> CalculateConvergenceTimeSecondWay(CalculateConvergenceTimeRequest request)
         {
+            var response = new CalculateConvergenceTimeResponse { Data = new CalculateConvergenceTimeResponseData() };
 
+            return Task.FromResult(response);
         }
     }
 }

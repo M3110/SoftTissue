@@ -13,8 +13,10 @@ using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivit
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensitivityAnalysis.MaxwellModel;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis.FungModel;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderRelaxationFunction;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderRelaxationFunction;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
 
 namespace SoftTissue.Application
@@ -48,13 +50,16 @@ namespace SoftTissue.Application
             services.AddScoped<IMaxwellModel, MaxwellModel>();
             services.AddScoped<IFungModel, FungModel>();
 
-            // Register Operations
+            // Register Operations for Linear Viscoelastic Model
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
             services.AddScoped<ICalculateMaxwellModelStrainSensitivityAnalysis, CalculateMaxwellModelStrainSensitivityAnalysis>();
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
             services.AddScoped<ICalculateMaxwellModelStressSensitivityAnalysis, CalculateMaxwellModelStressSensitivityAnalysis>();
-            services.AddScoped<ICalculateFungModelStress, CalculateFungModelStress>();
-            services.AddScoped<ICalculateFungModelStressSentivityAnalysis, CalculateFungModelStressSentivityAnalysis>();
+            // Register Operations for Quasi-Linear Viscoelastic Model
+            services.AddScoped<ICalculateFungModelStressConsiderRampTime, CalculateFungModelStressConsiderRampTime>();
+            services.AddScoped<ICalculateSimplifiedFungModelStressConsiderRampTime, CalculateSimplifiedFungModelStressConsiderRampTime>();
+            services.AddScoped<ICalculateFungModelStressDisregardRampTime, CalculateFungModelStressDisregardRampTime>();
+            services.AddScoped<ICalculateSimplifiedFungModelStressDisregardRampTime, CalculateSimplifiedFungModelStressDisregardRampTime>();
             services.AddScoped<IGenerateFungModelDomain, GenerateFungModelDomain>();
             services.AddScoped<ICalculateConvergenceTime, CalculateConvergenceTime>();
 

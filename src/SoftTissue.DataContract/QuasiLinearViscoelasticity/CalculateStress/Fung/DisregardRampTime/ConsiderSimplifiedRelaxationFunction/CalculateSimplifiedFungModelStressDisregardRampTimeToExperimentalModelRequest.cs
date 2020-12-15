@@ -1,12 +1,12 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using SoftTissue.Infrastructure.Models;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.DisregardRampTime
 {
     /// <summary>
     /// It represents the request content to CalculateStress operation of Quasi-Linear Viscoelasticity Model for a soft tissue experimental model.
     /// </summary>
-    public class CalculateStressToExperimentalModelRequest : OperationRequestBase
+    public class CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest : OperationRequestBase
     {
         /// <summary>
         /// The experimental model.
@@ -14,15 +14,15 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress
         public ExperimentalModel ExperimentalModel { get; set; }
 
         /// <summary>
-        /// Strain rate.
-        /// Unity: Dimensionless.
+        /// The strain.
+        /// Unit: Dimensionless.
         /// </summary>
-        public double StrainRate { get; set; }
+        public double Strain { get; set; }
 
         /// <summary>
-        /// Maximum strain.
-        /// Unity: Dimensionless.
+        /// The maximum stress.
+        /// Unit: Pa (Pascal).
         /// </summary>
-        public double MaximumStrain { get; set; }
+        public double InitialStress { get; set; }
     }
 }

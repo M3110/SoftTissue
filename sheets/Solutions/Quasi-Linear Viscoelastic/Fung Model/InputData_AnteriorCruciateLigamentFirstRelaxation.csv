@@ -1,0 +1,11 @@
+Parameter;Value;Unit
+Soft Tissue type;AnteriorCruciateLigamentFirstRelaxation;
+Viscoelastic Consideration;RampTimeDisregard;
+Use Simplified Reduced Relaxation Function;True;
+Initial Time;0;s
+Time Step;0,1;s
+Final Time;300;s
+Maximum Stress;2,5;Pa
+First Viscoelastic Stiffness;0,740272
+Viscoelastic Stiffness List;0,11126799999999999 - 0,084708 - 0,049552;
+Relaxation Time List;27,91285 - 27,89834 - 27,96472

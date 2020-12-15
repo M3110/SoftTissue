@@ -6,19 +6,24 @@
     public enum ViscoelasticConsideration
     {
         /// <summary>
-        /// Viscoelastic effect considered to all time domain.
+        /// Viscoelastic effect considered to all time domain considering a constant strain after the ramp time.
         /// </summary>
-        GeneralViscoelasctiEffect = 1,
+        GeneralViscoelasctiEffectWithConstantStrain = 1,
+
+        /// <summary>
+        /// Viscoelastic effect considered to all time domain considering that the strain decrease after a specific time.
+        /// </summary>
+        GeneralViscoelasticEffectWithStrainDecrease = 2,
 
         /// <summary>
         /// Viscoelastic effect considered after the ramp time.
         /// </summary>
-        ViscoelasticEffectAfterRampTime = 2,
+        ViscoelasticEffectAfterRampTime = 3,
 
         /// <summary>
-        /// The ramp time is not considered. In time equals to zero, the 
+        /// The ramp time is disregarded. In time equals to zero, the 
         /// stress is maximum and equals to the maximum elastic stress.
         /// </summary>
-        RampTimeNotConsidered = 3,
+        DisregardRampTime = 4,
     }
 }

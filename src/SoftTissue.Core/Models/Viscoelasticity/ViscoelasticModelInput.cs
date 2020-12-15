@@ -8,30 +8,25 @@ namespace SoftTissue.Core.Models.Viscoelasticity
     public class ViscoelasticModelInput
     {
         /// <summary>
-        /// The viscoelasctic consideration.
-        /// </summary>
-        public ViscoelasticConsideration ViscoelasticConsideration { get; set; }
-
-        /// <summary>
         /// The soft tissue type.
         /// </summary>
         public string SoftTissueType { get; set; }
 
         /// <summary>
         /// Initial time.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double InitialTime { get; set; }
 
         /// <summary>
         /// Time step.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double TimeStep { get; set; }
 
         /// <summary>
         /// Final time.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double FinalTime { get; set; }
     }

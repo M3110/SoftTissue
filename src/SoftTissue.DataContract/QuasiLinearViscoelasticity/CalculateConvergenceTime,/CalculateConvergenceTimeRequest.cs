@@ -1,4 +1,5 @@
 ﻿using SoftTissue.DataContract.OperationBase;
+using SoftTissue.Infrastructure.Models;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime_
 {
@@ -7,6 +8,11 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenc
     /// </summary>
     public class CalculateConvergenceTimeRequest : OperationRequestBase
     {
+        /// <summary>
+        /// The viscoelasctic consideration.
+        /// </summary>
+        public ViscoelasticConsideration ViscoelasticConsideration { get; set; }
+
         /// <summary>
         /// The analysis strain rate.
         /// </summary>

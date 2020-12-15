@@ -9,7 +9,16 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSens
     /// </summary>
     public class CalculateStressSensitivityAnalysisExplicitRequest : OperationRequestBase
     {
+        /// <summary>
+        /// True, if have to use the simplified Reduced Relaxation Function.
+        /// False, otherwise.
+        /// </summary>
         public bool UseSimplifiedReducedRelaxationFunction { get; set; }
+
+        /// <summary>
+        /// The viscoelasctic consideration.
+        /// </summary>
+        public ViscoelasticConsideration ViscoelasticConsideration { get; set; }
 
         public Value StrainRateList { get; set; }
 
