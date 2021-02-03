@@ -50,22 +50,70 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public override double CalculateStrain(TInput input, double time)
         {
-            if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
+            switch (input.ViscoelasticConsideration)
             {
-                return input.MaximumStrain;
-            }
-            else if (input.ViscoelasticConsideration == ViscoelasticConsideration.GeneralViscoelasctiEffectWithConstantStrain)
-            {
-                return time < input.RampTime ? input.StrainRate * time : input.MaximumStrain;
-            }
-            else if (input.ViscoelasticConsideration == ViscoelasticConsideration.GeneralViscoelasticEffectWithStrainDecrease)
-            {
-                if (time < input.RampTime) return input.StrainRate * time;
-                else if (time > input.RampTime && time < input.FinalStrainTime) return input.MaximumStrain;
-                else return 0;
+                case ViscoelasticConsideration.GeneralViscoelasctiEffect:
+                case ViscoelasticConsideration.ViscoelasticEffectAfterRampTime:
+                    return time <= input.RampTime ? input.StrainRate * time : input.MaximumStrain;
+
+                case ViscoelasticConsideration.GeneralViscoelasticEffectWithStrainDecrease:
+                case ViscoelasticConsideration.ViscoelasticEffectAfterRampTimeWithStrainDecrease:
+                    if (time <= input.RampTime)
+                        return input.StrainRate * time;
+
+                    double timeWhenStrainBeginningDecrease = input.RampTime + input.TimeWithConstantStrain;
+
+                    if (time > input.RampTime && time <= timeWhenStrainBeginningDecrease)
+                        return input.MaximumStrain;
+
+                    if (time > timeWhenStrainBeginningDecrease && time <= timeWhenStrainBeginningDecrease + input.DecreaseTime)
+                        return input.MaximumStrain - input.StrainDecreaseRate * (time - timeWhenStrainBeginningDecrease);
+
+                    return input.MinimumStrain;
+
+                case ViscoelasticConsideration.DisregardRampTime:
+                    return input.MaximumStrain;
             }
 
-            return 0;
+            throw new ArgumentOutOfRangeException("Invalid viscoelastic consideration.");
+        }
+
+        /// <summary>
+        /// This method calculates the strain derivative.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public virtual double CalculateStrainDerivative(TInput input, double time)
+        {
+            switch (input.ViscoelasticConsideration)
+            {
+                case ViscoelasticConsideration.GeneralViscoelasctiEffect:
+                case ViscoelasticConsideration.ViscoelasticEffectAfterRampTime:
+                    return time < input.RampTime ? input.StrainRate : 0;
+
+                case ViscoelasticConsideration.GeneralViscoelasticEffectWithStrainDecrease:
+                case ViscoelasticConsideration.ViscoelasticEffectAfterRampTimeWithStrainDecrease:
+                    {
+                        if (time <= input.RampTime)
+                            return input.StrainRate;
+
+                        double timeWhenStrainBeginningDecrease = input.RampTime + input.TimeWithConstantStrain;
+
+                        if (time > input.RampTime && time <= timeWhenStrainBeginningDecrease)
+                            return 0;
+
+                        if (time > timeWhenStrainBeginningDecrease && time <= timeWhenStrainBeginningDecrease + input.DecreaseTime)
+                            return -input.StrainDecreaseRate;
+
+                        return 0;
+                    }
+
+                case ViscoelasticConsideration.DisregardRampTime:
+                    return 0;
+            }
+
+            throw new ArgumentOutOfRangeException("Invalid viscoelastic consideration.");
         }
 
         /// <summary>
@@ -94,16 +142,29 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public virtual double CalculateElasticResponseDerivative(TInput input, double time)
         {
-            double strain = this.CalculateStrain(input, time);
+            if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
+                return 0;
 
-            // After the ramp time, the strain is constant, so the its derivative is zero.
-            double strainDerivative = time <= input.RampTime ? input.StrainRate : 0;
+            double strain = this.CalculateStrain(input, time);
+            double strainDerivative = this.CalculateStrainDerivative(input, time);
 
             return input.ElasticStressConstant * input.ElasticPowerConstant * strainDerivative * Math.Exp(input.ElasticPowerConstant * strain);
         }
-        
+
+        /// <summary>
+        /// This method calculates the reduced relaxation function.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public abstract double CalculateReducedRelaxationFunction(TInput input, double time);
 
+        /// <summary>
+        /// This method calculates the derivative of reduced relaxation function.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public abstract double CalculateReducedRelaxationFunctionDerivative(TInput input, double time);
 
         /// <summary>
@@ -114,36 +175,46 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public override double CalculateStress(TInput input, double time)
         {
-            if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
+            switch (input.ViscoelasticConsideration)
             {
-                return input.InitialStress * this.CalculateReducedRelaxationFunction(input, time);
-            }
-            else if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
-            {
-                if (time <= input.RampTime)
-                {
-                    return this.CalculateElasticResponse(input, time);
-                }
-                else
-                {
+                case ViscoelasticConsideration.DisregardRampTime:
+                    return input.InitialStress * CalculateReducedRelaxationFunction(input, time);
+
+                case ViscoelasticConsideration.ViscoelasticEffectAfterRampTime:
+                    {
+                        if (time <= input.RampTime)
+                        {
+                            return CalculateElasticResponse(input, time);
+                        }
+
+                        return this._simpsonRuleIntegration.Calculate(
+                            (integrationTime) => CalculateReducedRelaxationFunction(input, time - integrationTime) * CalculateElasticResponseDerivative(input, integrationTime),
+                            new IntegralInput
+                            {
+                                InitialPoint = 0,
+                                FinalPoint = input.RampTime,
+                                Step = input.TimeStep
+                            });
+                    }
+
+                case ViscoelasticConsideration.GeneralViscoelasctiEffect:
                     return this._simpsonRuleIntegration.Calculate(
-                        (equationTime) => this.CalculateReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime),
+                        (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
                         new IntegralInput
                         {
                             InitialPoint = 0,
-                            FinalPoint = input.RampTime,
+                            FinalPoint = time < input.RampTime ? time : input.RampTime,
                             Step = input.TimeStep
                         });
-                }
             }
 
-            // The default way to calculate the stress is considering the viscoelastic effect to all time domain and the strain is constant after the ramp time.
+            // The default way to calculate the stress is using the convolution between the reduced relaxation function and derivative of elastic response.
             return this._simpsonRuleIntegration.Calculate(
-                (equationTime) => this.CalculateReducedRelaxationFunction(input, time - equationTime) * this.CalculateElasticResponseDerivative(input, equationTime),
+                (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
                 new IntegralInput
                 {
                     InitialPoint = 0,
-                    FinalPoint = time < input.RampTime ? time : input.RampTime,
+                    FinalPoint = time,
                     Step = input.TimeStep
                 });
         }
@@ -157,19 +228,18 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public virtual double CalculateStressByReducedRelaxationFunctionDerivative(TInput input, double time)
         {
-            var integralInput = new IntegralInput
-            {
-                InitialPoint = 0,
-                FinalPoint = time,
-                Step = input.TimeStep
-            };
+            if (time <= Constants.Precision)
+                return 0;
 
             return this.CalculateReducedRelaxationFunction(input, time: 0) * this.CalculateElasticResponse(input, time) +
-                this._simpsonRuleIntegration.Calculate((integrationTime) =>
-                {
-                    return this.CalculateElasticResponse(input, integrationTime) * this.CalculateReducedRelaxationFunctionDerivative(input, time);
-                },
-                integralInput);
+                this._simpsonRuleIntegration.Calculate(
+                    (integrationTime) => this.CalculateElasticResponse(input, time - integrationTime) * this.CalculateReducedRelaxationFunctionDerivative(input, integrationTime),
+                    new IntegralInput
+                    {
+                        InitialPoint = 0,
+                        FinalPoint = time,
+                        Step = input.TimeStep
+                    });
         }
 
         /// <summary>
@@ -181,20 +251,19 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public virtual double CalculateStressByIntegralDerivative(TInput input, double time)
         {
-            return this._derivative.Calculate((derivativeTime) =>
-            {
-                var integralInput = new IntegralInput
-                {
-                    InitialPoint = 0,
-                    FinalPoint = derivativeTime,
-                    Step = input.TimeStep
-                };
+            if (time <= Constants.Precision)
+                return 0;
 
-                return this._simpsonRuleIntegration.Calculate(
-                    (integrationTime) => this.CalculateElasticResponse(input, time - integrationTime) * this.CalculateReducedRelaxationFunction(input, integrationTime),
-                    integralInput);
-            },
-            input.TimeStep, time);
+            return this._derivative.Calculate(
+                (derivativeTime) => this._simpsonRuleIntegration.Calculate(
+                    (integrationTime) => this.CalculateElasticResponse(input, derivativeTime - integrationTime) * this.CalculateReducedRelaxationFunction(input, integrationTime),
+                    new IntegralInput
+                    {
+                        InitialPoint = 0,
+                        FinalPoint = derivativeTime,
+                        Step = input.TimeStep
+                    }),
+                input.TimeStep, time);
         }
     }
 }

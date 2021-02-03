@@ -45,7 +45,6 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
                 {
                     FinalTime = requestData.FinalTime ?? request.FinalTime,
                     TimeStep = requestData.TimeStep ?? request.TimeStep,
-                    InitialTime = requestData.InitialTime ?? request.InitialTime,
                     InitialStrain = requestData.InitialStrain,
                     Stiffness = requestData.Stiffness,
                     Viscosity = requestData.Viscosity,

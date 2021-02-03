@@ -7,7 +7,7 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
     {
         public const double Epsilon = 2.2e-16;
 
-        public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double variable)
+        public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double time)
             where TInput : ViscoelasticModelInput
         {
             //double stepTime;
@@ -20,13 +20,13 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
             //    stepTime = Math.Sqrt(Epsilon) * variable;
             //}
 
-            double actualValue = Equation(input, variable);
-            double nextValue = Equation(input, variable + input.TimeStep);
+            double actualValue = Equation(input, time);
+            double nextValue = Equation(input, time + input.TimeStep);
 
             return (nextValue - actualValue) / input.TimeStep;
         }
 
-        public double Calculate(Func<double, double> Equation, double step, double variable)
+        public double Calculate(Func<double, double> Equation, double step, double time)
         {
             //double stepTime;
             //if (variable == 0)
@@ -38,8 +38,8 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
             //    stepTime = Math.Sqrt(Epsilon) * variable;
             //}
 
-            double actualValue = Equation(variable);
-            double nextValue = Equation(variable + step);
+            double actualValue = Equation(time);
+            double nextValue = Equation(time + step);
 
             return (nextValue - actualValue) / step;
         }

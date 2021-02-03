@@ -50,7 +50,6 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
                         {
                             FinalTime = request.FinalTime,
                             TimeStep = request.TimeStep,
-                            InitialTime = request.InitialTime,
                             InitialStrain = initialStrain,
                             Stiffness = stiffness,
                             Viscosity = viscosity
@@ -114,7 +113,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
         /// <param name="initialTime"></param>
         /// <param name="finalTime"></param>
         /// <param name="timeStep"></param>
-        public override void CalculateAndWriteResults(List<TInput> inputList, double initialTime, double finalTime, double timeStep)
+        public override void CalculateAndWriteResults(List<TInput> inputList, double finalTime, double timeStep, double initialTime = 0)
         {
             using (StreamWriter relaxationFunctionStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Relaxation Function")))
             using (StreamWriter stressStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Stress")))
@@ -167,7 +166,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
 
             try
             {
-                CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
+                this.CalculateAndWriteResults(inputList, request.FinalTime, request.TimeStep);
             }
             catch (Exception ex)
             {

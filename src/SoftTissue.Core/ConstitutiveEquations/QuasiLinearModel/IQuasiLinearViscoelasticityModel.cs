@@ -6,14 +6,51 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         where TInput : QuasiLinearViscoelasticityModelInput<TRelaxationFunction>, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
+        /// <summary>
+        /// This method calculates the initial conditions for Fung model analysis.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         TResult CalculateInitialConditions(TInput input);
 
+        /// <summary>
+        /// This method calculates the strain derivative.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        double CalculateStrainDerivative(TInput input, double time);
+
+        /// <summary>
+        /// This method calculates the elastic response.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         double CalculateElasticResponse(TInput input, double time);
 
+        /// <summary>
+        /// This method calculates the derivtive of elastic response.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         double CalculateElasticResponseDerivative(TInput input, double time);
 
+        /// <summary>
+        /// This method calculates the reduced relaxation function.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         double CalculateReducedRelaxationFunction(TInput input, double time);
 
+        /// <summary>
+        /// This method calculates the derivative of reduced relaxation function.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         double CalculateReducedRelaxationFunctionDerivative(TInput input, double time);
 
         /// <summary>

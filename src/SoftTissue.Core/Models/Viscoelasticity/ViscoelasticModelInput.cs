@@ -1,6 +1,4 @@
-﻿using SoftTissue.Infrastructure.Models;
-
-namespace SoftTissue.Core.Models.Viscoelasticity
+﻿namespace SoftTissue.Core.Models.Viscoelasticity
 {
     /// <summary>
     /// It contains the input data to a generic Viscoelastic Model.
@@ -16,7 +14,7 @@ namespace SoftTissue.Core.Models.Viscoelasticity
         /// Initial time.
         /// Unit: s (second).
         /// </summary>
-        public double InitialTime { get; set; }
+        public double InitialTime => 0;
 
         /// <summary>
         /// Time step.

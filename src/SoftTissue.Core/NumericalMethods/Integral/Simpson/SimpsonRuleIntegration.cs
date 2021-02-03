@@ -76,7 +76,7 @@ namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
 
             for (int i = 0; i <= numberOfDivisions; i++)
             {
-                if (i == 0 || i == integralInput.Step)
+                if (i == 0 || i == integralInput.FinalPoint)
                 {
                     result += Equation(integralInput.InitialPoint + i * integralInput.Step);
                 }

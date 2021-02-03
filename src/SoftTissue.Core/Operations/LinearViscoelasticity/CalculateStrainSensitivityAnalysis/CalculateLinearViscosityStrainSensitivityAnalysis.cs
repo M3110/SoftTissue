@@ -50,7 +50,6 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
                         {
                             FinalTime = request.FinalTime,
                             TimeStep = request.TimeStep,
-                            InitialTime = request.InitialTime,
                             InitialStress = initialStress,
                             Stiffness = stiffness,
                             Viscosity = viscosity
@@ -114,7 +113,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
         /// <param name="initialTime"></param>
         /// <param name="finalTime"></param>
         /// <param name="timeStep"></param>
-        public override void CalculateAndWriteResults(List<TInput> inputList, double initialTime, double finalTime, double timeStep)
+        public override void CalculateAndWriteResults(List<TInput> inputList, double finalTime, double timeStep, double initialTime = 0)
         {
             using (StreamWriter creepComplianceStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Creep Compliance")))
             using (StreamWriter strainStreamWriter = new StreamWriter(CreateSolutionFile(functionName: "Strain")))
@@ -167,7 +166,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
 
             try
             {
-                CalculateAndWriteResults(inputList, request.InitialTime, request.FinalTime, request.TimeStep);
+                this.CalculateAndWriteResults(inputList, request.FinalTime, request.TimeStep);
             }
             catch (Exception ex)
             {

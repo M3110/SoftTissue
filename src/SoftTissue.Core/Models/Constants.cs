@@ -15,12 +15,21 @@ namespace SoftTissue.Core.Models
         /// <summary>
         /// The double-point precision accepted.
         /// </summary>
-        public static double Precision = 1e-7;
+        public static double Precision = 1e-6;
 
         /// <summary>
         /// The relative double-point precision accepted.
         /// </summary>
         public static double RelativePrecision = 1e-3;
+
+        /// <summary>
+        /// The final time to equation E1 must be at most 11.4, because, using Geogebra to plot the graphic for the 
+        /// equation e^(-t)/t, we found to that time a value less than the precision assumed to the project.
+        /// f(t) = e^(-t)/t
+        /// f(11.4) = 9.820601e-7
+        /// f(11.4) < Precision = 1e-6
+        /// </summary>
+        public static double EquationE1MaximumFinalTime = 11.4;
 
         /// <summary>
         /// The application base path.

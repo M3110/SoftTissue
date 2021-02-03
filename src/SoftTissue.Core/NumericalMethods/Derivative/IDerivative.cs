@@ -5,9 +5,9 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
 {
     public interface IDerivative
     {
-        double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double variable)
+        double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double time)
             where TInput : ViscoelasticModelInput;
 
-        double Calculate(Func<double, double> Equation, double step, double variable);
+        double Calculate(Func<double, double> Equation, double step, double time);
     }
 }

@@ -110,49 +110,55 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<TResponse> ProcessOperation(TRequest request)
+        protected override async Task<TResponse> ProcessOperation(TRequest request)
         {
             var response = new TResponse { Data = new TResponseData() };
             response.SetSuccessCreated();
 
             List<TInput> inputList = this.BuildInputList(request);
 
-            Parallel.ForEach(inputList, async input =>
+            var tasks = new List<Task>();
+
+            foreach (var input in inputList)
             {
-                this.WriteInput(input);
-
-                double time = input.InitialTime;
-
-                TResult previousResult = this._viscoelasticModel.CalculateInitialConditions(input);
-
-                try
+                tasks.Add(Task.Run(async () =>
                 {
-                    using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(input)))
+                    this.WriteInput(input);
+                    
+                    double time = input.InitialTime;
+                    
+                    TResult previousResult = this._viscoelasticModel.CalculateInitialConditions(input);
+                    
+                    try
                     {
-                        streamWriter.WriteLine(this.SolutionFileHeader);
-
-                        while (time <= input.FinalTime)
+                        using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(input)))
                         {
-                            TResult result = await this.CalculateAndWriteResults(input, time, streamWriter).ConfigureAwait(false);
-
-                            // It increases the time step when the stress is converging to its asymptote.
-                            if (Math.Abs((result.Stress - previousResult.Stress) / previousResult.Stress) < Constants.RelativePrecision)
-                                time += 10 * input.TimeStep;
-                            else
-                                time += input.TimeStep;
-
-                            previousResult = result;
+                            streamWriter.WriteLine(this.SolutionFileHeader);
+                    
+                            while (time <= input.FinalTime)
+                            {
+                                TResult result = await this.CalculateAndWriteResults(input, time, streamWriter).ConfigureAwait(false);
+                    
+                                // It increases the time step when the stress is converging to its asymptote.
+                                if (Math.Abs((result.Stress - previousResult.Stress) / previousResult.Stress) < Constants.RelativePrecision)
+                                    time += 10 * input.TimeStep;
+                                else
+                                    time += input.TimeStep;
+                    
+                                previousResult = result;
+                            }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    response.AddError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.", HttpStatusCode.InternalServerError);
-                    response.SetInternalServerError();
-                }
-            });
+                    catch (Exception ex)
+                    {
+                        response.AddError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.", HttpStatusCode.InternalServerError);
+                    }
+                }));
 
-            return Task.FromResult(response);
+                await Task.WhenAll(tasks).ConfigureAwait(false);
+            }
+
+            return response;
         }
     }
 }

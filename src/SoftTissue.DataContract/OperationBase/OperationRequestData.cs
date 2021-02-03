@@ -11,12 +11,6 @@
         public string SoftTissueType { get; set; }
 
         /// <summary>
-        /// Initial time.
-        /// Unit: s (second).
-        /// </summary>
-        public double? InitialTime { get; set; }
-
-        /// <summary>
         /// Time step.
         /// Unit: s (second).
         /// </summary>

@@ -70,7 +70,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
                     {
                         FastRelaxationTime = fastRelaxationTime,
                         SlowRelaxationTime = slowRelaxationTime,
-                        InitialTime = 0,
                         TimeStep = request.TimeStep,
                         FinalTime = request.FinalTime
                     });

@@ -50,7 +50,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
                     InitialStress = requestData.InitialStress,
                     MaximumStrain = requestData.Strain,
                     ReducedRelaxationFunctionInput = requestData.ReducedRelaxationFunctionData,
-                    InitialTime = requestData.InitialTime ?? request.InitialTime,
                     TimeStep = requestData.TimeStep ?? request.TimeStep,
                     FinalTime = requestData.FinalTime ?? request.FinalTime
                 });
@@ -73,7 +72,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
                 streamWriter.WriteLine($"Initial Time;{input.InitialTime};s");
                 streamWriter.WriteLine($"Time Step;{input.TimeStep};s");
                 streamWriter.WriteLine($"Final Time;{input.FinalTime};s");
-                streamWriter.WriteLine($"Final Strain Time;{input.FinalStrainTime};s");
+                streamWriter.WriteLine($"Final Strain Time;{input.DecreaseTime};s");
                 streamWriter.WriteLine($"Strain Rate;{input.StrainRate};");
                 streamWriter.WriteLine($"Maximum Strain;{input.MaximumStrain};");
                 streamWriter.WriteLine($"Elastic Stress Constant;{input.ElasticStressConstant};Pa");

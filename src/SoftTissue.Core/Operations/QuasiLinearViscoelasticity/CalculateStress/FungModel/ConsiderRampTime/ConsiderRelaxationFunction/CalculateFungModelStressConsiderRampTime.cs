@@ -48,13 +48,14 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
                 inputs.Add(new FungModelInput
                 {
                     ViscoelasticConsideration = requestData.ViscoelasticConsideration,
-                    FinalStrainTime = requestData.FinalStrainTime,
                     StrainRate = requestData.StrainRate,
                     MaximumStrain = requestData.MaximumStrain,
+                    TimeWithConstantStrain = requestData.TimeWithConstantStrain,
+                    StrainDecreaseRate = requestData.StrainDecreaseRate,
+                    MinimumStrain = requestData.MinimumStrain,
                     ElasticStressConstant = requestData.ElasticStressConstant,
                     ElasticPowerConstant = requestData.ElasticPowerConstant,
                     ReducedRelaxationFunctionInput = requestData.ReducedRelaxationFunctionData,
-                    InitialTime = requestData.InitialTime ?? request.InitialTime,
                     TimeStep = requestData.TimeStep ?? request.TimeStep,
                     FinalTime = requestData.FinalTime ?? request.FinalTime,
                     SoftTissueType = requestData.SoftTissueType,
@@ -78,7 +79,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
                 streamWriter.WriteLine($"Initial Time;{input.InitialTime};s");
                 streamWriter.WriteLine($"Time Step;{input.TimeStep};s");
                 streamWriter.WriteLine($"Final Time;{input.FinalTime};s");
-                streamWriter.WriteLine($"Final Strain Time;{input.FinalStrainTime};s");
+                streamWriter.WriteLine($"Final Strain Time;{input.DecreaseTime};s");
                 streamWriter.WriteLine($"Strain Rate;{input.StrainRate};");
                 streamWriter.WriteLine($"Maximum Strain;{input.MaximumStrain};");
                 streamWriter.WriteLine($"Elastic Stress Constant;{input.ElasticStressConstant};Pa");

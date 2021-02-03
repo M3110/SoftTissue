@@ -8,8 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{E468E120-4BDD-4C72-AD36-FA44CB23642E}"
 	ProjectSection(SolutionItems) = preProject
 		etc\CHANGELOG.md = etc\CHANGELOG.md
-		etc\Equations.docx = etc\Equations.docx
-		etc\Notes.txt = etc\Notes.txt
 		etc\README.md = etc\README.md
 	EndProjectSection
 EndProject

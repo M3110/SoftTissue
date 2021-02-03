@@ -18,11 +18,5 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Dis
         /// Unit: Dimensionless.
         /// </summary>
         public double Strain { get; set; }
-
-        /// <summary>
-        /// The maximum stress.
-        /// Unit: Pa (Pascal).
-        /// </summary>
-        public double InitialStress { get; set; }
     }
 }
