@@ -1,0 +1,14 @@
+Parameter;Value;Unit
+Soft Tissue type;PosteriorCruciateLigamentSecondRelaxation;
+Viscoelastic Consideration;DisregardRampTime;
+Initial Time;0;s
+Time Step;0,1;s
+Final Time;1800;s
+Final Strain Time;0;s
+Strain Rate;0;
+Maximum Strain;0,02;
+Elastic Stress Constant;0;Pa
+Elastic Power Constant;0;
+First Viscoelastic Stiffness;0,9046143790849673
+Viscoelastic Stiffness List;0,02230065359477124 - 0,030947712418300657 - 0,05070588235294117;
+Relaxation Time List;1,87972 - 14,66308 - 139,22114
