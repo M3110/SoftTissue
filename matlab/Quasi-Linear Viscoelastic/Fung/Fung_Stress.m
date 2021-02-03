@@ -11,6 +11,7 @@ global fileName
 % for mi to be used in Redecued Relaxation Function.
 % The values hard-coded are obtained to experiments
 
+% Those values must be changed for each soft tissue.
 softTissueType = 'Posterior Cruciate Ligament - Second Relaxation';
 initialStress = 1.54;
 mi0 = 1.38406 / initialStress;
@@ -23,15 +24,15 @@ tau3 = 139.22114;
 
 initialTime = 0;
 timeStep = 0.1;
-finalTime = 300;
+finalTime = 1800;
 
 considerRampTime = false;
 
 time = initialTime;
 
-fileName = strcat('Stress_',softTissueType,'.txt');
+fileName = strcat('Stress_',softTissueType,'.csv');
 fileID = fopen(fileName,'w');
-fprintf(fileID,'%6s %6s\n','Time','Stress');
+fprintf(fileID,'Time,Stress\n');
 
 while time <= finalTime
     
@@ -40,7 +41,7 @@ while time <= finalTime
     else
     end
     
-    fprintf(fileID,'%6.2f %12.8f\n', time, stress);
+    fprintf(fileID,'%6.2f,%12.8f\n', time, stress);
     
     time = time + timeStep;
     
