@@ -75,12 +75,10 @@ namespace SoftTissue.Core.Operations.Experimental
                 string solutionFileName = this.CreateSolutionFile(request.FileName);
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
-                    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-
                     // Writes the file header and the first and second lines into the file.
-                    streamWriter.WriteLine($"{fileHeader},First Derivative,Second Derivative");
-                    streamWriter.WriteLine($"{firstLine},,");
-                    streamWriter.WriteLine($"{previousLine},{previousDerivate},");
+                    streamWriter.WriteLine($"{fileHeader};First Derivative;Second Derivative");
+                    streamWriter.WriteLine($"{firstLine};;");
+                    streamWriter.WriteLine($"{previousLine};{previousDerivate};");
 
                     while (streamReader.EndOfStream == false)
                     {
@@ -89,7 +87,7 @@ namespace SoftTissue.Core.Operations.Experimental
 
                         double secondDerivative = this._derivative.Calculate(previousDerivate, derivative, this._timeStep);
 
-                        streamWriter.WriteLine($"{line},{derivative},{secondDerivative}");
+                        streamWriter.WriteLine($"{line};{derivative};{secondDerivative}");
 
                         previousLine = line;
                         previousDerivate = derivative;
@@ -106,7 +104,7 @@ namespace SoftTissue.Core.Operations.Experimental
 
         public double CalculateRate(string initialLine, string finalLine)
         {
-            char separator = ',';
+            char separator = ';';
 
             (double initialTime, double initialStress) = initialLine.ToTimeAndStress(separator);
             (double finalTime, double finalStress) = finalLine.ToTimeAndStress(separator);
