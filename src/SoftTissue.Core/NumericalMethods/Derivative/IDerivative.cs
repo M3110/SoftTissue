@@ -9,5 +9,7 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
             where TInput : ViscoelasticModelInput;
 
         double Calculate(Func<double, double> Equation, double step, double time);
+
+        double Calculate(double initialPoint, double finalPoint, double step);
     }
 }

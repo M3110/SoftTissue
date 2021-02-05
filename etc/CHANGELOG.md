@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## UNRELEASED
 ### Added
+- Operation AnalyzeAndPredictResults.
 - Operation GenerateDomain.
 - Operation CalculateConvergenceTime.
 - Operation to calculate stress for experimental models.

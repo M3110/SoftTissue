@@ -65,5 +65,10 @@ namespace SoftTissue.Core.Models
         /// The base path to response files of Maxwell Model.
         /// </summary>
         public static string MaxwellModelBasePath = Path.Combine(Constants.LinearModelBasePath, "Maxwell Model");
+
+        /// <summary>
+        /// The base path to response files of Experimental operations.
+        /// </summary>
+        public static string ExperimentalBasePath = Path.Combine(Constants.SolutionBasePath, "Experimental");
     }
 }

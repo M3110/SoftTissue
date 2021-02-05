@@ -9,6 +9,7 @@ using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
+using SoftTissue.Core.Operations.Experimental;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
@@ -47,17 +48,19 @@ namespace SoftTissue.Application
         {
             services.AddScoped<IDerivative, Derivative>();
 
-            // Register Constitutive Equations to Viscoelastic Models
+            // Register Constitutive Equations to Viscoelastic Models.
             services.AddScoped<IMaxwellModel, MaxwellModel>();
             services.AddScoped<IFungModel, FungModel>();
             services.AddScoped<ISimplifiedFungModel, SimplifiedFungModel>();
 
-            // Register Operations for Linear Viscoelastic Model
+            // Register Operations for Experimental analysis.
+            services.AddScoped<IAnalyzeAndExtendResults, AnalyzeAndExtendResults>();
+            // Register Operations for Linear Viscoelastic Model.
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
             services.AddScoped<ICalculateMaxwellModelStrainSensitivityAnalysis, CalculateMaxwellModelStrainSensitivityAnalysis>();
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
             services.AddScoped<ICalculateMaxwellModelStressSensitivityAnalysis, CalculateMaxwellModelStressSensitivityAnalysis>();
-            // Register Operations for Quasi-Linear Viscoelastic Model
+            // Register Operations for Quasi-Linear Viscoelastic Model.
             services.AddScoped<ICalculateFungModelStressConsiderRampTime, CalculateFungModelStressConsiderRampTime>();
             services.AddScoped<ICalculateSimplifiedFungModelStressConsiderRampTime, CalculateSimplifiedFungModelStressConsiderRampTime>();
             services.AddScoped<ICalculateFungModelStressDisregardRampTime, CalculateFungModelStressDisregardRampTime>();
@@ -65,7 +68,7 @@ namespace SoftTissue.Application
             services.AddScoped<IGenerateFungModelDomain, GenerateFungModelDomain>();
             services.AddScoped<ICalculateConvergenceTime, CalculateConvergenceTime>();
 
-            // Register Numerical Methods
+            // Register Numerical Methods.
             services.AddTransient<ISimpsonRuleIntegration, SimpsonRuleIntegration>();
             services.AddTransient<IDerivative, Derivative>();
 
