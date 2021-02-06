@@ -1,17 +1,20 @@
-﻿namespace SoftTissue.Core.ExtensionMethods
+﻿using System;
+
+namespace SoftTissue.Core.ExtensionMethods
 {
+    /// <summary>
+    /// It contains the extension methods to double.
+    /// </summary>
     public static class DoubleExtensions
     {
-		public static double Factorial(this double value)
-		{
-			if (value == 1 || value == 0)
-			{
-				return 1;
-			}
-
-			double previousFactorial = (value - 1).Factorial();
-
-			return value * previousFactorial;
-		}
+        /// <summary>
+        /// This method converts the value from radians to degree.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+		public static double ToDegree(this double value)
+        {
+            return (Math.PI / 180) * value;
+        }
 	}
 }

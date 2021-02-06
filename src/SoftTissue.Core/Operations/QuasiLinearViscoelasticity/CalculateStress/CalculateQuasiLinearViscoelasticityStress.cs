@@ -2,6 +2,7 @@
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResult;
+using SoftTissue.DataContract.CalculateResult;
 using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
     /// It is responsible to calculate the stress to a quasi-linear viscoelastic model.
     /// </summary>
     public abstract class CalculateQuasiLinearViscoelasticityStress<TRequest, TResponse, TResponseData, TInput, TReducedRelaxation, TResult> : CalculateResult<TRequest, TResponse, TResponseData, TInput>, ICalculateQuasiLinearViscoelasticityStress<TRequest, TResponse, TResponseData, TInput, TReducedRelaxation, TResult>
-        where TRequest : OperationRequestBase
-        where TResponse : OperationResponseBase<TResponseData>, new()
-        where TResponseData : OperationResponseData, new()
+        where TRequest : CalculateResultRequest
+        where TResponse : CalculateResultResponse<TResponseData>, new()
+        where TResponseData : CalculateResultResponseData, new()
         where TInput : QuasiLinearViscoelasticityModelInput<TReducedRelaxation>, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {

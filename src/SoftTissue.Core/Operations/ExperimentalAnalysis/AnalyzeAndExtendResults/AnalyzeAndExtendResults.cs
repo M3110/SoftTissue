@@ -3,12 +3,11 @@ using SoftTissue.Core.Models;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.Operations.Base;
 using SoftTissue.DataContract.Experimental.AnalyzeAndExtendResults;
-using System.Globalization;
+using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace SoftTissue.Core.Operations.Experimental
+namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults
 {
     /// <summary>
     /// It is responsible to analyze the experimental results and extend.
@@ -44,7 +43,7 @@ namespace SoftTissue.Core.Operations.Experimental
         public string CreateSolutionFile(string fileName)
         {
             var fileInfo = new FileInfo(Path.Combine(
-                this.TemplateBasePath,
+                TemplateBasePath,
                 $"{Path.GetFileNameWithoutExtension(fileName)}_rate.csv"));
 
             if (fileInfo.Directory.Exists == false)
@@ -70,24 +69,24 @@ namespace SoftTissue.Core.Operations.Experimental
                 string firstLine = streamReader.ReadLine();
                 string previousLine = streamReader.ReadLine();
 
-                double previousDerivate = this.CalculateRate(firstLine, previousLine);
+                double previousDerivate = CalculateRate(firstLine, previousLine);
 
-                string solutionFileName = this.CreateSolutionFile(request.FileName);
+                string solutionFileName = CreateSolutionFile(request.FileName);
                 using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
                 {
                     // Writes the file header and the first and second lines into the file.
-                    streamWriter.WriteLine($"{fileHeader};First Derivative;Second Derivative");
-                    streamWriter.WriteLine($"{firstLine};;");
-                    streamWriter.WriteLine($"{previousLine};{previousDerivate};");
+                    streamWriter.WriteLine($"{fileHeader};First Derivative;Rate in degrees;Second Derivative");
+                    streamWriter.WriteLine($"{firstLine};;;");
+                    streamWriter.WriteLine($"{previousLine};{previousDerivate};{Math.Atan(previousDerivate).ToDegree()};");
 
                     while (streamReader.EndOfStream == false)
                     {
                         string line = streamReader.ReadLine();
-                        double derivative = this.CalculateRate(previousLine, line);
+                        double derivative = CalculateRate(previousLine, line);
 
-                        double secondDerivative = this._derivative.Calculate(previousDerivate, derivative, this._timeStep);
+                        double secondDerivative = this._derivative.Calculate(previousDerivate, derivative, _timeStep);
 
-                        streamWriter.WriteLine($"{line};{derivative};{secondDerivative}");
+                        streamWriter.WriteLine($"{line};{derivative};{Math.Atan(derivative).ToDegree()};{secondDerivative}");
 
                         previousLine = line;
                         previousDerivate = derivative;
@@ -109,9 +108,9 @@ namespace SoftTissue.Core.Operations.Experimental
             (double initialTime, double initialStress) = initialLine.ToTimeAndStress(separator);
             (double finalTime, double finalStress) = finalLine.ToTimeAndStress(separator);
 
-            this._timeStep = finalTime - initialTime;
+            _timeStep = finalTime - initialTime;
 
-            return this._derivative.Calculate(initialStress, finalStress, this._timeStep);
+            return _derivative.Calculate(initialStress, finalStress, _timeStep);
         }
     }
 }

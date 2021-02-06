@@ -9,7 +9,7 @@ using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
-using SoftTissue.Core.Operations.Experimental;
+using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;

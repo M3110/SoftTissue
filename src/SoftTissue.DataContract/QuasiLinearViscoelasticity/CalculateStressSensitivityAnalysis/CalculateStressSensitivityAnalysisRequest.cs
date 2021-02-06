@@ -1,4 +1,4 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.CalculateResult;
 using SoftTissue.Infrastructure.Models;
 using System.Collections.Generic;
 
@@ -7,7 +7,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSens
     /// <summary>
     /// It represents the request content to CalculateStressSensitivityAnalysis operation of Quasi-Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStressSensitivityAnalysisRequest : OperationRequestBase
+    public class CalculateStressSensitivityAnalysisRequest : CalculateResultRequest
     {
         /// <summary>
         /// True, if have to use the simplified Reduced Relaxation Function.

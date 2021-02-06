@@ -1,9 +1,9 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.CalculateResult;
 
 namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrainSensitivityAnalysis
 {
     /// <summary>
     /// It represents the response content to CalculateStrainSensitivityAnalysis operation of Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStrainSensitivityAnalysisResponse : OperationResponseBase<CalculateStrainSensitivityAnalysisResponseData> { }
+    public class CalculateStrainSensitivityAnalysisResponse : CalculateResultResponse<CalculateStrainSensitivityAnalysisResponseData> { }
 }

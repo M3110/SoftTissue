@@ -1,4 +1,4 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.CalculateResult;
 using SoftTissue.Infrastructure.Models;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.DisregardRampTime
@@ -6,7 +6,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Dis
     /// <summary>
     /// It represents the request content to CalculateStress operation of Quasi-Linear Viscoelasticity Model for a soft tissue experimental model.
     /// </summary>
-    public class CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest : OperationRequestBase
+    public class CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest : CalculateResultRequest
     {
         /// <summary>
         /// The experimental model.

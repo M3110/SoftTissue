@@ -6,7 +6,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
     /// <summary>
     /// It represents the 'data' content to CalculateStressConsiderRampTime operation request of Quasi-Linear Viscoelasticity Model.
     /// </summary>
-    public abstract class CalculateStressConsiderRampTimeRequestData<T> : OperationRequestData
+    public abstract class CalculateStressConsiderRampTimeRequestData<T> : CalculateResultRequestData
     {
         /// <summary>
         /// The viscoelasticy considerations to analysis.

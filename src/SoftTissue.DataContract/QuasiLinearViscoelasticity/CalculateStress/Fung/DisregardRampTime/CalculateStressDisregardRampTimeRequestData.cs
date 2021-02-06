@@ -5,7 +5,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Dis
     /// <summary>
     /// It represents the 'data' content to CalculateStressDisregardRampTime operation request of Quasi-Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStressDisregardRampTimeRequestData : OperationRequestData
+    public class CalculateStressDisregardRampTimeRequestData : CalculateResultRequestData
     {
         /// <summary>
         /// The maximum strain.

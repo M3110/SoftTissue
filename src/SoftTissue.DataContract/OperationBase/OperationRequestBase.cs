@@ -1,22 +1,9 @@
 ﻿namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
-    /// It represents the request content to operations.
+    /// It represents the request content to all operations.
     /// </summary>
-    public class OperationRequestBase
-    {
-        /// <summary>
-        /// Time step.
-        /// Unit: s (second).
-        /// </summary>
-        public double TimeStep { get; set; }
-
-        /// <summary>
-        /// Final time.
-        /// Unit: s (second).
-        /// </summary>
-        public double FinalTime { get; set; }
-    }
+    public class OperationRequestBase { }
 
     /// <summary>
     /// It represents the essencial request content to operations.

@@ -1,9 +1,9 @@
 ﻿namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
-    /// It represents the 'data' content to operation request.
+    /// It represents the 'data' content to CalculateResult operations request.
     /// </summary>
-    public class OperationRequestData
+    public class CalculateResultRequestData
     {
         /// <summary>
         /// The type of soft tissue.

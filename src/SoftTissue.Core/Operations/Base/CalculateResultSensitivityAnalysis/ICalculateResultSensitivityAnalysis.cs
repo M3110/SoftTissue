@@ -1,5 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity;
-using SoftTissue.DataContract.OperationBase;
+using SoftTissue.DataContract.CalculateResult;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,9 +13,9 @@ namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
     /// <typeparam name="TResponseData"></typeparam>
     /// <typeparam name="TInput"></typeparam>
     public interface ICalculateResultSensitivityAnalysis<TRequest, TResponse, TResponseData, TInput> : IOperationBase<TRequest, TResponse, TResponseData>
-        where TRequest : OperationRequestBase
-        where TResponse : OperationResponseBase<TResponseData>, new()
-        where TResponseData : OperationResponseData, new()
+        where TRequest : CalculateResultRequest
+        where TResponse : CalculateResultResponse<TResponseData>, new()
+        where TResponseData : CalculateResultResponseData, new()
         where TInput : ViscoelasticModelInput, new()
     {
         /// <summary>

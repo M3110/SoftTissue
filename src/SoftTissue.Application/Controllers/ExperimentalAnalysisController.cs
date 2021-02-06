@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
-using SoftTissue.Core.Operations.Experimental;
+using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults;
 using SoftTissue.DataContract.Experimental.AnalyzeAndExtendResults;
 using System.Threading.Tasks;
 

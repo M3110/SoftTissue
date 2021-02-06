@@ -5,7 +5,7 @@ namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
     /// <summary>
     /// It represents the 'data' content to CalculateStress operation request of Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStressRequestData : OperationRequestData
+    public class CalculateStressRequestData : CalculateResultRequestData
     {
         /// <summary>
         /// Stiffness.
