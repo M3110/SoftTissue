@@ -14,7 +14,7 @@ namespace SoftTissue.Core.ExtensionMethods
         /// <returns></returns>
 		public static double ToDegree(this double value)
         {
-            return (Math.PI / 180) * value;
+            return (180 / Math.PI) * value;
         }
-	}
+    }
 }

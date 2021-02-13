@@ -48,7 +48,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             {
                 return 1;
             }
-
+            
             var reducedRelaxationFunctionInput = input.ReducedRelaxationFunctionInput;
 
             // The original equation was rewritten to simplify the E1 equation.

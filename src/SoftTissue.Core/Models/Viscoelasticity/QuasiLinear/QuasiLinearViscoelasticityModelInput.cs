@@ -40,6 +40,12 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
         public double TimeWithConstantStrain { get; set; }
 
         /// <summary>
+        /// The time when the strain starts decreasing.
+        /// Unity: s (second).
+        /// </summary>
+        public double TimeWhenStrainStartDecreasing => this.RampTime + this.TimeWithConstantStrain;
+
+        /// <summary>
         /// The absolut strain decrease rate.
         /// This property is only used when considering that the strain decreases.
         /// Unit: Dimensionless.

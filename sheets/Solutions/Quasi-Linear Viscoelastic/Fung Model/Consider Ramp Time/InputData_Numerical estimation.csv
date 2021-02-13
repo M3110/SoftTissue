@@ -7,7 +7,7 @@ Final Time;300;s
 Final Strain Time;10;s
 Strain Rate;0,001;
 Maximum Strain;0,01;
-Elastic Stress Constant;0,001;Pa
+Elastic Stress Constant;1000;Pa
 Elastic Power Constant;0,1;
 Relaxation Index (C);0,05;
 Fast Relaxation Time (Tau 1);0,005;s
