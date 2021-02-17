@@ -1,7 +1,7 @@
 ﻿using SoftTissue.DataContract.CalculateResult;
 using SoftTissue.Infrastructure.Models;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.DisregardRampTime
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction
 {
     /// <summary>
     /// It represents the request content to CalculateStress operation of Quasi-Linear Viscoelasticity Model for a soft tissue experimental model.
