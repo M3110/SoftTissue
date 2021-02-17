@@ -4,6 +4,7 @@ using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using SoftTissue.Infrastructure.Models;
 using System;
+using System.Collections.Generic;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
@@ -50,18 +51,34 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public override double CalculateStrain(TInput input, double time)
         {
+            if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
+                return input.MaximumStrain;
+
+            if (time <= Constants.Precision)
+                return 0;
+
+            if (time <= input.FirstRampTime && time > Constants.Precision)
+                return input.StrainRate * time;
+
+            double relaxationTime = input.TimeWithConstantMaximumStrain + input.DecreaseTime + input.TimeWithConstantMinimumStrain;
+
+            for (int i = 0; i < input.NumerOfRelaxations; i++)
+            {
+
+            }
+
             switch (input.ViscoelasticConsideration)
             {
                 case ViscoelasticConsideration.GeneralViscoelasctiEffect:
                 case ViscoelasticConsideration.ViscoelasticEffectAfterRampTime:
-                    return time <= input.RampTime ? input.StrainRate * time : input.MaximumStrain;
+                    return time <= input.FirstRampTime ? input.StrainRate * time : input.MaximumStrain;
 
                 case ViscoelasticConsideration.GeneralViscoelasticEffectWithStrainDecrease:
                 case ViscoelasticConsideration.ViscoelasticEffectAfterRampTimeWithStrainDecrease:
-                    if (time <= input.RampTime)
+                    if (time <= input.FirstRampTime)
                         return input.StrainRate * time;
 
-                    if (time > input.RampTime && time <= input.TimeWhenStrainStartDecreasing)
+                    if (time > input.FirstRampTime && time <= input.TimeWhenStrainStartDecreasing)
                         return input.MaximumStrain;
 
                     if (time > input.TimeWhenStrainStartDecreasing && time <= input.TimeWhenStrainStartDecreasing + input.DecreaseTime)
@@ -88,17 +105,17 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             {
                 case ViscoelasticConsideration.GeneralViscoelasctiEffect:
                 case ViscoelasticConsideration.ViscoelasticEffectAfterRampTime:
-                    return time < input.RampTime ? input.StrainRate : 0;
+                    return time < input.FirstRampTime ? input.StrainRate : 0;
 
                 case ViscoelasticConsideration.GeneralViscoelasticEffectWithStrainDecrease:
                 case ViscoelasticConsideration.ViscoelasticEffectAfterRampTimeWithStrainDecrease:
                     {
-                        if (time <= input.RampTime)
+                        if (time <= input.FirstRampTime)
                             return input.StrainRate;
 
-                        double timeWhenStrainBeginningDecrease = input.RampTime + input.TimeWithConstantStrain;
+                        double timeWhenStrainBeginningDecrease = input.FirstRampTime + input.TimeWithConstantMaximumStrain;
 
-                        if (time > input.RampTime && time <= timeWhenStrainBeginningDecrease)
+                        if (time > input.FirstRampTime && time <= timeWhenStrainBeginningDecrease)
                             return 0;
 
                         if (time > timeWhenStrainBeginningDecrease && time <= timeWhenStrainBeginningDecrease + input.DecreaseTime)
@@ -177,7 +194,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             if (time <= Constants.Precision)
                 return 0;
 
-            if (time <= input.RampTime && time > Constants.Precision)
+            if (time <= input.FirstRampTime && time > Constants.Precision)
             {
                 if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
                     return this.CalculateElasticResponse(input, time);
@@ -192,13 +209,13 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                     });
             }
 
-            if (time <= input.TimeWhenStrainStartDecreasing && time > input.RampTime)
+            if (time <= input.TimeWhenStrainStartDecreasing && time > input.FirstRampTime)
                 return this._simpsonRuleIntegration.Calculate(
                     (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
                     new IntegralInput
                     {
                         InitialPoint = 0,
-                        FinalPoint = input.RampTime,
+                        FinalPoint = input.FirstRampTime,
                         Step = input.TimeStep
                     });
 
@@ -211,7 +228,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                         new IntegralInput
                         {
                             InitialPoint = 0,
-                            FinalPoint = input.RampTime,
+                            FinalPoint = input.FirstRampTime,
                             Step = input.TimeStep
                         })
                     + this._simpsonRuleIntegration.Calculate(
@@ -281,5 +298,25 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                     }),
                 input.TimeStep, time);
         }
+
+        //protected List<double> CreateImportantTimes(TInput input)
+        //{
+        //    var times = new List<double> { 0 };
+        //
+        //    if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
+        //        times.Add(input.FirstRampTime);
+        //
+        //    double previousTime =
+        //        input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime
+        //        ? 0 : input.FirstRampTime;
+        //
+        //    for (int i = 0; i < input.NumerOfRelaxations; i++)
+        //    {
+        //        times.Add(previousTime + input.TimeWithConstantMaximumStrain);
+        //        times.Add(previousTime + input.TimeWithConstantMaximumStrain + );
+        //    }
+        //
+        //    return times;
+        //}
     }
 }

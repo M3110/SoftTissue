@@ -125,27 +125,29 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                 tasks.Add(Task.Run(async () =>
                 {
                     this.WriteInput(input);
-                    
+
                     double time = input.InitialTime;
-                    
+
                     TResult previousResult = this._viscoelasticModel.CalculateInitialConditions(input);
-                    
+
                     try
                     {
                         using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(input)))
                         {
                             streamWriter.WriteLine(this.SolutionFileHeader);
-                    
+
                             while (time <= input.FinalTime)
                             {
+                                input.RelaxationNumber = this.CalculateRelaxationNumber(input, time);
+
                                 TResult result = await this.CalculateAndWriteResults(input, time, streamWriter).ConfigureAwait(false);
-                    
+
                                 // It increases the time step when the stress is converging to its asymptote.
                                 if (Math.Abs((result.Stress - previousResult.Stress) / previousResult.Stress) < Constants.RelativePrecision)
                                     time += 10 * input.TimeStep;
                                 else
                                     time += input.TimeStep;
-                    
+
                                 previousResult = result;
                             }
                         }
@@ -160,6 +162,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             }
 
             return response;
+        }
+
+        protected int CalculateRelaxationNumber(TInput input, double time)
+        {
+            throw new NotImplementedException();
         }
     }
 }

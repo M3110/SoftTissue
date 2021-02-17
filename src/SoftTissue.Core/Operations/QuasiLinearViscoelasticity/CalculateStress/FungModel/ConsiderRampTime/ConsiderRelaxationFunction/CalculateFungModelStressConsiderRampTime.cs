@@ -50,7 +50,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
                     ViscoelasticConsideration = requestData.ViscoelasticConsideration,
                     StrainRate = requestData.StrainRate,
                     MaximumStrain = requestData.MaximumStrain,
-                    TimeWithConstantStrain = requestData.TimeWithConstantStrain,
+                    TimeWithConstantMaximumStrain = requestData.TimeWithConstantStrain,
                     StrainDecreaseRate = requestData.StrainDecreaseRate,
                     MinimumStrain = requestData.MinimumStrain,
                     ElasticStressConstant = requestData.ElasticStressConstant,

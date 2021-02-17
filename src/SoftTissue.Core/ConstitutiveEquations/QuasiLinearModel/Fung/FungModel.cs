@@ -35,10 +35,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             // be the ramp time.
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
             {
-                if (time <= input.RampTime)
+                if (time <= input.FirstRampTime)
                     return 1;
                 else
-                    time -= input.RampTime;
+                    time -= input.FirstRampTime;
             }
 
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
@@ -71,12 +71,12 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             // be the ramp time.
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
             {
-                if (time <= input.RampTime)
+                if (time <= input.FirstRampTime)
                 {
                     return reducedRelaxationFunctionInput.RelaxationIndex * (-1 / reducedRelaxationFunctionInput.FastRelaxationTime + 1 / reducedRelaxationFunctionInput.SlowRelaxationTime) / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
                 }
                 else
-                    time -= input.RampTime;
+                    time -= input.FirstRampTime;
             }
 
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
