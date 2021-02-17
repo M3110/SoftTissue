@@ -2,7 +2,7 @@
 using SoftTissue.Core.Models;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.Operations.Base;
-using SoftTissue.DataContract.Experimental.AnalyzeAndExtendResults;
+using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults;
 using System;
 using System.IO;
 using System.Threading.Tasks;
