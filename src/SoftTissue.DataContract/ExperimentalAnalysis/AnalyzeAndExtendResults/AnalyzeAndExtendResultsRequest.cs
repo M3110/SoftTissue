@@ -18,11 +18,6 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
         public string FileUri { get; set; }
 
         /// <summary>
-        /// True, if should use the time step from experimental file. False, otherwise.
-        /// </summary>
-        public bool UseTimeStepFromFile { get; set; }
-
-        /// <summary>
         /// Time step.
         /// Unit: s (second).
         /// </summary>

@@ -8,11 +8,11 @@ namespace SoftTissue.Core.ExtensionMethods
     public static class DoubleExtensions
     {
         /// <summary>
-        /// This method converts the value from radians to degree.
+        /// This method converts the value from radians to degrees.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-		public static double ToDegree(this double value)
+		public static double ToDegrees(this double value)
         {
             return (180 / Math.PI) * value;
         }
