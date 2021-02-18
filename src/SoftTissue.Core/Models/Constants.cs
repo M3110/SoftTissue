@@ -32,6 +32,11 @@ namespace SoftTissue.Core.Models
         public const double EquationE1MaximumFinalTime = 11.4;
 
         /// <summary>
+        /// The minimum number of lines accepted to read a file.
+        /// </summary>
+        public const int MinimumFileNumberOfLines = 3;
+
+        /// <summary>
         /// The application base path.
         /// </summary>
         public readonly static string DirectoryBasePath = Directory.GetCurrentDirectory().Replace("\\src\\SoftTissue.Application", "\\");

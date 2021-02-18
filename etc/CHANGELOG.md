@@ -8,11 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Data contracts to CalculateResult operation.
 - Operation SkipPoints.
-- Operation AnalyzeAndPredictResults.
+- Operation AnalyzeAndExtendResults.
 - Operation GenerateDomain.
 - Operation CalculateConvergenceTime.
 - Operation to calculate stress for experimental models.
 - Enum ViscoelasticConsideration with each viscoelastic consideration.
+- Nuget package CsvHelper.
 ### Changed
 - Data contracts of operations that inheriting from CalculteResult inherite from CalculateResult data contract.
 - RelavativePrecision from 5e-3 to 1e-3 and Precision from 1e-10 to 1e-6.
