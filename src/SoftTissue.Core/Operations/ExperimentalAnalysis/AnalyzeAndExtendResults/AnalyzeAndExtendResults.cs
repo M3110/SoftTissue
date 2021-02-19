@@ -1,10 +1,17 @@
-﻿using SoftTissue.Core.ExtensionMethods;
+﻿using CsvHelper;
+using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models;
+using SoftTissue.Core.Models.ExperimentalAnalysis;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.Operations.Base;
-using SoftTissue.DataContract.Experimental.AnalyzeAndExtendResults;
+using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults;
+using SoftTissue.DataContract.OperationBase;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults
@@ -17,14 +24,14 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         private readonly IDerivative _derivative;
 
         /// <summary>
-        /// The time step to operation.
+        /// The experimental results obtained in the file passed on request.
         /// </summary>
-        private double _timeStep;
+        private List<ExperimentalResult> _experimentalResults;
 
         /// <summary>
         /// The base path to files.
         /// </summary>
-        protected string TemplateBasePath = Path.Combine(Constants.ExperimentalBasePath, "Analyze and extend");
+        private readonly string _templateBasePath = Path.Combine(Constants.ExperimentalBasePath, "Analyze and extend");
 
         /// <summary>
         /// Class constructor.
@@ -43,7 +50,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         public string CreateSolutionFile(string fileName)
         {
             var fileInfo = new FileInfo(Path.Combine(
-                TemplateBasePath,
+                this._templateBasePath,
                 $"{Path.GetFileNameWithoutExtension(fileName)}_rate.csv"));
 
             if (fileInfo.Directory.Exists == false)
@@ -63,54 +70,83 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         {
             var response = new AnalyzeAndExtendResultsResponse { Data = new AnalyzeAndExtendResultsResponseData() };
 
-            using (StreamReader streamReader = new StreamReader(Path.Combine(request.FileUri, request.FileName)))
+            string solutionFileName = this.CreateSolutionFile(request.FileName);
+            using (var streamWriter = new StreamWriter(solutionFileName))
+            using (var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
             {
-                string fileHeader = streamReader.ReadLine();
-                string firstLine = streamReader.ReadLine();
-                string previousLine = streamReader.ReadLine();
+                // Step 1 - Writes the file header.
+                csvWriter.WriteHeader<AnalyzedExperimentalResult>();
+                csvWriter.NextRecord();
 
-                double previousDerivate = CalculateRate(firstLine, previousLine);
+                // Step 2 - Writes the first line. It is equals to the first line of the file analyzed.
+                ExperimentalResult firstResult = this._experimentalResults[0];
+                csvWriter.WriteLine(new AnalyzedExperimentalResult(firstResult));
 
-                string solutionFileName = CreateSolutionFile(request.FileName);
-                using (StreamWriter streamWriter = new StreamWriter(solutionFileName))
+                // Step 3 - Writes the second line. It just have the derivative, because to calculate the second derivative needs two derivative previously calculated.
+                ExperimentalResult secondResult = this._experimentalResults[1];
+
+                var previousAnalyzedResult = new AnalyzedExperimentalResult(secondResult);
+                previousAnalyzedResult.Derivative = this._derivative.Calculate(firstResult.Stress, secondResult.Stress, secondResult.Time - firstResult.Time);
+
+                csvWriter.WriteLine(previousAnalyzedResult);
+
+                // Step 4 - Analyze the experimental results.
+                // Here is necessary to skip 2 lines, beacause that lines was already analyzed.
+                foreach (ExperimentalResult experimentalResult in this._experimentalResults.Skip(2))
                 {
-                    // Writes the file header and the first and second lines into the file.
-                    streamWriter.WriteLine($"{fileHeader};First Derivative;Rate in degrees;Second Derivative");
-                    streamWriter.WriteLine($"{firstLine};;;");
-                    streamWriter.WriteLine($"{previousLine};{previousDerivate};{Math.Atan(previousDerivate).ToDegree()};");
+                    // Step 4.1 - Converts the experimental result.
+                    var analyzedResult = new AnalyzedExperimentalResult(experimentalResult);
 
-                    while (streamReader.EndOfStream == false)
-                    {
-                        string line = streamReader.ReadLine();
-                        double derivative = CalculateRate(previousLine, line);
+                    // Step 4.2 - Calculates the step time.
+                    double stepTime = analyzedResult.Time - previousAnalyzedResult.Time;
 
-                        double secondDerivative = this._derivative.Calculate(previousDerivate, derivative, _timeStep);
+                    // Step 4.3 - Calculates the derivative and second derivative.
+                    analyzedResult.Derivative = this._derivative.Calculate(previousAnalyzedResult.Stress, analyzedResult.Stress, stepTime);
+                    analyzedResult.SecondDerivative = this._derivative.Calculate(previousAnalyzedResult.Derivative.Value, analyzedResult.Derivative.Value, stepTime);
 
-                        streamWriter.WriteLine($"{line};{derivative};{Math.Atan(derivative).ToDegree()};{secondDerivative}");
+                    // Step 4.4 - Writes the result in the file.
+                    csvWriter.WriteLine(analyzedResult);
 
-                        previousLine = line;
-                        previousDerivate = derivative;
-                    }
+                    // Step 4.5 - Saves the current result to be used in the next iteration.
+                    previousAnalyzedResult = analyzedResult;
                 }
-
-                // Maps to response.
-                response.Data.FileUri = Path.GetDirectoryName(solutionFileName);
-                response.Data.FileName = Path.GetFileName(solutionFileName);
             }
+
+            // Step 5 - Maps to response.
+            response.Data.FileUri = Path.GetDirectoryName(solutionFileName);
+            response.Data.FileName = Path.GetFileName(solutionFileName);
 
             return Task.FromResult(response);
         }
 
-        public double CalculateRate(string initialLine, string finalLine)
+        /// <summary>
+        /// This method validates the <see cref="AnalyzeAndExtendResultsRequest"/>.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        protected override async Task<AnalyzeAndExtendResultsResponse> ValidateOperation(AnalyzeAndExtendResultsRequest request)
         {
-            char separator = ';';
+            var response = await base.ValidateOperation(request);
+            if (response.Success == false)
+            {
+                return response;
+            }
 
-            (double initialTime, double initialStress) = initialLine.ToTimeAndStress(separator);
-            (double finalTime, double finalStress) = finalLine.ToTimeAndStress(separator);
+            // Reads the file and add it into a variable to be used in the operation.
+            using (var streamReader = new StreamReader(Path.Combine(request.FileUri, request.FileName)))
+            using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+            {
+                this._experimentalResults = csvReader.GetRecords<ExperimentalResult>().ToList();
+            }
 
-            _timeStep = finalTime - initialTime;
+            // The file must be at least a specific number of lines to be possible to execute the operation.
+            if (this._experimentalResults.Count <= Constants.MinimumFileNumberOfLines)
+            {
+                response.AddError(OperationErrorCode.InternalServerError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.", HttpStatusCode.BadRequest);
+                return response;
+            }
 
-            return _derivative.Calculate(initialStress, finalStress, _timeStep);
+            return response;
         }
     }
 }

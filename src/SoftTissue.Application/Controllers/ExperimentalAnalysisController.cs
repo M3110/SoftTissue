@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults;
-using SoftTissue.DataContract.Experimental.AnalyzeAndExtendResults;
+using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers

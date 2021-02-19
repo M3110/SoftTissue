@@ -10,13 +10,13 @@ namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrainSensitivi
     {
         /// <summary>
         /// List of stiffness.
-        /// Unity: Pa (Pascal).
+        /// Unit: Pa (Pascal).
         /// </summary>
         public Value StiffnessList { get; set; }
 
         /// <summary>
         /// List of initial stress.
-        /// Unity: Pa (Pascal).
+        /// Unit: Pa (Pascal).
         /// </summary>
         public Value InitialStressList { get; set; }
 

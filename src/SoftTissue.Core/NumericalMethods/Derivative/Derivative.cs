@@ -5,23 +5,24 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
 {
     public class Derivative : IDerivative
     {
-        public const double Epsilon = 2.2e-16;
+        // TODO: Melhorar o método de derivada utilizado, para que aumente a precisão do valor calculado.
+        // PROPOSTA: Usar um método de ordem maior.
 
         public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double time)
             where TInput : ViscoelasticModelInput
         {
-            double actualValue = Equation(input, time);
+            double currentValue = Equation(input, time);
             double nextValue = Equation(input, time + input.TimeStep);
 
-            return (nextValue - actualValue) / input.TimeStep;
+            return (nextValue - currentValue) / input.TimeStep;
         }
 
         public double Calculate(Func<double, double> Equation, double step, double time)
         {
-            double actualValue = Equation(time);
+            double currentValue = Equation(time);
             double nextValue = Equation(time + step);
 
-            return (nextValue - actualValue) / step;
+            return (nextValue - currentValue) / step;
         }
 
         public double Calculate(double initialPoint, double finalPoint, double step)

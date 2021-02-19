@@ -1,5 +1,5 @@
 ﻿using SoftTissue.Core.Operations.Base;
-using SoftTissue.DataContract.Experimental.AnalyzeAndExtendResults;
+using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults;
 
 namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults
 {

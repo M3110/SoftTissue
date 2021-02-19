@@ -1,6 +1,6 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 
-namespace SoftTissue.DataContract.Experimental.AnalyzeAndExtendResults
+namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
 {
     /// <summary>
     /// It represents the response content for AnalyzeAndPredictResults operations.
