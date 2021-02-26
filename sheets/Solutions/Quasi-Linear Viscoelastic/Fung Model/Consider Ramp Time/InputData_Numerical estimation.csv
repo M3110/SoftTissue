@@ -1,14 +1,19 @@
 Parameter;Value;Unit
 Soft Tissue type;Numerical estimation;
-Viscoelastic Consideration;GeneralViscoelasticEffectWithStrainDecrease;
+Viscoelastic Consideration;GeneralViscoelasctiEffect;
+Number of relaxations;2;
 Initial Time;0;s
-Time Step;0,1;s
+Time Step;0.1;s
 Final Time;300;s
 Final Strain Time;10;s
-Strain Rate;0,001;
-Maximum Strain;0,01;
+Strain Rate;0.001;
+Strain Decrease Rate;0.001;
+Maximum Strain;0.02;
+Minimum Strain;0.01;
+Time with maximum constant Strain;50;s
+Time with minimum constant Strain;50;s
 Elastic Stress Constant;1000;Pa
-Elastic Power Constant;0,1;
-Relaxation Index (C);0,05;
-Fast Relaxation Time (Tau 1);0,005;s
+Elastic Power Constant;0.1;
+Relaxation Index (C);0.05;
+Fast Relaxation Time (Tau 1);0.005;s
 Slow Relaxation Time (Tau 2);50;s
