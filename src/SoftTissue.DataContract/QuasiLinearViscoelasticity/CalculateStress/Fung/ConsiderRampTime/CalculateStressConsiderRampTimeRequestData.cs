@@ -1,4 +1,5 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using Newtonsoft.Json;
+using SoftTissue.DataContract.OperationBase;
 using SoftTissue.Infrastructure.Models;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime
@@ -8,10 +9,20 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
     /// </summary>
     public abstract class CalculateStressConsiderRampTimeRequestData<T> : CalculateResultRequestData
     {
+        #region Relaxation parameters.
+
         /// <summary>
-        /// The viscoelasticy considerations to analysis.
+        /// The viscoelasctic consideration.
         /// </summary>
         public ViscoelasticConsideration ViscoelasticConsideration { get; set; }
+
+        /// <summary>
+        /// The number of relaxations considered in the analysis.
+        /// Unity: Dimensionless.
+        /// </summary>
+        public int NumerOfRelaxations { get; protected set; }
+
+        #endregion
 
         #region Strain parameters
 
@@ -22,36 +33,39 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
         public double StrainRate { get; set; }
 
         /// <summary>
+        /// The absolut strain decrease rate.
+        /// Unit: Dimensionless.
+        /// </summary>
+        public double StrainDecreaseRate { get; set; }
+
+        /// <summary>
         /// The maximum strain, this is obtained after the ramp time.
         /// Unit: Dimensionless.
         /// </summary>
         public double MaximumStrain { get; set; }
 
         /// <summary>
-        /// The time when the maximum strain is kept constant before strain decreases.
-        /// This property is only used when considering that the strain decreases.
-        /// Unit: s (second).
-        /// </summary>
-        public double TimeWithConstantStrain { get; set; }
-
-        /// <summary>
-        /// The absolut strain decrease rate.
-        /// This property is only used when considering that the strain decreases.
-        /// Unit: Dimensionless.
-        /// </summary>
-        public double StrainDecreaseRate { get; set; }
-
-        /// <summary>
         /// The minimum strain, this is obtained after the decrease time.
-        /// This property is only used when considering that the strain decreases.
-        /// Unit: Dimensionless.
+        /// Unity: Dimensionless.
         /// </summary>
         public double MinimumStrain { get; set; }
+
+        /// <summary>
+        /// The time when the maximum strain is kept constant before strain decreases.
+        /// Unit: s (second).
+        /// </summary>
+        public double TimeWithConstantMaximumStrain { get; set; }
+
+        /// <summary>
+        /// The time when the minimum strain is kept constant after the strain decreases.
+        /// Unity: s (second).
+        /// </summary>
+        public double TimeWithConstantMinimumStrain { get; set; }
 
         #endregion
 
         #region Elastic Response parameters
-        
+
         /// <summary>
         /// The elastic stress constant. Constant A.
         /// Unit: Pa (Pascal). In some cases, can be N (Newton).
@@ -71,7 +85,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
         /// <summary>
         /// The input data to Reduced Relaxation Function.
         /// </summary>
-        public T ReducedRelaxationFunctionData { get; set; } 
+        public T ReducedRelaxationFunctionData { get; set; }
 
         #endregion
     }

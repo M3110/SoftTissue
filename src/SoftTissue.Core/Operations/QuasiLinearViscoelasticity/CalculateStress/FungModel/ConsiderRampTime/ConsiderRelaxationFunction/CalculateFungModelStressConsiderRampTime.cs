@@ -47,15 +47,22 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
             {
                 inputs.Add(new FungModelInput
                 {
+                    // Relaxation parameters
                     ViscoelasticConsideration = requestData.ViscoelasticConsideration,
+                    NumerOfRelaxations = requestData.NumerOfRelaxations,
+                    // Strain parameters
                     StrainRate = requestData.StrainRate,
-                    MaximumStrain = requestData.MaximumStrain,
-                    TimeWithConstantMaximumStrain = requestData.TimeWithConstantStrain,
                     StrainDecreaseRate = requestData.StrainDecreaseRate,
+                    MaximumStrain = requestData.MaximumStrain,
                     MinimumStrain = requestData.MinimumStrain,
+                    TimeWithConstantMaximumStrain = requestData.TimeWithConstantMaximumStrain,
+                    TimeWithConstantMinimumStrain = requestData.TimeWithConstantMinimumStrain,
+                    // Elastic parameters
                     ElasticStressConstant = requestData.ElasticStressConstant,
                     ElasticPowerConstant = requestData.ElasticPowerConstant,
+                    // Reduced Relaxation Function parameters
                     ReducedRelaxationFunctionInput = requestData.ReducedRelaxationFunctionData,
+                    // General parameters
                     TimeStep = requestData.TimeStep ?? request.TimeStep,
                     FinalTime = requestData.FinalTime ?? request.FinalTime,
                     SoftTissueType = requestData.SoftTissueType,
@@ -76,12 +83,17 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
                 streamWriter.WriteLine("Parameter;Value;Unit");
                 streamWriter.WriteLine($"Soft Tissue type;{input.SoftTissueType};");
                 streamWriter.WriteLine($"Viscoelastic Consideration;{input.ViscoelasticConsideration};");
+                streamWriter.WriteLine($"Number of relaxations;{input.NumerOfRelaxations};");
                 streamWriter.WriteLine($"Initial Time;{input.InitialTime};s");
                 streamWriter.WriteLine($"Time Step;{input.TimeStep};s");
                 streamWriter.WriteLine($"Final Time;{input.FinalTime};s");
                 streamWriter.WriteLine($"Final Strain Time;{input.DecreaseTime};s");
                 streamWriter.WriteLine($"Strain Rate;{input.StrainRate};");
+                streamWriter.WriteLine($"Strain Decrease Rate;{input.StrainDecreaseRate};");
                 streamWriter.WriteLine($"Maximum Strain;{input.MaximumStrain};");
+                streamWriter.WriteLine($"Minimum Strain;{input.MinimumStrain};");
+                streamWriter.WriteLine($"Time with maximum constant Strain;{input.TimeWithConstantMaximumStrain};s");
+                streamWriter.WriteLine($"Time with minimum constant Strain;{input.TimeWithConstantMinimumStrain};s");
                 streamWriter.WriteLine($"Elastic Stress Constant;{input.ElasticStressConstant};Pa");
                 streamWriter.WriteLine($"Elastic Power Constant;{input.ElasticPowerConstant};");
                 streamWriter.WriteLine($"Relaxation Index (C);{input.ReducedRelaxationFunctionInput.RelaxationIndex};");

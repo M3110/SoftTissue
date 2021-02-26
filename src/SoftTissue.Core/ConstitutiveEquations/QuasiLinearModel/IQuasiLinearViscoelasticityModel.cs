@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
@@ -9,9 +10,16 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <summary>
         /// This method calculates the initial conditions for Fung model analysis.
         /// </summary>
-        /// <param name="input"></param>
         /// <returns></returns>
-        TResult CalculateInitialConditions(TInput input);
+        TResult CalculateInitialConditions();
+
+        /// <summary>
+        /// This method calculates the results for a quasi-linear viscoelastic model.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <param name="streamWriter"></param>
+        Task<TResult> CalculateResults(TInput input, double time);
 
         /// <summary>
         /// This method calculates the strain derivative.

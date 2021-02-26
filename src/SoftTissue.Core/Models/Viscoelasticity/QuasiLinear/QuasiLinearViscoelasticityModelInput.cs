@@ -28,10 +28,18 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
         public int RelaxationNumber { get; set; }
 
         /// <summary>
+        /// The total time spent on the first soft tissue relaxation.
+        /// Unity: s (second).
+        /// </summary>
+        public double FirstRelaxationTotalTime =>
+            this.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime
+            ? this.TimeWithConstantMaximumStrain : this.FirstRampTime + this.TimeWithConstantMaximumStrain;
+
+        /// <summary>
         /// The total time spent with the soft tissue relaxing.
         /// Unity: s (second).
         /// </summary>
-        public double RelaxationTotalTime => this.TimeWithConstantMaximumStrain + this.DecreaseTime + this.TimeWithConstantMinimumStrain;
+        public double RelaxationTotalTime => this.DecreaseTime + this.TimeWithConstantMinimumStrain + this.RampTime + this.TimeWithConstantMaximumStrain;
 
         #endregion
 
@@ -45,7 +53,6 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
 
         /// <summary>
         /// The analysis strain decrease rate.
-        /// This property is only used when considering that the strain decreases.
         /// Unity: Dimensionless.
         /// </summary>
         public double StrainDecreaseRate { get; set; }
@@ -57,8 +64,7 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
         public double MaximumStrain { get; set; }
 
         /// <summary>
-        /// The minimum strain, this is obtained after the decrease time (<see cref="DecreaseTime"/>).
-        /// This property is only used when considering that the strain decreases.
+        /// The minimum strain, this is obtained after the decrease time.
         /// Unity: Dimensionless.
         /// </summary>
         public double MinimumStrain { get; set; }
@@ -78,30 +84,21 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
         /// <summary>
         /// The strain decrease time.
         /// The time when the strain is equals to minimum strain (<see cref="MinimumStrain"/>).
-        /// This property is only used when considering that the strain decrease.
         /// Unity: s (second).
         /// </summary>
         public double DecreaseTime => (this.MaximumStrain - this.MinimumStrain) / this.StrainDecreaseRate;
 
         /// <summary>
         /// The time when the maximum strain is kept constant after the strain increases.
-        /// This property is only used when considering that the strain decreases.
         /// Unity: s (second).
         /// </summary>
         public double TimeWithConstantMaximumStrain { get; set; }
 
         /// <summary>
         /// The time when the minimum strain is kept constant after the strain decreases.
-        /// This property is only used when considering that the strain decreases.
         /// Unity: s (second).
         /// </summary>
         public double TimeWithConstantMinimumStrain { get; set; }
-
-        /// <summary>
-        /// The time when the strain starts decreasing.
-        /// Unity: s (second).
-        /// </summary>
-        public double TimeWhenStrainStartDecreasing => this.FirstRampTime + this.TimeWithConstantMaximumStrain;
 
         #endregion
 

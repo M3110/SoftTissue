@@ -15,6 +15,7 @@ namespace SoftTissue.Core.Models
         /// <summary>
         /// The double-point precision accepted.
         /// </summary>
+        // TODO: Pensar em outro nome mais claro.
         public const double Precision = 1e-6;
 
         /// <summary>
