@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.OperationBase;
 using SoftTissue.Infrastructure.Models;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime
@@ -18,7 +17,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
 
         /// <summary>
         /// The number of relaxations considered in the analysis.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public int NumerOfRelaxations { get; protected set; }
 
@@ -46,7 +45,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
 
         /// <summary>
         /// The minimum strain, this is obtained after the decrease time.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public double MinimumStrain { get; set; }
 
@@ -58,7 +57,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
 
         /// <summary>
         /// The time when the minimum strain is kept constant after the strain decreases.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double TimeWithConstantMinimumStrain { get; set; }
 

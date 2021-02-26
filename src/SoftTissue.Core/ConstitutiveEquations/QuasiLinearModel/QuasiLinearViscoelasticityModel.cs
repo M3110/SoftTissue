@@ -1,16 +1,20 @@
 ﻿using SoftTissue.Core.Models;
-using SoftTissue.Core.Models.Viscoelasticity;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using SoftTissue.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
+    /// <summary>
+    /// It represents the quasi-linear viscoelastic model.
+    /// </summary>
+    /// <typeparam name="TInput"></typeparam>
+    /// <typeparam name="TResult"></typeparam>
+    /// <typeparam name="TRelaxationFunction"></typeparam>
     public abstract class QuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction> : ViscoelasticModel<TInput>, IQuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction>
         where TInput : QuasiLinearViscoelasticityModelInput<TRelaxationFunction>, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
@@ -37,9 +41,9 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// This method calculates the initial conditions for Fung model analysis.
         /// </summary>
         /// <returns></returns>
-        public virtual TResult CalculateInitialConditions()
+        public virtual Task<TResult> CalculateInitialConditions()
         {
-            return new TResult
+            return Task.FromResult(new TResult
             {
                 ReducedRelaxationFunction = 1,
                 Strain = 0,
@@ -47,7 +51,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                 Stress = 0,
                 StressByIntegralDerivative = 0,
                 StressByReducedRelaxationFunctionDerivative = 0
-            };
+            });
         }
 
         /// <summary>
@@ -59,7 +63,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         public virtual async Task<TResult> CalculateResults(TInput input, double time)
         {
             if (time <= Constants.Precision)
-                return this.CalculateInitialConditions();
+                return await this.CalculateInitialConditions();
 
             input.RelaxationNumber = this.CalculateRelaxationNumber(input, time);
 

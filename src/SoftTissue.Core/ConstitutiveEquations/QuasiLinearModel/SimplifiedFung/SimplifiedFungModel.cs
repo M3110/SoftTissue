@@ -7,6 +7,9 @@ using System;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
 {
+    /// <summary>
+    /// It represents the viscoelastic Fung Model considering the Simplified Relaxation Function.
+    /// </summary>
     public class SimplifiedFungModel : QuasiLinearViscoelasticityModel<SimplifiedFungModelInput, SimplifiedFungModelResult, SimplifiedReducedRelaxationFunctionData>, ISimplifiedFungModel
     {
         /// <summary>
@@ -53,6 +56,12 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
             return result;
         }
 
+        /// <summary>
+        /// This method calculates the derivative of reduced relaxation function.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public override double CalculateReducedRelaxationFunctionDerivative(SimplifiedFungModelInput input, double time)
         {
             // When considering that the viscoelastic effect ocurrer just after the ramp time, the reduced relaxation function must not

@@ -16,20 +16,20 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
 
         /// <summary>
         /// The number of relaxations considered in the analysis.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public int NumerOfRelaxations { get; set; }
 
         /// <summary>
         /// The relaxation number.
         /// It is iterated belong the analysis is executed.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public int RelaxationNumber { get; set; }
 
         /// <summary>
         /// The total time spent on the first soft tissue relaxation.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double FirstRelaxationTotalTime =>
             this.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime
@@ -37,7 +37,7 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
 
         /// <summary>
         /// The total time spent with the soft tissue relaxing.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double RelaxationTotalTime => this.DecreaseTime + this.TimeWithConstantMinimumStrain + this.RampTime + this.TimeWithConstantMaximumStrain;
 
@@ -47,56 +47,56 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
 
         /// <summary>
         /// The analysis strain rate.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public double StrainRate { get; set; }
 
         /// <summary>
         /// The analysis strain decrease rate.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public double StrainDecreaseRate { get; set; }
 
         /// <summary>
         /// The maximum strain, this is obtained after the ramp time.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public double MaximumStrain { get; set; }
 
         /// <summary>
         /// The minimum strain, this is obtained after the decrease time.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public double MinimumStrain { get; set; }
 
         /// <summary>
         /// The time taken for the strain reaches the maximum value.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double FirstRampTime => this.MaximumStrain / this.StrainRate;
 
         /// <summary>
         /// The time taken for the strain reaches the maximum value beginning from the minimum value.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double RampTime => (this.MaximumStrain - this.MinimumStrain) / this.StrainRate;
 
         /// <summary>
         /// The strain decrease time.
         /// The time when the strain is equals to minimum strain (<see cref="MinimumStrain"/>).
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double DecreaseTime => (this.MaximumStrain - this.MinimumStrain) / this.StrainDecreaseRate;
 
         /// <summary>
         /// The time when the maximum strain is kept constant after the strain increases.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double TimeWithConstantMaximumStrain { get; set; }
 
         /// <summary>
         /// The time when the minimum strain is kept constant after the strain decreases.
-        /// Unity: s (second).
+        /// Unit: s (second).
         /// </summary>
         public double TimeWithConstantMinimumStrain { get; set; }
 
@@ -107,19 +107,19 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
         /// <summary>
         /// The maximum stress.
         /// This property is only used when disregarding the ramp time. <see cref="ViscoelasticConsideration.DisregardRampTime"/>
-        /// Unity: Pa (Pascal).
+        /// Unit: Pa (Pascal).
         /// </summary>
         public double InitialStress { get; set; }
 
         /// <summary>
         /// The elastic stress constante. Constant A.
-        /// Unity: Pa (Pascal). In some cases, can be N (Newton).
+        /// Unit: Pa (Pascal). In some cases, can be N (Newton).
         /// </summary>
         public double ElasticStressConstant { get; set; }
 
         /// <summary>
         /// The elastic power constant. Constant B.
-        /// Unity: Dimensionless.
+        /// Unit: Dimensionless.
         /// </summary>
         public double ElasticPowerConstant { get; set; }
 
