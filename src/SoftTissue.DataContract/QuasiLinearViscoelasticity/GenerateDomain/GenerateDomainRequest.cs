@@ -9,22 +9,31 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
     /// </summary>
     public class GenerateDomainRequest : OperationRequestBase
     {
-        // TODO: Ver se tem atalho para construir construtor com todos os campos.
-
         /// <summary>
-        /// Time step.
-        /// Unit: s (second).
+        /// Class constructor.
         /// </summary>
-        public double TimeStep { get; }
-
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <param name="fastRelaxationTimeList"></param>
+        /// <param name="slowRelaxationTimeList"></param>
         [JsonConstructor]
-        public GenerateDomainRequest(double timeStep, double finalTime, Value fastRelaxationTimeList, Value slowRelaxationTimeList)
+        public GenerateDomainRequest(
+            double timeStep, 
+            double finalTime, 
+            Value fastRelaxationTimeList, 
+            Value slowRelaxationTimeList)
         {
             TimeStep = timeStep;
             FinalTime = finalTime;
             FastRelaxationTimeList = fastRelaxationTimeList;
             SlowRelaxationTimeList = slowRelaxationTimeList;
         }
+
+        /// <summary>
+        /// Time step.
+        /// Unit: s (second).
+        /// </summary>
+        public double TimeStep { get; }
 
         /// <summary>
         /// Final time.
