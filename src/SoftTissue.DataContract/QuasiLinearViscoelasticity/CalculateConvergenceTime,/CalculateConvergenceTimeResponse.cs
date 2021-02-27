@@ -5,5 +5,5 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenc
     /// <summary>
     /// It represents the response content to CalculateConvergenceTime operation.
     /// </summary>
-    public class CalculateConvergenceTimeResponse : CalculateResultResponse<CalculateConvergenceTimeResponseData> { }
+    public sealed class CalculateConvergenceTimeResponse : CalculateResultResponse<CalculateConvergenceTimeResponseData> { }
 }

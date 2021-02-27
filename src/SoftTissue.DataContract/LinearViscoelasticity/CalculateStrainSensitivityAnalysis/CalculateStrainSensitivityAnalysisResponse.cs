@@ -5,5 +5,5 @@ namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStrainSensitivi
     /// <summary>
     /// It represents the response content to CalculateStrainSensitivityAnalysis operation of Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStrainSensitivityAnalysisResponse : CalculateResultResponse<CalculateStrainSensitivityAnalysisResponseData> { }
+    public sealed class CalculateStrainSensitivityAnalysisResponse : CalculateResultResponse<CalculateStrainSensitivityAnalysisResponseData> { }
 }

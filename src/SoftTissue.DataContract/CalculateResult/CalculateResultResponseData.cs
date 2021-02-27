@@ -5,7 +5,7 @@ namespace SoftTissue.DataContract.CalculateResult
     /// <summary>
     /// It represents the 'data' content of CalculateResult operations response.
     /// </summary>
-    public class CalculateResultResponseData : OperationResponseData
+    public abstract class CalculateResultResponseData : OperationResponseData
     {
         /// <summary>
         /// The result file name.

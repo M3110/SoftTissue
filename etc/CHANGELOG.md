@@ -17,8 +17,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Nuget package Microsoft.AspNetCore.Mvc.NewtonsoftJson.
 - Nuget package Newtonsoft.Json.
 ### Changed
-- Quasi-linear operations considering multiple relaxations.
+- Concrete classes in the DataContracts project to be sealed and 'set' method to be private.
+- Generic classes in the DataContracts project to be abstract and 'set' method to be protected.
 - Data contracts of operations that inheriting from CalculteResult inherite from CalculateResult data contract.
+- Quasi-linear operations considering multiple relaxations.
 - RelavativePrecision from 5e-3 to 1e-3 and Precision from 1e-10 to 1e-6.
 - Moved sensitivity analysis operations to a new folder.
 - CalculateStress operations for Quasi-Linear Viscoelastic model to process considering ramp time or not, or considering Reduced Relaxation Function or Simplified Reduced Relaxation Function.

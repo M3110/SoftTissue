@@ -127,7 +127,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             double result = 0;
             double integralTime = initialTime;
 
-            Func<double, double> Equation = (time) => Math.Exp(-time) / time;
+            static double Equation(double time) => Math.Exp(-time) / time;
 
             int index = 0;
 

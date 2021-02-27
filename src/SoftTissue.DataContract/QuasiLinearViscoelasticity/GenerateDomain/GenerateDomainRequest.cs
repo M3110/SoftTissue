@@ -7,7 +7,7 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
     /// <summary>
     /// It represents the request content to GenerateDomain operation of Quasi-Linear Viscoelasticity Model.
     /// </summary>
-    public class GenerateDomainRequest : OperationRequestBase
+    public sealed class GenerateDomainRequest : OperationRequestBase
     {
         /// <summary>
         /// Class constructor.
@@ -23,34 +23,34 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
             Value fastRelaxationTimeList, 
             Value slowRelaxationTimeList)
         {
-            TimeStep = timeStep;
-            FinalTime = finalTime;
-            FastRelaxationTimeList = fastRelaxationTimeList;
-            SlowRelaxationTimeList = slowRelaxationTimeList;
+            this.TimeStep = timeStep;
+            this.FinalTime = finalTime;
+            this.FastRelaxationTimeList = fastRelaxationTimeList;
+            this.SlowRelaxationTimeList = slowRelaxationTimeList;
         }
 
         /// <summary>
         /// Time step.
         /// Unit: s (second).
         /// </summary>
-        public double TimeStep { get; }
+        public double TimeStep { get; private set; }
 
         /// <summary>
         /// Final time.
         /// Unit: s (second).
         /// </summary>
-        public double FinalTime { get; }
+        public double FinalTime { get; private set; }
 
         /// <summary>
         /// Tau 1.
         /// List of fast relaxation time.
         /// </summary>
-        public Value FastRelaxationTimeList { get; }
+        public Value FastRelaxationTimeList { get; private set; }
 
         /// <summary>
         /// Tau 2.
         /// List of slow relaxation time.
         /// </summary>
-        public Value SlowRelaxationTimeList { get; }
+        public Value SlowRelaxationTimeList { get; private set; }
     }
 }

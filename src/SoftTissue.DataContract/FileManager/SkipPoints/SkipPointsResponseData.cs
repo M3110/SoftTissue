@@ -5,7 +5,7 @@ namespace SoftTissue.DataContract.FileManager.SkipPoints
     /// <summary>
     /// It represents the 'data' content of SkipPoints operation response.
     /// </summary>
-    public class SkipPointsResponseData : OperationResponseData
+    public sealed class SkipPointsResponseData : OperationResponseData
     {
         /// <summary>
         /// The file URI.
