@@ -7,6 +7,9 @@ using System;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
 {
+    /// <summary>
+    /// It represents the viscoelastic Fung Model considering the Simplified Relaxation Function.
+    /// </summary>
     public class SimplifiedFungModel : QuasiLinearViscoelasticityModel<SimplifiedFungModelInput, SimplifiedFungModelResult, SimplifiedReducedRelaxationFunctionData>, ISimplifiedFungModel
     {
         /// <summary>
@@ -29,10 +32,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
             // be the ramp time.
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
             {
-                if (time <= input.RampTime)
+                if (time <= input.FirstRampTime)
                     return 1;
 
-                return time -= input.RampTime;
+                return time -= input.FirstRampTime;
             }
 
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
@@ -53,6 +56,12 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
             return result;
         }
 
+        /// <summary>
+        /// This method calculates the derivative of reduced relaxation function.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public override double CalculateReducedRelaxationFunctionDerivative(SimplifiedFungModelInput input, double time)
         {
             // When considering that the viscoelastic effect ocurrer just after the ramp time, the reduced relaxation function must not
@@ -60,10 +69,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
             // be the ramp time.
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
             {
-                if (time <= input.RampTime)
+                if (time <= input.FirstRampTime)
                     return 0;
                 else
-                    time -= input.RampTime;
+                    time -= input.FirstRampTime;
             }
 
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.

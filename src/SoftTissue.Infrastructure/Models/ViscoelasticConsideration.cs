@@ -12,23 +12,13 @@
         GeneralViscoelasctiEffect = 1,
 
         /// <summary>
-        /// Viscoelastic effect considered to all time domain considering that the strain decrease after a specific time.
-        /// </summary>
-        GeneralViscoelasticEffectWithStrainDecrease = 2,
-
-        /// <summary>
         /// Viscoelastic effect considered after the ramp time.
         /// </summary>
-        ViscoelasticEffectAfterRampTime = 3,
-
-        /// <summary>
-        /// Viscoelastic effect considered after the ramp time and the strain decrease after a specific time.
-        /// </summary>
-        ViscoelasticEffectAfterRampTimeWithStrainDecrease = 4,
+        ViscoelasticEffectAfterRampTime = 2,
 
         /// <summary>
         /// The ramp time is disregarded. In time equals to zero, the stress is maximum and equals to the maximum elastic stress.
         /// </summary>
-        DisregardRampTime = 5,
+        DisregardRampTime = 3,
     }
 }

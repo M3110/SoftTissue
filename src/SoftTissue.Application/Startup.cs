@@ -75,7 +75,7 @@ namespace SoftTissue.Application
             services.AddTransient<ISimpsonRuleIntegration, SimpsonRuleIntegration>();
             services.AddTransient<IDerivative, Derivative>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddSwaggerDocs();
         }
