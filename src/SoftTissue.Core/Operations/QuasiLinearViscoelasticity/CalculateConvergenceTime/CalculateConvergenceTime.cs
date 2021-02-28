@@ -2,7 +2,7 @@
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using SoftTissue.Core.Operations.Base;
 using SoftTissue.DataContract.OperationBase;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime_;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime;
 using System;
 using System.Collections.Generic;
 using System.Net;

@@ -5,5 +5,5 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
     /// <summary>
     /// It represents the 'data' content to CalculateFungModelStressDisregardRampTime operation response of Quasi-Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateFungModelStressDisregardRampTimeResponseData : CalculateResultResponseData { }
+    public sealed class CalculateFungModelStressDisregardRampTimeResponseData : CalculateResultResponseData { }
 }

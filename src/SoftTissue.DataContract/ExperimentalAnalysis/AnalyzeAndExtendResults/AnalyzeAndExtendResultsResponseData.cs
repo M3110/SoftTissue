@@ -5,7 +5,7 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
     /// <summary>
     /// It represents the 'data' content of AnalyzeAndPredictResults operation response.
     /// </summary>
-    public class AnalyzeAndExtendResultsResponseData : OperationResponseData
+    public sealed class AnalyzeAndExtendResultsResponseData : OperationResponseData
     {
         /// <summary>
         /// The file name with the experimental results analyzed and predicted.

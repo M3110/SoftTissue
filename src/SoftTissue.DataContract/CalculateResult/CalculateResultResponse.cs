@@ -6,7 +6,7 @@ namespace SoftTissue.DataContract.CalculateResult
     /// It represents the response content for CalculateResult operations.
     /// </summary>
     /// <typeparam name="TResponseData"></typeparam>
-    public class CalculateResultResponse<TResponseData> : OperationResponseBase<TResponseData>
+    public abstract class CalculateResultResponse<TResponseData> : OperationResponseBase<TResponseData>
         where TResponseData : CalculateResultResponseData, new()
     { }
 }

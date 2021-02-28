@@ -7,7 +7,7 @@ namespace SoftTissue.DataContract.OperationBase
     /// It represents the response content for all operations.
     /// </summary>
     /// <typeparam name="TResponseData"></typeparam>
-    public class OperationResponseBase<TResponseData>
+    public abstract class OperationResponseBase<TResponseData>
         where TResponseData : OperationResponseData
     {
         /// <summary>
@@ -26,7 +26,7 @@ namespace SoftTissue.DataContract.OperationBase
         /// <summary>
         /// The HTTP status code.
         /// </summary>
-        public HttpStatusCode HttpStatusCode { get; set; }
+        public HttpStatusCode HttpStatusCode { get; protected set; }
 
         /// <summary>
         /// The list of errors.

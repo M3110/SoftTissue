@@ -1,11 +1,11 @@
 ﻿using SoftTissue.DataContract.CalculateResult;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime_
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime
 {
     /// <summary>
     /// It represents the 'data' content to CalculateConvergenceTime operation response.
     /// </summary>
-    public class CalculateConvergenceTimeResponseData : CalculateResultResponseData
+    public sealed class CalculateConvergenceTimeResponseData : CalculateResultResponseData
     {
         /// <summary>
         /// The convergence time.

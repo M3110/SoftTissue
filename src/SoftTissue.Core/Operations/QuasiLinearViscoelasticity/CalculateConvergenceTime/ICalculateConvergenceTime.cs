@@ -1,5 +1,5 @@
 ﻿using SoftTissue.Core.Operations.Base;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime_;
+using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime
 {

@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// The erro message.
+        /// The error message.
         /// </summary>
         public string Message { get; }
 
