@@ -2,7 +2,7 @@
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.Infrastructure.Models;
 
-namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime_
+namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime
 {
     /// <summary>
     /// It represents the request content to CalculateConvergenceTime operation.
@@ -35,16 +35,16 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenc
             double fastRelaxationTime, 
             double slowRelaxationTime)
         {
-            TimeStep = timeStep;
-            FinalTime = finalTime;
-            ViscoelasticConsideration = viscoelasticConsideration;
-            StrainRate = strainRate;
-            MaximumStrain = maximumStrain;
-            ElasticStressConstant = elasticStressConstant;
-            ElasticPowerConstant = elasticPowerConstant;
-            RelaxationIndex = relaxationIndex;
-            FastRelaxationTime = fastRelaxationTime;
-            SlowRelaxationTime = slowRelaxationTime;
+            this.TimeStep = timeStep;
+            this.FinalTime = finalTime;
+            this.ViscoelasticConsideration = viscoelasticConsideration;
+            this.StrainRate = strainRate;
+            this.MaximumStrain = maximumStrain;
+            this.ElasticStressConstant = elasticStressConstant;
+            this.ElasticPowerConstant = elasticPowerConstant;
+            this.RelaxationIndex = relaxationIndex;
+            this.FastRelaxationTime = fastRelaxationTime;
+            this.SlowRelaxationTime = slowRelaxationTime;
         }
 
         /// <summary>
