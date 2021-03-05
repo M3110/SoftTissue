@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ConstitutiveEquations\NonLinearModel\Schapery\" />
+    <Folder Include="Models\Viscoelasticity\NonLinear\Schapery\" />
     <Folder Include="Operations\QuasiLinearViscoelasticity\CalculateStressSensitivityAnalysis\FungModel\" />
   </ItemGroup>
 
