@@ -15,7 +15,10 @@ namespace SoftTissue.DataContract.FileManager.SkipPoints
         /// <param name="fileName"></param>
         /// <param name="pointsToSkip"></param>
         [JsonConstructor]
-        public SkipPointsRequest(string fileUri, string fileName, int pointsToSkip)
+        public SkipPointsRequest(
+            string fileUri, 
+            string fileName, 
+            int pointsToSkip)
         {
             this.FileUri = fileUri;
             this.FileName = fileName;
@@ -25,16 +28,16 @@ namespace SoftTissue.DataContract.FileManager.SkipPoints
         /// <summary>
         /// The file URI.
         /// </summary>
-        public string FileUri { get; private set; }
+        public string FileUri { get; set; }
 
         /// <summary>
         /// The file name to be used in the operation.
         /// </summary>
-        public string FileName { get; private set; }
+        public string FileName { get; set; }
 
         /// <summary>
         /// The number of points to be skipped in the file.
         /// </summary>
-        public int PointsToSkip { get; private set; }
+        public int PointsToSkip { get; set; }
     }
 }

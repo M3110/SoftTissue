@@ -9,6 +9,11 @@ namespace SoftTissue.Core.Models.ExperimentalAnalysis
     public class AnalyzedExperimentalResult
     {
         /// <summary>
+        /// Basic class constructor.
+        /// </summary>
+        public AnalyzedExperimentalResult() { }
+
+        /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="experimentalResult"></param>

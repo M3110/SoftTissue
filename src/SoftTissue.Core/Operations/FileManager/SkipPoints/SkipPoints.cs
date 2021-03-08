@@ -12,11 +12,6 @@ namespace SoftTissue.Core.Operations.FileManager.SkipPoints
     public class SkipPoints : OperationBase<SkipPointsRequest, SkipPointsResponse, SkipPointsResponseData>, ISkipPoints
     {
         /// <summary>
-        /// The base path to files.
-        /// </summary>
-        protected string TemplateBasePath => Constants.
-
-        /// <summary>
         /// This method skips points into the file, increasing the time step and generating a new file.
         /// </summary>
         /// <param name="request"></param>

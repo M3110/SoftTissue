@@ -31,7 +31,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         /// <summary>
         /// The base path to files.
         /// </summary>
-        private readonly string _templateBasePath = Path.Combine(Constants.ExperimentalBasePath, "Analyze and extend");
+        private readonly string _templateBasePath = BasePaths.AnalyzeAndExtend;
 
         /// <summary>
         /// Class constructor.
@@ -62,6 +62,66 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         }
 
         /// <summary>
+        /// This method calculates the time step that is used when extending the results.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public double CalculateTimeStep(AnalyzeAndExtendResultsRequest request)
+        {
+            if (request.UseFileTimeStep == false)
+                return request.TimeStep;
+
+            return this._experimentalResults[1].Time - this._experimentalResults[0].Time;
+        }
+
+        /// <summary>
+        /// This method extends the results.
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="previousResult"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalSecondDerivative"></param>
+        /// <returns></returns>
+        public AnalyzedExperimentalResult CalculateExtendedResult(AnalyzeAndExtendResultsResponse response, AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative)
+        {
+            // Step 6.1 - Creates the analyzed experimental results.
+            var extendedResult = new AnalyzedExperimentalResult { Time = previousResult.Time + timeStep };
+
+            // If the derivative is not equals to zero, it means that the stress do not tends to asymptote.
+            if (previousResult.Derivative.Value != 0)
+            {
+                // Step 6.2 - Calculates the derivative.
+                double derivative = previousResult.Derivative.Value + timeStep * (double.IsNegative(finalSecondDerivative) ? -finalSecondDerivative : finalSecondDerivative);
+
+                // If the derivative is not negative, it means that the sign has changed.
+                // When it occurs, it is assumed that the derivative tended to zero, so the value is overwritten to zero.
+                if (double.IsNegative(derivative) == false)
+                    derivative = 0;
+
+                extendedResult.Derivative = derivative;
+
+                // Step 6.3 - Calculates the stress.
+                double stress = previousResult.Stress + timeStep * derivative;
+                extendedResult.Stress = stress;
+
+                return extendedResult;
+            }
+
+            // If the derivative is equals to zero, the stress reached to asymptote.
+            // Maps the time and stress to the response if the asymptote time don't have value.
+            if (response.Data.AsymptoteTime == null)
+            {
+                response.Data.AsymptoteTime = previousResult.Time;
+                response.Data.AsymptoteStress = previousResult.Stress;
+            }
+
+            extendedResult.Stress = previousResult.Stress;
+            extendedResult.Derivative = 0;
+
+            return extendedResult;
+        }
+
+        /// <summary>
         /// This method analyzes and predicts the experimental results.
         /// </summary>
         /// <param name="request"></param>
@@ -85,10 +145,13 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                 // Step 3 - Writes the second line. It just have the derivative, because to calculate the second derivative needs two derivative previously calculated.
                 ExperimentalResult secondResult = this._experimentalResults[1];
 
-                var previousAnalyzedResult = new AnalyzedExperimentalResult(secondResult);
-                previousAnalyzedResult.Derivative = this._derivative.Calculate(firstResult.Stress, secondResult.Stress, secondResult.Time - firstResult.Time);
+                var previousResult = new AnalyzedExperimentalResult(secondResult);
+                previousResult.Derivative = this._derivative.Calculate(firstResult.Stress, secondResult.Stress, secondResult.Time - firstResult.Time);
 
-                csvWriter.WriteLine(previousAnalyzedResult);
+                csvWriter.WriteLine(previousResult);
+
+                // Gets the second derivative of previous analyzed result to be used to extend the results.
+                double finalSecondDerivative = previousResult.SecondDerivative.GetValueOrDefault();
 
                 // Step 4 - Analyze the experimental results.
                 // Here is necessary to skip 2 lines, beacause that lines was already analyzed.
@@ -98,23 +161,43 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                     var analyzedResult = new AnalyzedExperimentalResult(experimentalResult);
 
                     // Step 4.2 - Calculates the step time.
-                    double stepTime = analyzedResult.Time - previousAnalyzedResult.Time;
+                    double stepTime = analyzedResult.Time - previousResult.Time;
 
                     // Step 4.3 - Calculates the derivative and second derivative.
-                    analyzedResult.Derivative = this._derivative.Calculate(previousAnalyzedResult.Stress, analyzedResult.Stress, stepTime);
-                    analyzedResult.SecondDerivative = this._derivative.Calculate(previousAnalyzedResult.Derivative.Value, analyzedResult.Derivative.Value, stepTime);
+                    analyzedResult.Derivative = this._derivative.Calculate(previousResult.Stress, analyzedResult.Stress, stepTime);
+                    analyzedResult.SecondDerivative = this._derivative.Calculate(previousResult.Derivative.Value, analyzedResult.Derivative.Value, stepTime);
 
                     // Step 4.4 - Writes the result in the file.
                     csvWriter.WriteLine(analyzedResult);
 
                     // Step 4.5 - Saves the current result to be used in the next iteration.
-                    previousAnalyzedResult = analyzedResult;
+                    previousResult = analyzedResult;
+
+                    // Step 4.6 - Sets the smallest second derivative.
+                    if (finalSecondDerivative == 0 || Math.Abs(finalSecondDerivative) > Math.Abs(analyzedResult.SecondDerivative.Value))
+                        finalSecondDerivative = analyzedResult.SecondDerivative.Value;
+                }
+
+                // Step 5 - Calculates the time step.
+                double timeStep = this.CalculateTimeStep(request);
+
+                // Step 6 - Extend the results, here will be used the last second derivative to preview the next values.
+                while (previousResult.Time <= request.FinalTime)
+                {
+                    // Step 6.1 - Creates the analyzed experimental results.
+                    // Step 6.2 - Calculates the derivative.
+                    // Step 6.3 - Calculates the stress.
+                    AnalyzedExperimentalResult extendedResult = this.CalculateExtendedResult(response, previousResult, timeStep, finalSecondDerivative);
+
+                    // Step 6.4 - Writes the results in the file.
+                    csvWriter.WriteLine(extendedResult);
+
+                    // Step 6.5 - Saves the current extended result to be used in the next iteration.
+                    previousResult = extendedResult;
                 }
             }
 
-            // TODO: Fazer conjunto de curvas.
-
-            // Step 5 - Maps to response.
+            // Step 7 - Maps to response.
             response.Data.FileUri = Path.GetDirectoryName(solutionFileName);
             response.Data.FileName = Path.GetFileName(solutionFileName);
 
@@ -134,6 +217,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                 return response;
             }
 
+            if (request.UseFileTimeStep && request.TimeStep <= 0)
+            {
+                response.AddError(OperationErrorCode.RequestValidationError, "If should use the time step of file, the time step passed on request must be greather than 0.");
+            }
+
             // Reads the file and add it into a variable to be used in the operation.
             using (var streamReader = new StreamReader(Path.Combine(request.FileUri, request.FileName)))
             using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
@@ -144,7 +232,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
             // The file must be at least a specific number of lines to be possible to execute the operation.
             if (this._experimentalResults.Count <= Constants.MinimumFileNumberOfLines)
             {
-                response.AddError(OperationErrorCode.InternalServerError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.", HttpStatusCode.BadRequest);
+                response.AddError(OperationErrorCode.RequestValidationError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.");
                 return response;
             }
 

@@ -16,7 +16,7 @@ namespace SoftTissue.Application.Controllers
         /// <summary>
         /// It is responsible to skip points into a file.
         /// </summary>
-        /// <param name="skipPoints"></param>
+        /// <param name="operation"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -27,12 +27,12 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-stress/maxwell-model")]
+        [HttpPost("skip-points")]
         public async Task<ActionResult<SkipPointsResponse>> SkipPoints(
-            [FromServices] ISkipPoints skipPoints,
-            [FromQuery] SkipPointsRequest request)
+            [FromServices] ISkipPoints operation,
+            [FromBody] SkipPointsRequest request)
         {
-            SkipPointsResponse response = await skipPoints.Process(request).ConfigureAwait(false);
+            SkipPointsResponse response = await operation.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

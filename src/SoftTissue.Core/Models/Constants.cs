@@ -1,9 +1,7 @@
-﻿using System.IO;
-
-namespace SoftTissue.Core.Models
+﻿namespace SoftTissue.Core.Models
 {
     /// <summary>
-    /// It is responsible to contain all the common variables used in application.
+    /// It is responsible to contain the constats used in application.
     /// </summary>
     public static class Constants
     {
@@ -31,50 +29,10 @@ namespace SoftTissue.Core.Models
         /// f(11.4) < Precision = 1e-6
         /// </summary>
         public const double EquationE1MaximumFinalTime = 11.4;
-
+        
         /// <summary>
         /// The minimum number of lines accepted to read a file.
         /// </summary>
         public const int MinimumFileNumberOfLines = 3;
-
-        /// <summary>
-        /// The application base path.
-        /// </summary>
-        public readonly static string DirectoryBasePath = Directory.GetCurrentDirectory().Replace("\\src\\SoftTissue.Application", "\\");
-
-        /// <summary>
-        /// The base path to solution response files.
-        /// </summary>
-        public readonly static string SolutionBasePath = Path.Combine(Constants.DirectoryBasePath, "solutions");
-
-        /// <summary>
-        /// The base path to response files of Quasi-Linear Model.
-        /// </summary>
-        public readonly static string QuasiLinearModelBasePath = Path.Combine(Constants.SolutionBasePath, "Quasi-Linear Viscoelastic");
-
-        /// <summary>
-        /// The base path to response files of Fung Model.
-        /// </summary>
-        public readonly static string FungModelBasePath = Path.Combine(Constants.QuasiLinearModelBasePath, "Fung Model");
-
-        /// <summary>
-        /// The base path to response files of Simplified Fung Model.
-        /// </summary>
-        public readonly static string SimplifiedFungModelBasePath = Path.Combine(Constants.QuasiLinearModelBasePath, "Simplified Fung Model");
-
-        /// <summary>
-        /// The base path to response files of Linear Viscoelastic Model.
-        /// </summary>
-        public readonly static string LinearModelBasePath = Path.Combine(Constants.SolutionBasePath, "Linear Viscoelastic");
-
-        /// <summary>
-        /// The base path to response files of Maxwell Model.
-        /// </summary>
-        public readonly static string MaxwellModelBasePath = Path.Combine(Constants.LinearModelBasePath, "Maxwell Model");
-
-        /// <summary>
-        /// The base path to response files of Experimental operations.
-        /// </summary>
-        public readonly static string ExperimentalBasePath = Path.Combine(Constants.SolutionBasePath, "Experimental");
     }
 }

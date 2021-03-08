@@ -24,7 +24,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// <summary>
         /// The base path to files.
         /// </summary>
-        protected override string TemplateBasePath => Path.Combine(Constants.SimplifiedFungModelBasePath, "Disregard Ramp Time");
+        protected override string TemplateBasePath => Path.Combine(BasePaths.SimplifiedFungModel, "Disregard Ramp Time");
 
         /// <summary>
         /// Class constructor.

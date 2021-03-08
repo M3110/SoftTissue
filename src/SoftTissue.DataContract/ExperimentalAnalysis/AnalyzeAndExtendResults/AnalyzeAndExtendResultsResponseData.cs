@@ -16,5 +16,15 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
         /// The file URI.
         /// </summary>
         public string FileUri { get; set; }
+
+        /// <summary>
+        /// The time when the stress tends to an asymptote value.
+        /// </summary>
+        public double? AsymptoteTime { get; set; }
+
+        /// <summary>
+        /// The value that the stress tends.
+        /// </summary>
+        public double AsymptoteStress { get; set; }
     }
 }
