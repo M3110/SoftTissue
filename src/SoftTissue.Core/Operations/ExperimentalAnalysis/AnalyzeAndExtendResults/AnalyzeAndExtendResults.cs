@@ -112,6 +112,8 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                 }
             }
 
+            // TODO: Fazer conjunto de curvas.
+
             // Step 5 - Maps to response.
             response.Data.FileUri = Path.GetDirectoryName(solutionFileName);
             response.Data.FileName = Path.GetFileName(solutionFileName);

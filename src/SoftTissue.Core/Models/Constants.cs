@@ -45,7 +45,7 @@ namespace SoftTissue.Core.Models
         /// <summary>
         /// The base path to solution response files.
         /// </summary>
-        public readonly static string SolutionBasePath = Path.Combine(Constants.DirectoryBasePath, "sheets\\Solutions");
+        public readonly static string SolutionBasePath = Path.Combine(Constants.DirectoryBasePath, "solutions");
 
         /// <summary>
         /// The base path to response files of Quasi-Linear Model.

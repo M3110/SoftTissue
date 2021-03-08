@@ -1,4 +1,5 @@
-﻿using SoftTissue.Core.Operations.Base;
+﻿using SoftTissue.Core.Models;
+using SoftTissue.Core.Operations.Base;
 using SoftTissue.DataContract.FileManager.SkipPoints;
 using System.IO;
 using System.Threading.Tasks;
@@ -10,6 +11,11 @@ namespace SoftTissue.Core.Operations.FileManager.SkipPoints
     /// </summary>
     public class SkipPoints : OperationBase<SkipPointsRequest, SkipPointsResponse, SkipPointsResponseData>, ISkipPoints
     {
+        /// <summary>
+        /// The base path to files.
+        /// </summary>
+        protected string TemplateBasePath => Constants.
+
         /// <summary>
         /// This method skips points into the file, increasing the time step and generating a new file.
         /// </summary>
