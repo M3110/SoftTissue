@@ -174,7 +174,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                     previousResult = analyzedResult;
 
                     // Step 4.6 - Sets the smallest second derivative.
-                    if (finalSecondDerivative == 0 || Math.Abs(finalSecondDerivative) > Math.Abs(analyzedResult.SecondDerivative.Value))
+                    if (finalSecondDerivative == 0 || finalSecondDerivative.AbsolutRelativeDiference(analyzedResult.SecondDerivative.Value) > Constants.RelativePrecision)
                         finalSecondDerivative = analyzedResult.SecondDerivative.Value;
                 }
 

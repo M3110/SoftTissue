@@ -19,7 +19,7 @@
         /// <summary>
         /// The relative double-point precision accepted.
         /// </summary>
-        public const double RelativePrecision = 1e-3;
+        public const double RelativePrecision = 1e-2;
 
         /// <summary>
         /// The final time to equation E1 must be at most 11.4, because, using Geogebra to plot the graphic for the 
