@@ -21,6 +21,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
     /// </summary>
     public class AnalyzeAndExtendResults : OperationBase<AnalyzeAndExtendResultsRequest, AnalyzeAndExtendResultsResponse, AnalyzeAndExtendResultsResponseData>, IAnalyzeAndExtendResults
     {
+        private double _previousDerivative;
         private readonly IDerivative _derivative;
 
         /// <summary>
@@ -62,15 +63,58 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         }
 
         /// <summary>
+        /// This method calculates the second derivative.
+        /// </summary>
+        /// <param name="previousDerivative"></param>
+        /// <param name="currentDerivative"></param>
+        /// <param name="timeStep"></param>
+        /// <returns></returns>
+        public double? CalculateSecondDerivative(double previousDerivative, double currentDerivative, double timeStep)
+        {
+            if (currentDerivative.IsPositive() || Math.Abs(currentDerivative) > Math.Abs(previousDerivative))
+                return null;
+
+            double secondDerivative = this._derivative.Calculate(this._previousDerivative, currentDerivative, timeStep);
+
+            this._previousDerivative = previousDerivative;
+
+            return secondDerivative;
+        }
+
+        /// <summary>
+        /// This method calculates the final second derivative to be used when extending results.
+        /// </summary>
+        /// <param name="previousSecondDerivative"></param>
+        /// <param name="currentSecondDerivative"></param>
+        /// <returns></returns>
+        public double CalculateFinalSecondDerivative(double previousSecondDerivative, double? currentSecondDerivative)
+        {
+            if (currentSecondDerivative == null || currentSecondDerivative.IsNegative())
+                return previousSecondDerivative;
+
+            if (previousSecondDerivative == 0)
+                return currentSecondDerivative.Value;
+
+            double relativeDiference = previousSecondDerivative.RelativeDiference(currentSecondDerivative.Value);
+
+            if (relativeDiference.IsPositive() && relativeDiference < 1 - Constants.RelativePrecision && relativeDiference > Constants.RelativePrecision)
+                return currentSecondDerivative.Value;
+
+            return previousSecondDerivative;
+        }
+
+        /// <summary>
         /// This method calculates the time step that is used when extending the results.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         public double CalculateTimeStep(AnalyzeAndExtendResultsRequest request)
         {
+            // If should not use the time step at the experimental file, use the time step informed on request.
             if (request.UseFileTimeStep == false)
                 return request.TimeStep;
 
+            // Otherwise, calculates the time step based on the first and second lines at the experimental file.
             return this._experimentalResults[1].Time - this._experimentalResults[0].Time;
         }
 
@@ -91,11 +135,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
             if (previousResult.Derivative.Value != 0)
             {
                 // Step 6.2 - Calculates the derivative.
-                double derivative = previousResult.Derivative.Value + timeStep * (double.IsNegative(finalSecondDerivative) ? -finalSecondDerivative : finalSecondDerivative);
+                double derivative = previousResult.Derivative.Value + timeStep * finalSecondDerivative;
 
                 // If the derivative is not negative, it means that the sign has changed.
                 // When it occurs, it is assumed that the derivative tended to zero, so the value is overwritten to zero.
-                if (double.IsNegative(derivative) == false)
+                if (derivative.IsNegative() == false)
                     derivative = 0;
 
                 extendedResult.Derivative = derivative;
@@ -139,19 +183,19 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                 csvWriter.NextRecord();
 
                 // Step 2 - Writes the first line. It is equals to the first line of the file analyzed.
-                ExperimentalResult firstResult = this._experimentalResults[0];
-                csvWriter.WriteLine(new AnalyzedExperimentalResult(firstResult));
+                ExperimentalResult firstExperimentalResult = this._experimentalResults[0];
+                csvWriter.WriteLine(new AnalyzedExperimentalResult(firstExperimentalResult));
 
                 // Step 3 - Writes the second line. It just have the derivative, because to calculate the second derivative needs two derivative previously calculated.
-                ExperimentalResult secondResult = this._experimentalResults[1];
+                ExperimentalResult secondExperimentalResult = this._experimentalResults[1];
 
-                var previousResult = new AnalyzedExperimentalResult(secondResult);
-                previousResult.Derivative = this._derivative.Calculate(firstResult.Stress, secondResult.Stress, secondResult.Time - firstResult.Time);
+                var previousResult = new AnalyzedExperimentalResult(secondExperimentalResult);
+                previousResult.Derivative = this._derivative.Calculate(firstExperimentalResult.Stress, secondExperimentalResult.Stress, secondExperimentalResult.Time - firstExperimentalResult.Time);
 
                 csvWriter.WriteLine(previousResult);
 
-                // Gets the second derivative of previous analyzed result to be used to extend the results.
-                double finalSecondDerivative = previousResult.SecondDerivative.GetValueOrDefault();
+                // Instantiate the variable to contain the final second derivative.
+                double finalSecondDerivative = 0;
 
                 // Step 4 - Analyze the experimental results.
                 // Here is necessary to skip 2 lines, beacause that lines was already analyzed.
@@ -160,12 +204,15 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                     // Step 4.1 - Converts the experimental result.
                     var analyzedResult = new AnalyzedExperimentalResult(experimentalResult);
 
-                    // Step 4.2 - Calculates the step time.
-                    double stepTime = analyzedResult.Time - previousResult.Time;
+                    // Step 4.2 - Calculates the step time to experimental result.
+                    double experimentalTimeStep = analyzedResult.Time - previousResult.Time;
 
                     // Step 4.3 - Calculates the derivative and second derivative.
-                    analyzedResult.Derivative = this._derivative.Calculate(previousResult.Stress, analyzedResult.Stress, stepTime);
-                    analyzedResult.SecondDerivative = this._derivative.Calculate(previousResult.Derivative.Value, analyzedResult.Derivative.Value, stepTime);
+                    // For an utopian case:
+                    // - The derivative must be negative to indicates that the values is decreasing.
+                    // - The second derivative must be positive to indicate that the curve's concavity is upward.
+                    analyzedResult.Derivative = this._derivative.Calculate(previousResult.Stress, analyzedResult.Stress, experimentalTimeStep);
+                    analyzedResult.SecondDerivative = this.CalculateSecondDerivative(previousResult.Derivative.Value, analyzedResult.Derivative.Value, experimentalTimeStep);
 
                     // Step 4.4 - Writes the result in the file.
                     csvWriter.WriteLine(analyzedResult);
@@ -174,8 +221,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                     previousResult = analyzedResult;
 
                     // Step 4.6 - Sets the smallest second derivative.
-                    if (finalSecondDerivative == 0 || finalSecondDerivative.AbsolutRelativeDiference(analyzedResult.SecondDerivative.Value) > Constants.RelativePrecision)
-                        finalSecondDerivative = analyzedResult.SecondDerivative.Value;
+                    finalSecondDerivative = this.CalculateFinalSecondDerivative(finalSecondDerivative, analyzedResult.SecondDerivative);
                 }
 
                 // Step 5 - Calculates the time step.

@@ -1,7 +1,4 @@
-﻿using SoftTissue.Core.ExtensionMethods;
-using System;
-
-namespace SoftTissue.Core.Models.ExperimentalAnalysis
+﻿namespace SoftTissue.Core.Models.ExperimentalAnalysis
 {
     /// <summary>
     /// It contains the data of experimental result and its variation rates.
@@ -41,21 +38,6 @@ namespace SoftTissue.Core.Models.ExperimentalAnalysis
         /// Unit: MPa/s (Mega-Pascal per second).
         /// </summary>
         public double? Derivative { get; set; }
-
-        /// <summary>
-        /// The stress derivative (rate) converted to degrees.
-        /// Unit: ° (Degrees).
-        /// </summary>
-        public double? RateInDegrees
-        {
-            get
-            {
-                if (Derivative == null)
-                    return null;
-
-                return Math.Atan(Derivative.Value).ToDegrees();
-            }
-        }
 
         /// <summary>
         /// The stress second derivative.
