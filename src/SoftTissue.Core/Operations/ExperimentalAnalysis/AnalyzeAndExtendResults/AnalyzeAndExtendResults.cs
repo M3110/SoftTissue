@@ -89,6 +89,8 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         /// <returns></returns>
         public double CalculateFinalSecondDerivative(double previousSecondDerivative, double? currentSecondDerivative)
         {
+            // If the current second derivative is negative, it indicates that the curve's concavity changed to downward.
+            // When it occurs, it means that some error happened while calculating the second derivative.
             if (currentSecondDerivative == null || currentSecondDerivative.IsNegative())
                 return previousSecondDerivative;
 
