@@ -1,4 +1,4 @@
-﻿using SoftTissue.Infrastructure.Models;
+﻿using SoftTissue.DataContract.Models;
 
 namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung
 {

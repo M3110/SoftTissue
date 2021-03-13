@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.DisregardRampTime;
-using SoftTissue.Infrastructure.Models;
+using SoftTissue.DataContract.Models;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction
 {

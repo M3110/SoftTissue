@@ -3,7 +3,7 @@ using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderRelaxationFunction;
-using SoftTissue.Infrastructure.Models;
+using SoftTissue.DataContract.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;

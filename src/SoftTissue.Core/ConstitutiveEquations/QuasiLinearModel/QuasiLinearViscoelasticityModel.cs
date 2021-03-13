@@ -2,7 +2,7 @@
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
-using SoftTissue.Infrastructure.Models;
+using SoftTissue.DataContract.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

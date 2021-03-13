@@ -1,5 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
-using SoftTissue.Infrastructure.Models;
+using SoftTissue.DataContract.Models;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
 {
