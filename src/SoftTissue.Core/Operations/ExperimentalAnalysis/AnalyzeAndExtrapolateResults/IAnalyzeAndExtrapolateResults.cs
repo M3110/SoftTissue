@@ -20,10 +20,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// This method calculates the second derivative.
         /// </summary>
         /// <param name="previousDerivative"></param>
+        /// <param name="previousTime"></param>
         /// <param name="currentDerivative"></param>
-        /// <param name="timeStep"></param>
+        /// <param name="currentTime"></param>
         /// <returns></returns>
-        double? CalculateSecondDerivative(double previousDerivative, double currentDerivative, double timeStep);
+        double? CalculateSecondDerivative(double previousDerivative, double previousTime, double currentDerivative, double currentTime);
 
         /// <summary>
         /// This method calculates the final second derivative to be used when extending results.
