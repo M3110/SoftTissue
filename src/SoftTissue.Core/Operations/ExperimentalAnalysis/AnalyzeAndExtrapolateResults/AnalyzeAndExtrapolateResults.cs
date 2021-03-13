@@ -20,7 +20,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
     /// </summary>
     public class AnalyzeAndExtrapolateResults : OperationBase<AnalyzeAndExtrapolateResultsRequest, AnalyzeAndExtrapolateResultsResponse, AnalyzeAndExtrapolateResultsResponseData>, IAnalyzeAndExtrapolateResults
     {
+        /// <summary>
+        /// A variable to save the previous valid derivative.
+        /// </summary>
         private double _previousDerivative;
+
         private readonly IDerivative _derivative;
 
         /// <summary>
@@ -70,13 +74,13 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// <returns></returns>
         public double? CalculateSecondDerivative(double previousDerivative, double currentDerivative, double timeStep)
         {
-            // Variavel sempre preenchida porque garante que previousDerivative é valido.
+            // If the previous derivative is valid, this value will be saved.
             if ((this._previousDerivative == 0 && previousDerivative.IsNegative()) || Math.Abs(previousDerivative) < Math.Abs(this._previousDerivative))
             {
                 this._previousDerivative = previousDerivative;
             }
 
-            // Checar se derivada atual é válida.
+            // Checks if the current derivative is valid. If not, the second derivative cannot be calculated to current time.
             if (currentDerivative.IsPositive() || (Math.Abs(currentDerivative) > Math.Abs(previousDerivative) && Math.Abs(currentDerivative) > Math.Abs(this._previousDerivative)))
             {
                 return null;
@@ -103,7 +107,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
 
             double relativeDiference = previousSecondDerivative.RelativeDiference(currentSecondDerivative.Value);
 
-            // Segunda derivada atual pode ser 0,1% da anterior?
+            // If the relative diference between the previous and current second derivative is positive, it indicates that the second derivative decrease as expected.
             if (relativeDiference.IsPositive() && relativeDiference < 1 - Constants.RelativePrecision && relativeDiference > Constants.RelativePrecision)
                 return currentSecondDerivative.Value;
 
@@ -128,7 +132,6 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// <summary>
         /// This method extends the results.
         /// </summary>
-        /// <param name="response"></param>
         /// <param name="previousResult"></param>
         /// <param name="timeStep"></param>
         /// <param name="finalSecondDerivative"></param>
