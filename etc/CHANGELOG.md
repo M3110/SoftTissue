@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Data contracts to CalculateResult operation.
 - Operation SkipPoints.
-- Operation AnalyzeAndExtendResults.
+- Operation AnalyzeAndExtrapolateResults.
 - Operation GenerateDomain.
 - Operation CalculateConvergenceTime.
 - Operation to calculate stress for experimental models.

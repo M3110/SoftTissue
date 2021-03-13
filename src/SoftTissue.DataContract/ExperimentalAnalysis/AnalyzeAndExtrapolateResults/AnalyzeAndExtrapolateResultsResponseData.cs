@@ -1,11 +1,11 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 
-namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
+namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
     /// It represents the 'data' content of AnalyzeAndPredictResults operation response.
     /// </summary>
-    public sealed class AnalyzeAndExtendResultsResponseData : OperationResponseData
+    public sealed class AnalyzeAndExtrapolateResultsResponseData : OperationResponseData
     {
         /// <summary>
         /// The file name with the experimental results analyzed and predicted.
@@ -25,6 +25,6 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
         /// <summary>
         /// The value that the stress tends.
         /// </summary>
-        public double AsymptoteStress { get; set; }
+        public double? AsymptoteStress { get; set; }
     }
 }

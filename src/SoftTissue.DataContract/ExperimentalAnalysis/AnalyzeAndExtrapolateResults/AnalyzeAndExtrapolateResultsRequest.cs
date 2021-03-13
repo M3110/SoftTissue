@@ -1,17 +1,17 @@
 ﻿using Newtonsoft.Json;
 using SoftTissue.DataContract.OperationBase;
 
-namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
+namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
     /// It represents the request content to AnalyzeAndPredictResults operation.
     /// </summary>
-    public sealed class AnalyzeAndExtendResultsRequest : OperationRequestBase
+    public sealed class AnalyzeAndExtrapolateResultsRequest : OperationRequestBase
     {
         /// <summary>
         /// Basic class constructor.
         /// </summary>
-        public AnalyzeAndExtendResultsRequest() { }
+        public AnalyzeAndExtrapolateResultsRequest() { }
 
         /// <summary>
         /// Class constructor.
@@ -22,7 +22,7 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults
         /// <param name="finalTime"></param>
         /// <param name="useFileTimeStep"></param>
         [JsonConstructor]
-        public AnalyzeAndExtendResultsRequest(
+        public AnalyzeAndExtrapolateResultsRequest(
             string fileName,
             string fileUri,
             double timeStep,

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
-using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults;
-using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults;
+using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
+using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers
@@ -28,11 +28,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("analyze-and-extend")]
-        public async Task<ActionResult<AnalyzeAndExtendResultsResponse>> CalculateStress(
-            [FromServices] IAnalyzeAndExtendResults analyzeAndExtendResults,
-            [FromQuery] AnalyzeAndExtendResultsRequest request)
+        public async Task<ActionResult<AnalyzeAndExtrapolateResultsResponse>> CalculateStress(
+            [FromServices] IAnalyzeAndExtrapolateResults analyzeAndExtendResults,
+            [FromQuery] AnalyzeAndExtrapolateResultsRequest request)
         {
-            AnalyzeAndExtendResultsResponse response = await analyzeAndExtendResults.Process(request).ConfigureAwait(false);
+            AnalyzeAndExtrapolateResultsResponse response = await analyzeAndExtendResults.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

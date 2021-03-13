@@ -4,22 +4,21 @@ using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.ExperimentalAnalysis;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.Operations.Base;
-using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults;
+using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
 using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
-namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults
+namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
     /// It is responsible to analyze the experimental results and extend.
     /// </summary>
-    public class AnalyzeAndExtendResults : OperationBase<AnalyzeAndExtendResultsRequest, AnalyzeAndExtendResultsResponse, AnalyzeAndExtendResultsResponseData>, IAnalyzeAndExtendResults
+    public class AnalyzeAndExtrapolateResults : OperationBase<AnalyzeAndExtrapolateResultsRequest, AnalyzeAndExtrapolateResultsResponse, AnalyzeAndExtrapolateResultsResponseData>, IAnalyzeAndExtrapolateResults
     {
         private double _previousDerivative;
         private readonly IDerivative _derivative;
@@ -32,13 +31,13 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         /// <summary>
         /// The base path to files.
         /// </summary>
-        private readonly string _templateBasePath = BasePaths.AnalyzeAndExtend;
+        private readonly string _templateBasePath = BasePaths.AnalyzeAndExtrapolateResults;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="derivative"></param>
-        public AnalyzeAndExtendResults(IDerivative derivative)
+        public AnalyzeAndExtrapolateResults(IDerivative derivative)
         {
             this._derivative = derivative;
         }
@@ -71,14 +70,19 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         /// <returns></returns>
         public double? CalculateSecondDerivative(double previousDerivative, double currentDerivative, double timeStep)
         {
-            if (currentDerivative.IsPositive() || Math.Abs(currentDerivative) > Math.Abs(previousDerivative))
+            // Variavel sempre preenchida porque garante que previousDerivative é valido.
+            if ((this._previousDerivative == 0 && previousDerivative.IsNegative()) || Math.Abs(previousDerivative) < Math.Abs(this._previousDerivative))
+            {
+                this._previousDerivative = previousDerivative;
+            }
+
+            // Checar se derivada atual é válida.
+            if (currentDerivative.IsPositive() || (Math.Abs(currentDerivative) > Math.Abs(previousDerivative) && Math.Abs(currentDerivative) > Math.Abs(this._previousDerivative)))
+            {
                 return null;
+            }
 
-            double secondDerivative = this._derivative.Calculate(this._previousDerivative, currentDerivative, timeStep);
-
-            this._previousDerivative = previousDerivative;
-
-            return secondDerivative;
+            return this._derivative.Calculate(this._previousDerivative, currentDerivative, timeStep);
         }
 
         /// <summary>
@@ -99,6 +103,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
 
             double relativeDiference = previousSecondDerivative.RelativeDiference(currentSecondDerivative.Value);
 
+            // Segunda derivada atual pode ser 0,1% da anterior?
             if (relativeDiference.IsPositive() && relativeDiference < 1 - Constants.RelativePrecision && relativeDiference > Constants.RelativePrecision)
                 return currentSecondDerivative.Value;
 
@@ -110,7 +115,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public double CalculateTimeStep(AnalyzeAndExtendResultsRequest request)
+        public double CalculateTimeStep(AnalyzeAndExtrapolateResultsRequest request)
         {
             // If should not use the time step at the experimental file, use the time step informed on request.
             if (request.UseFileTimeStep == false)
@@ -128,7 +133,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         /// <param name="timeStep"></param>
         /// <param name="finalSecondDerivative"></param>
         /// <returns></returns>
-        public AnalyzedExperimentalResult CalculateExtendedResult(AnalyzeAndExtendResultsResponse response, AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative)
+        public AnalyzedExperimentalResult CalculateExtendedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative)
         {
             // Step 6.1 - Creates the analyzed experimental results.
             var extendedResult = new AnalyzedExperimentalResult { Time = previousResult.Time + timeStep };
@@ -153,14 +158,6 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                 return extendedResult;
             }
 
-            // If the derivative is equals to zero, the stress reached to asymptote.
-            // Maps the time and stress to the response if the asymptote time don't have value.
-            if (response.Data.AsymptoteTime == null)
-            {
-                response.Data.AsymptoteTime = previousResult.Time;
-                response.Data.AsymptoteStress = previousResult.Stress;
-            }
-
             extendedResult.Stress = previousResult.Stress;
             extendedResult.Derivative = 0;
 
@@ -172,9 +169,9 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<AnalyzeAndExtendResultsResponse> ProcessOperation(AnalyzeAndExtendResultsRequest request)
+        protected override Task<AnalyzeAndExtrapolateResultsResponse> ProcessOperation(AnalyzeAndExtrapolateResultsRequest request)
         {
-            var response = new AnalyzeAndExtendResultsResponse { Data = new AnalyzeAndExtendResultsResponseData() };
+            var response = new AnalyzeAndExtrapolateResultsResponse { Data = new AnalyzeAndExtrapolateResultsResponseData() };
 
             string solutionFileName = this.CreateSolutionFile(request.FileName);
             using (var streamWriter = new StreamWriter(solutionFileName))
@@ -235,13 +232,20 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                     // Step 6.1 - Creates the analyzed experimental results.
                     // Step 6.2 - Calculates the derivative.
                     // Step 6.3 - Calculates the stress.
-                    AnalyzedExperimentalResult extendedResult = this.CalculateExtendedResult(response, previousResult, timeStep, finalSecondDerivative);
+                    AnalyzedExperimentalResult extendedResult = this.CalculateExtendedResult(previousResult, timeStep, finalSecondDerivative);
 
                     // Step 6.4 - Writes the results in the file.
                     csvWriter.WriteLine(extendedResult);
 
                     // Step 6.5 - Saves the current extended result to be used in the next iteration.
                     previousResult = extendedResult;
+                }
+
+                // If the derivative is equals to zero, the stress reached to asymptote, so should map the time and stress to the response.
+                if (previousResult.Derivative == 0)
+                {
+                    response.Data.AsymptoteTime = previousResult.Time;
+                    response.Data.AsymptoteStress = previousResult.Stress;
                 }
             }
 
@@ -253,11 +257,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
         }
 
         /// <summary>
-        /// This method validates the <see cref="AnalyzeAndExtendResultsRequest"/>.
+        /// This method validates the <see cref="AnalyzeAndExtrapolateResultsRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override async Task<AnalyzeAndExtendResultsResponse> ValidateOperation(AnalyzeAndExtendResultsRequest request)
+        protected override async Task<AnalyzeAndExtrapolateResultsResponse> ValidateOperation(AnalyzeAndExtrapolateResultsRequest request)
         {
             var response = await base.ValidateOperation(request);
             if (response.Success == false)
@@ -265,9 +269,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResult
                 return response;
             }
 
-            if (request.UseFileTimeStep && request.TimeStep <= 0)
+            if (request.UseFileTimeStep == false && request.TimeStep <= 0)
             {
-                response.AddError(OperationErrorCode.RequestValidationError, "If should use the time step of file, the time step passed on request must be greather than 0.");
+                response.AddError(OperationErrorCode.RequestValidationError, "If should not use the time step of file, the time step passed on request must be greather than 0.");
+
+                return response;
             }
 
             // Reads the file and add it into a variable to be used in the operation.
