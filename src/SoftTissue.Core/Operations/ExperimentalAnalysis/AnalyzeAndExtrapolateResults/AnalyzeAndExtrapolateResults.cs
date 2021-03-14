@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
-    /// It is responsible to analyze the experimental results and extend.
+    /// It is responsible to analyze the experimental results and extrapolate.
     /// </summary>
     public class AnalyzeAndExtrapolateResults : OperationBase<AnalyzeAndExtrapolateResultsRequest, AnalyzeAndExtrapolateResultsResponse, AnalyzeAndExtrapolateResultsResponseData>, IAnalyzeAndExtrapolateResults
     {
@@ -97,7 +97,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         }
 
         /// <summary>
-        /// This method calculates the final second derivative to be used when extending results.
+        /// This method calculates the final second derivative to be used when extrapolateing results.
         /// </summary>
         /// <param name="previousSecondDerivative"></param>
         /// <param name="currentSecondDerivative"></param>
@@ -122,7 +122,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         }
 
         /// <summary>
-        /// This method calculates the time step that is used when extending the results.
+        /// This method calculates the time step that is used when extrapolateing the results.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -137,16 +137,16 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         }
 
         /// <summary>
-        /// This method extends the results.
+        /// This method extrapolates the results.
         /// </summary>
         /// <param name="previousResult"></param>
         /// <param name="timeStep"></param>
         /// <param name="finalSecondDerivative"></param>
         /// <returns></returns>
-        public AnalyzedExperimentalResult CalculateExtendedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative)
+        public AnalyzedExperimentalResult CalculateExtrapolatedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative)
         {
             // Step 6.1 - Creates the analyzed experimental results.
-            var extendedResult = new AnalyzedExperimentalResult { Time = previousResult.Time + timeStep };
+            var extrapolatedResult = new AnalyzedExperimentalResult { Time = previousResult.Time + timeStep };
 
             // If the derivative is not equals to zero, it means that the stress do not tends to asymptote.
             if (previousResult.Derivative.Value != 0)
@@ -156,22 +156,21 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
 
                 // If the derivative is not negative, it means that the sign has changed.
                 // When it occurs, it is assumed that the derivative tended to zero, so the value is overwritten to zero.
-                if (derivative.IsNegative() == false)
+                if (derivative.IsPositive())
                     derivative = 0;
 
-                extendedResult.Derivative = derivative;
+                extrapolatedResult.Derivative = derivative;
 
                 // Step 6.3 - Calculates the stress.
-                double stress = previousResult.Stress + timeStep * derivative;
-                extendedResult.Stress = stress;
+                extrapolatedResult.Stress = previousResult.Stress + timeStep * derivative;
 
-                return extendedResult;
+                return extrapolatedResult;
             }
 
-            extendedResult.Stress = previousResult.Stress;
-            extendedResult.Derivative = 0;
+            extrapolatedResult.Stress = previousResult.Stress;
+            extrapolatedResult.Derivative = 0;
 
-            return extendedResult;
+            return extrapolatedResult;
         }
 
         /// <summary>
@@ -233,26 +232,26 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
                 // Step 5 - Calculates the time step.
                 double timeStep = this.CalculateTimeStep(request);
 
-                // Step 6 - Extend the results, here will be used the last second derivative to preview the next values.
+                // Step 6 - Extrapolate the results, here will be used the last second derivative to preview the next values.
                 while (previousResult.Time <= request.FinalTime)
                 {
                     // Step 6.1 - Creates the analyzed experimental results.
                     // Step 6.2 - Calculates the derivative.
                     // Step 6.3 - Calculates the stress.
-                    AnalyzedExperimentalResult extendedResult = this.CalculateExtendedResult(previousResult, timeStep, finalSecondDerivative);
+                    AnalyzedExperimentalResult extrapolateedResult = this.CalculateExtrapolatedResult(previousResult, timeStep, finalSecondDerivative);
 
                     // If the derivative is equals to zero, the stress reached to asymptote, so should map the time and stress to the response.
-                    if (extendedResult.Derivative == 0 && response.Data.AsymptoteTime.HasValue == false)
+                    if (extrapolateedResult.Derivative == 0 && response.Data.AsymptoteTime.HasValue == false)
                     {
-                        response.Data.AsymptoteTime = extendedResult.Time;
-                        response.Data.AsymptoteStress = extendedResult.Stress;
+                        response.Data.AsymptoteTime = extrapolateedResult.Time;
+                        response.Data.AsymptoteStress = extrapolateedResult.Stress;
                     }
 
                     // Step 6.4 - Writes the results in the file.
-                    csvWriter.WriteLine(extendedResult);
+                    csvWriter.WriteLine(extrapolateedResult);
 
-                    // Step 6.5 - Saves the current extended result to be used in the next iteration.
-                    previousResult = extendedResult;
+                    // Step 6.5 - Saves the current extrapolateed result to be used in the next iteration.
+                    previousResult = extrapolateedResult;
                 }
             }
 
@@ -278,7 +277,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
 
             if (request.UseFileTimeStep == false && request.TimeStep <= 0)
             {
-                response.AddError(OperationErrorCode.RequestValidationError, "If should not use the time step of file, the time step passed on request must be greather than 0.");
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "If should not use the time step of file, the time step passed on request must be greather than 0.");
 
                 return response;
             }
@@ -293,7 +292,8 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
             // The file must be at least a specific number of lines to be possible to execute the operation.
             if (this._experimentalResults.Count <= Constants.MinimumFileNumberOfLines)
             {
-                response.AddError(OperationErrorCode.RequestValidationError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.");
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.");
+                
                 return response;
             }
 

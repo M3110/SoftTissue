@@ -59,7 +59,7 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResu
         public double FinalTime { get; set; }
 
         /// <summary>
-        /// True, if should be used the time step at the file. False, if must be used the time step passed on request to extend the results.
+        /// True, if should be used the time step at the file. False, if must be used the time step passed on request to extrapolate the results.
         /// </summary>
         public bool UseFileTimeStep { get; set; }
     }

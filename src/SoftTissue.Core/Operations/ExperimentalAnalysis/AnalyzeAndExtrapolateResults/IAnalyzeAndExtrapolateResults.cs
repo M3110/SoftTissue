@@ -27,7 +27,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         double? CalculateSecondDerivative(double previousDerivative, double previousTime, double currentDerivative, double currentTime);
 
         /// <summary>
-        /// This method calculates the final second derivative to be used when extending results.
+        /// This method calculates the final second derivative to be used when extrapolateing results.
         /// </summary>
         /// <param name="previousSecondDerivative"></param>
         /// <param name="currentSecondDerivative"></param>
@@ -35,19 +35,19 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         double CalculateFinalSecondDerivative(double previousSecondDerivative, double? currentSecondDerivative);
 
         /// <summary>
-        /// This method calculates the time step that is used when extending the results.
+        /// This method calculates the time step that is used when extrapolateing the results.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         double CalculateTimeStep(AnalyzeAndExtrapolateResultsRequest request);
 
         /// <summary>
-        /// This method extends the results.
+        /// This method extrapolates the results.
         /// </summary>
         /// <param name="previousResult"></param>
         /// <param name="timeStep"></param>
         /// <param name="finalSecondDerivative"></param>
         /// <returns></returns>
-        AnalyzedExperimentalResult CalculateExtendedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative);
+        AnalyzedExperimentalResult CalculateExtrapolatedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative);
     }
 }
