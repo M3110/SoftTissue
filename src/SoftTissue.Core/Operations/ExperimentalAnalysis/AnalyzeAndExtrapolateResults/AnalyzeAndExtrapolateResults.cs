@@ -37,7 +37,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
 
         /// <summary>
         /// The header to solution file.
-        /// The file is built that way to help when using Origin to plot results.
+        /// The file is built that way to help when using Origin to plot results, separating the stress and the extrapoleted stress.
         /// </summary>
         private readonly string _fileHeader = "Time,Stress,Time,Extrapolated Stress";
 
@@ -193,12 +193,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
             using (var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
             {
                 // Step 1 - Writes the file header.
-                csvWriter.WriteHeader<AnalyzedExperimentalResult>();
-                csvWriter.NextRecord();
+                streamWriter.WriteLine(this._fileHeader);
 
                 // Step 2 - Writes the first line. It is equals to the first line of the file analyzed.
                 ExperimentalResult firstExperimentalResult = this._experimentalResults[0];
-                csvWriter.WriteLine(new AnalyzedExperimentalResult(firstExperimentalResult));
+                streamWriter.WriteLine($"{firstExperimentalResult.Time},{firstExperimentalResult.Stress},,");
 
                 // Step 3 - Writes the second line. It just have the derivative, because to calculate the second derivative needs two derivative previously calculated.
                 ExperimentalResult secondExperimentalResult = this._experimentalResults[1];
@@ -206,7 +205,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
                 var previousResult = new AnalyzedExperimentalResult(secondExperimentalResult);
                 previousResult.Derivative = this._derivative.Calculate(firstExperimentalResult.Stress, secondExperimentalResult.Stress, secondExperimentalResult.Time - firstExperimentalResult.Time);
 
-                csvWriter.WriteLine(previousResult);
+                streamWriter.WriteLine($"{previousResult.Time},{previousResult.Stress},,");
 
                 // Instantiate the variable to contain the final second derivative.
                 double finalSecondDerivative = 0;
@@ -226,7 +225,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
                     analyzedResult.SecondDerivative = this.CalculateSecondDerivative(previousResult.Derivative.Value, previousResult.Time, analyzedResult.Derivative.Value, analyzedResult.Time);
 
                     // Step 4.3 - Writes the result in the file.
-                    csvWriter.WriteLine(analyzedResult);
+                    streamWriter.WriteLine($"{analyzedResult.Time},{analyzedResult.Stress},,");
 
                     // Step 4.4 - Saves the current result to be used in the next iteration.
                     previousResult = analyzedResult;
@@ -244,20 +243,20 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
                     // Step 6.1 - Creates the analyzed experimental results.
                     // Step 6.2 - Calculates the derivative.
                     // Step 6.3 - Calculates the stress.
-                    AnalyzedExperimentalResult extrapolateedResult = this.CalculateExtrapolatedResult(previousResult, timeStep, finalSecondDerivative);
+                    AnalyzedExperimentalResult extrapolatedResult = this.CalculateExtrapolatedResult(previousResult, timeStep, finalSecondDerivative);
 
                     // If the derivative is equals to zero, the stress reached to asymptote, so should map the time and stress to the response.
-                    if (extrapolateedResult.Derivative == 0 && response.Data.AsymptoteTime.HasValue == false)
+                    if (extrapolatedResult.Derivative == 0 && response.Data.AsymptoteTime.HasValue == false)
                     {
-                        response.Data.AsymptoteTime = extrapolateedResult.Time;
-                        response.Data.AsymptoteStress = extrapolateedResult.Stress;
+                        response.Data.AsymptoteTime = extrapolatedResult.Time;
+                        response.Data.AsymptoteStress = extrapolatedResult.Stress;
                     }
 
                     // Step 6.4 - Writes the results in the file.
-                    csvWriter.WriteLine(extrapolateedResult);
+                    streamWriter.WriteLine($",,{extrapolatedResult.Time},{extrapolatedResult.Stress}");
 
                     // Step 6.5 - Saves the current extrapolateed result to be used in the next iteration.
-                    previousResult = extrapolateedResult;
+                    previousResult = extrapolatedResult;
                 }
             }
 
@@ -299,7 +298,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
             if (this._experimentalResults.Count <= Constants.MinimumFileNumberOfLines)
             {
                 response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.");
-                
+
                 return response;
             }
 
