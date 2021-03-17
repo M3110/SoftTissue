@@ -30,17 +30,23 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// </summary>
         private double _previousTime;
 
-        private readonly IDerivative _derivative;
-
         /// <summary>
         /// The experimental results obtained in the file passed on request.
         /// </summary>
         private List<ExperimentalResult> _experimentalResults;
 
         /// <summary>
+        /// The header to solution file.
+        /// The file is built that way to help when using Origin to plot results.
+        /// </summary>
+        private readonly string _fileHeader = "Time,Stress,Time,Extrapolated Stress";
+
+        /// <summary>
         /// The base path to files.
         /// </summary>
         private readonly string _templateBasePath = BasePaths.AnalyzeAndExtrapolateResults;
+
+        private readonly IDerivative _derivative;
 
         /// <summary>
         /// Class constructor.
