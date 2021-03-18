@@ -1,4 +1,4 @@
-﻿namespace SoftTissue.Infrastructure.Models
+﻿namespace SoftTissue.DataContract.Models
 {
     /// <summary>
     /// It contains the values for each iteration to Simplified Reduced Relaxation Function.

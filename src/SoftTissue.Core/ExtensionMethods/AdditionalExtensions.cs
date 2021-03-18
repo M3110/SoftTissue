@@ -1,4 +1,4 @@
-﻿using SoftTissue.Infrastructure.Models;
+﻿using SoftTissue.DataContract.Models;
 using System.Collections.Generic;
 
 namespace SoftTissue.Core.ExtensionMethods

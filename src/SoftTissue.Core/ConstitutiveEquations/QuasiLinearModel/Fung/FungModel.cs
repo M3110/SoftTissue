@@ -2,7 +2,7 @@
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
-using SoftTissue.Infrastructure.Models;
+using SoftTissue.DataContract.Models;
 using System;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
@@ -109,10 +109,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// </summary>
         /// <param name="slowRelaxationTime"></param>
         /// <param name="fastRelaxationTime"></param>
-        /// <param name="stepTime"></param>
+        /// <param name="timeStep"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public double CalculateI(double slowRelaxationTime, double fastRelaxationTime, double stepTime, double time)
+        public double CalculateI(double slowRelaxationTime, double fastRelaxationTime, double timeStep, double time)
         {
             if (time == 0)
             {
@@ -120,7 +120,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             }
 
             double initialTime = time / slowRelaxationTime;
-            double step = this.SetIntegrationStep(initialTime, stepTime);
+            double step = this.SetIntegrationStep(initialTime, timeStep);
             double finalTime = time / fastRelaxationTime > Constants.EquationE1MaximumFinalTime
                     ? Constants.EquationE1MaximumFinalTime : time / fastRelaxationTime;
 
@@ -152,7 +152,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 
                 integralTime += step;
 
-                step = this.SetIntegrationStep(integralTime, stepTime);
+                step = this.SetIntegrationStep(integralTime, timeStep);
 
                 if (integralTime > finalTime)
                 {
@@ -166,14 +166,14 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             return result;
         }
 
-        private double SetIntegrationStep(double time, double stepTime)
+        private double SetIntegrationStep(double time, double timeStep)
         {
             if (time <= 0.5)
-                return 1e-3 < stepTime ? 1e-3 : stepTime;
+                return 1e-3 < timeStep ? 1e-3 : timeStep;
             else if (time > 0.5 && time <= 1)
-                return 1e-2 < stepTime ? 1e-2 : stepTime;
+                return 1e-2 < timeStep ? 1e-2 : timeStep;
             else
-                return 1e-1 < stepTime ? 1e-1 : stepTime;
+                return 1e-1 < timeStep ? 1e-1 : timeStep;
         }
 
         /// <summary>

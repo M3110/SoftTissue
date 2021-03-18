@@ -1,5 +1,4 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel;
-using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.Core.Operations.Base.CalculateResult;
 using SoftTissue.DataContract.CalculateResult;
@@ -96,9 +95,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                         response.AddError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.", HttpStatusCode.InternalServerError);
                     }
                 }));
-
-                await Task.WhenAll(tasks).ConfigureAwait(false);
             }
+
+            await Task.WhenAll(tasks).ConfigureAwait(false);
 
             return response;
         }

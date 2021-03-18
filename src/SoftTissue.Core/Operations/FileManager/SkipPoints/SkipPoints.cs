@@ -1,4 +1,5 @@
-﻿using SoftTissue.Core.Operations.Base;
+﻿using SoftTissue.Core.Models;
+using SoftTissue.Core.Operations.Base;
 using SoftTissue.DataContract.FileManager.SkipPoints;
 using System.IO;
 using System.Threading.Tasks;

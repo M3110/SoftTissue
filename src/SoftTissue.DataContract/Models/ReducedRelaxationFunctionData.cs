@@ -1,4 +1,4 @@
-﻿namespace SoftTissue.Infrastructure.Models
+﻿namespace SoftTissue.DataContract.Models
 {
     /// <summary>
     /// It constains the input data to Reduced Relaxation Function.

@@ -1,5 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
-using SoftTissue.Infrastructure.Models;
+using SoftTissue.DataContract.Models;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
@@ -15,10 +15,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// </summary>
         /// <param name="slowRelaxationTime"></param>
         /// <param name="fastRelaxationTime"></param>
-        /// <param name="stepTime"></param>
+        /// <param name="timeStep"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateI(double slowRelaxationTime, double fastRelaxationTime, double stepTime, double time);
+        double CalculateI(double slowRelaxationTime, double fastRelaxationTime, double timeStep, double time);
 
         /// <summary>
         /// This method calculates time when the alternative and original reduced relaxation function converge.

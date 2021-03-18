@@ -19,6 +19,6 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
         /// <summary>
         /// The base path to files.
         /// </summary>
-        protected override string TemplateBasePath => Path.Combine(Constants.MaxwellModelBasePath, "Strain", "Sensitivity Anlysis");
+        protected override string TemplateBasePath => Path.Combine(BasePaths.MaxwellModel, "Strain", "Sensitivity Anlysis");
     }
 }

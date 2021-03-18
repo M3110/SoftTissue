@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using SoftTissue.DataContract.CalculateResult;
-using SoftTissue.Infrastructure.Models;
+using SoftTissue.DataContract.Models;
 using System.Collections.Generic;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStressSensitivityAnalysis

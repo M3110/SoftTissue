@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SoftTissue.Infrastructure.Models
+namespace SoftTissue.DataContract.Models
 {
     /// <summary>
     /// It contains the input data to Simplified Reduced Relaxation Function.

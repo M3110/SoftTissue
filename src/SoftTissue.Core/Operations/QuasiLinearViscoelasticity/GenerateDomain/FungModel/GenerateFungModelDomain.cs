@@ -22,7 +22,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         /// <summary>
         /// The base path to domain analysis.
         /// </summary>
-        public virtual string TemplateBasePath => Path.Combine(Constants.FungModelBasePath, "Domain");
+        public virtual string TemplateBasePath => Path.Combine(BasePaths.FungModel, "Domain");
 
         /// <summary>
         /// The header to solution file.

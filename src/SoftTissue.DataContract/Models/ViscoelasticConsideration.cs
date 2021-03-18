@@ -1,4 +1,4 @@
-﻿namespace SoftTissue.Infrastructure.Models
+﻿namespace SoftTissue.DataContract.Models
 {
     /// <summary>
     /// It contains the viscoelasticy considerations to analysis.

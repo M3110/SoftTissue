@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
-using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtendResults;
-using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtendResults;
+using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
+using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers
@@ -14,9 +14,9 @@ namespace SoftTissue.Application.Controllers
     public class ExperimentalAnalysisController : Controller
     {
         /// <summary>
-        /// It is responsible to analyze and extend the experimental results.
+        /// It is responsible to analyze and extrapolate the experimental results.
         /// </summary>
-        /// <param name="analyzeAndExtendResults"></param>
+        /// <param name="analyzeAndExtrapolateResults"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -27,12 +27,12 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("analyze-and-extend")]
-        public async Task<ActionResult<AnalyzeAndExtendResultsResponse>> CalculateStress(
-            [FromServices] IAnalyzeAndExtendResults analyzeAndExtendResults,
-            [FromQuery] AnalyzeAndExtendResultsRequest request)
+        [HttpPost("analyze-and-extrapolate")]
+        public async Task<ActionResult<AnalyzeAndExtrapolateResultsResponse>> AnalyzeAndExtrapolateResults(
+            [FromServices] IAnalyzeAndExtrapolateResults analyzeAndExtrapolateResults,
+            [FromQuery] AnalyzeAndExtrapolateResultsRequest request)
         {
-            AnalyzeAndExtendResultsResponse response = await analyzeAndExtendResults.Process(request).ConfigureAwait(false);
+            AnalyzeAndExtrapolateResultsResponse response = await analyzeAndExtrapolateResults.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

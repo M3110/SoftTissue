@@ -15,7 +15,7 @@ namespace SoftTissue.DataContract.OperationBase
         /// </summary>
         public OperationResponseBase()
         {
-            Errors = new List<OperationError>();
+            this.Errors = new List<OperationError>();
         }
 
         /// <summary>
@@ -41,59 +41,95 @@ namespace SoftTissue.DataContract.OperationBase
         /// <summary>
         /// This method adds error on list of errors.
         /// </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
         /// <param name="httpStatusCode"></param>
-        public void AddError(string code, string message, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
+        public void AddError(string errorCode, string errorMessage, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
         {
-            this.Errors.Add(new OperationError(code, message));
+            this.Errors.Add(new OperationError(errorCode, errorMessage));
 
             this.HttpStatusCode = httpStatusCode;
             this.Success = false;
         }
 
         /// <summary>
-        /// Set success to true. The HttpStatusCode will be set to 201 (Created).
+        /// This method adds a list of errors.
         /// </summary>
-        public void SetSuccessCreated()
+        /// <param name="errors"></param>
+        /// <param name="httpStatusCode"></param>
+        public void AddErrors(List<OperationError> errors, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
         {
-            this.HttpStatusCode = HttpStatusCode.Created;
+            this.Errors.AddRange(errors);
+
+            this.HttpStatusCode = httpStatusCode;
+            this.Success = false;
+        }
+
+        /// <summary>
+        /// This method sets Success to true and the HttpStatusCode to 200 (OK).
+        /// </summary>
+        public void SetSuccessOk() => this.SetSuccess(HttpStatusCode.OK);
+
+        /// <summary>
+        /// This method sets Success to true and the HttpStatusCode to 201 (Created).
+        /// </summary>
+        public void SetSuccessCreated() => this.SetSuccess(HttpStatusCode.Created);
+
+        /// <summary>
+        /// This method sets Success to true and the HttpStatusCode to 202 (Accepted).
+        /// </summary>
+        public void SetSuccessAccepted() => this.SetSuccess(HttpStatusCode.Accepted);
+
+        /// <summary>
+        /// This method sets Success to false and the HttpStatusCode to 400 (BadRequest).
+        /// </summary>
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
+        public void SetBadRequestError(string errorCode = null, string errorMessage = null) => this.SetError(HttpStatusCode.BadRequest, errorCode, errorMessage);
+
+        /// <summary>
+        /// This method sets Success to false and the HttpStatusCode to 401 (Unauthorized).
+        /// </summary>
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
+        public void SetUnauthorizedError(string errorCode = null, string errorMessage = null) => this.SetError(HttpStatusCode.Unauthorized, errorCode, errorMessage);
+
+        /// <summary>
+        /// This method sets Success to false and the HttpStatusCode to 500 (InternalServerError).
+        /// </summary>
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
+        public void SetInternalServerError(string errorCode = null, string errorMessage = null) => this.SetError(HttpStatusCode.InternalServerError, errorCode, errorMessage);
+
+        /// <summary>
+        /// This method sets Success to false and the HttpStatusCode to 501 (NotImplemented).
+        /// </summary>
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
+        public void SetNotImplementedError(string errorCode = null, string errorMessage = null) => this.SetError(HttpStatusCode.NotImplemented, errorCode, errorMessage);
+
+        /// <summary>
+        /// This method sets Sucess to true.
+        /// </summary>
+        /// <param name="httpStatusCode"></param>
+        protected void SetSuccess(HttpStatusCode httpStatusCode)
+        {
+            this.HttpStatusCode = httpStatusCode;
             this.Success = true;
         }
 
         /// <summary>
-        /// Set success to false. The HttpStatusCode will be set to 400 (BadRequest).
+        /// This method sets Success to false.
         /// </summary>
-        public void SetBadRequestError()
+        /// <param name="httpStatusCode"></param>
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
+        protected void SetError(HttpStatusCode httpStatusCode, string errorCode = null, string errorMessage = null)
         {
-            this.HttpStatusCode = HttpStatusCode.BadRequest;
-            this.Success = false;
-        }
+            if (errorMessage != null)
+                this.Errors.Add(new OperationError(errorCode, errorMessage));
 
-        /// <summary>
-        /// Set success to false. The HttpStatusCode will be set to 401 (Unauthorized).
-        /// </summary>
-        public void SetUnauthorizedError()
-        {
-            HttpStatusCode = HttpStatusCode.Unauthorized;
-            Success = false;
-        }
-
-        /// <summary>
-        /// Set Success to false. The HttpStatusCode will be set to 500 (InternalServerError).
-        /// </summary>
-        public void SetInternalServerError()
-        {
-            this.HttpStatusCode = HttpStatusCode.InternalServerError;
-            this.Success = false;
-        }
-
-        /// <summary>
-        /// Set Success to false. The HttpStatusCode will be set to 501 (NotImplemented).
-        /// </summary>
-        public void SetNotImplementedError()
-        {
-            this.HttpStatusCode = HttpStatusCode.NotImplemented;
+            this.HttpStatusCode = httpStatusCode;
             this.Success = false;
         }
     }
