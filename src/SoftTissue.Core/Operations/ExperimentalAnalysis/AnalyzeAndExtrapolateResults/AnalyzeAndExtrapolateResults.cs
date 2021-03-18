@@ -190,7 +190,6 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
 
             string solutionFileName = this.CreateSolutionFile(request.FileName);
             using (var streamWriter = new StreamWriter(solutionFileName))
-            using (var csvWriter = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
             {
                 // Step 1 - Writes the file header.
                 streamWriter.WriteLine(this._fileHeader);
