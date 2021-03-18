@@ -1,0 +1,24 @@
+{
+  "timeStep": 0.1,
+  "finalTime": 600,
+  "data": [
+    {
+      "softTissueType": "Numerial estimation",
+      "viscoelasticConsideration": 1,
+      "numerOfRelaxations": 2,
+      "strainRate": 0.001,
+      "strainDecreaseRate": 0.001,
+      "maximumStrain": 0.02,
+      "minimumStrain": 0.01,
+      "timeWithConstantMaximumStrain": 100,
+      "timeWithConstantMinimumStrain": 100,
+      "elasticStressConstant": 1000,
+      "elasticPowerConstant": 0.1,
+      "reducedRelaxationFunctionData": {
+        "relaxationIndex": 0.05,
+        "fastRelaxationTime": 0.005,
+        "slowRelaxationTime": 50
+      }
+    }
+  ]
+}

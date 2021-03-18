@@ -39,13 +39,12 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress
         {
             var inputList = new List<TInput>();
 
-            foreach (var requestData in request.RequestDataList)
+            foreach (var requestData in request.Data)
             {
                 inputList.Add(new TInput
                 {
                     FinalTime = requestData.FinalTime ?? request.FinalTime,
                     TimeStep = requestData.TimeStep ?? request.TimeStep,
-                    InitialTime = requestData.InitialTime ?? request.InitialTime,
                     InitialStrain = requestData.InitialStrain,
                     Stiffness = requestData.Stiffness,
                     Viscosity = requestData.Viscosity,

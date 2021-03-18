@@ -1,13 +1,21 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using Newtonsoft.Json;
+using SoftTissue.DataContract.CalculateResult;
 using System.Collections.Generic;
 
 namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
 {
     /// <summary>
-    /// It represents the essencial request content to CalculateStress operation.
+    /// It represents the request content to CalculateStress operation of Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStressRequest : OperationRequestBase
+    public sealed class CalculateStressRequest : CalculateResultRequest<List<CalculateStressRequestData>>
     {
-        public List<CalculateStressRequestData> RequestDataList { get; set; }
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <param name="data"></param>
+        [JsonConstructor]
+        public CalculateStressRequest(double timeStep, double finalTime, List<CalculateStressRequestData> data) : base(timeStep, finalTime, data) { }
     }
 }

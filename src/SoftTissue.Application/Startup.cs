@@ -6,11 +6,20 @@ using Microsoft.Extensions.Hosting;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell;
 using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
+using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
+using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
+using SoftTissue.Core.Operations.FileManager.SkipPoints;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
+using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel;
+using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensitivityAnalysis.MaxwellModel;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderRelaxationFunction;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderRelaxationFunction;
+using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
 
 namespace SoftTissue.Application
@@ -40,24 +49,33 @@ namespace SoftTissue.Application
         {
             services.AddScoped<IDerivative, Derivative>();
 
-            // Register Constitutive Equations to Viscoelastic Models
+            // Register Constitutive Equations to Viscoelastic Models.
             services.AddScoped<IMaxwellModel, MaxwellModel>();
             services.AddScoped<IFungModel, FungModel>();
+            services.AddScoped<ISimplifiedFungModel, SimplifiedFungModel>();
 
-            // Register Operations
+            // Register Operations for Experimental analysis.
+            services.AddScoped<IAnalyzeAndExtrapolateResults, AnalyzeAndExtrapolateResults>();
+            // Register Operations for FileManager.
+            services.AddScoped<ISkipPoints, SkipPoints>();
+            // Register Operations for Linear Viscoelastic Model.
             services.AddScoped<ICalculateMaxwellModelStress, CalculateMaxwellModelStress>();
             services.AddScoped<ICalculateMaxwellModelStrainSensitivityAnalysis, CalculateMaxwellModelStrainSensitivityAnalysis>();
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
             services.AddScoped<ICalculateMaxwellModelStressSensitivityAnalysis, CalculateMaxwellModelStressSensitivityAnalysis>();
-            services.AddScoped<ICalculateFungModelStress, CalculateFungModelStress>();
-            services.AddScoped<ICalculateFungModelStressSentivityAnalysis, CalculateFungModelStressSentivityAnalysis>();
+            // Register Operations for Quasi-Linear Viscoelastic Model.
+            services.AddScoped<ICalculateFungModelStressConsiderRampTime, CalculateFungModelStressConsiderRampTime>();
+            services.AddScoped<ICalculateSimplifiedFungModelStressConsiderRampTime, CalculateSimplifiedFungModelStressConsiderRampTime>();
+            services.AddScoped<ICalculateFungModelStressDisregardRampTime, CalculateFungModelStressDisregardRampTime>();
+            services.AddScoped<ICalculateSimplifiedFungModelStressDisregardRampTime, CalculateSimplifiedFungModelStressDisregardRampTime>();
             services.AddScoped<IGenerateFungModelDomain, GenerateFungModelDomain>();
+            services.AddScoped<ICalculateConvergenceTime, CalculateConvergenceTime>();
 
-            // Register Numerical Methods
+            // Register Numerical Methods.
             services.AddTransient<ISimpsonRuleIntegration, SimpsonRuleIntegration>();
             services.AddTransient<IDerivative, Derivative>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddSwaggerDocs();
         }

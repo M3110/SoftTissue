@@ -5,11 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="24.0.1" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SoftTissue.DataContract\SoftTissue.DataContract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Operations\QuasiLinearViscoelasticity\CalculateStressSensitivityAnalysis\FungModel\" />
   </ItemGroup>
 
 </Project>

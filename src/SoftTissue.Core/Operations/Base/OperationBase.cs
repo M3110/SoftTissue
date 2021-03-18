@@ -1,5 +1,6 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using System;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace SoftTissue.Core.Operations.Base
         protected abstract Task<TResponse> ProcessOperation(TRequest request);
 
         /// <summary>
-        /// This method validates the operation.
+        /// This method validates the request sent to operation.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -50,6 +51,9 @@ namespace SoftTissue.Core.Operations.Base
         /// <returns></returns>
         public async Task<TResponse> Process(TRequest request)
         {
+            // Sets the current culture like invariant.
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
             var response = new TResponse();
 
             try
@@ -66,7 +70,6 @@ namespace SoftTissue.Core.Operations.Base
             }
             catch (Exception ex)
             {
-                response = new TResponse();
                 response.AddError(OperationErrorCode.InternalServerError, $"{ex.Message}", HttpStatusCode.InternalServerError);
             }
 

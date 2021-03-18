@@ -3,5 +3,5 @@
     /// <summary>
     /// It represents the 'data' content of all operation response.
     /// </summary>
-    public class OperationResponseData { }
+    public abstract class OperationResponseData { }
 }

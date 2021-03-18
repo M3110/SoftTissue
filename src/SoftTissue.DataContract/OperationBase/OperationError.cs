@@ -1,7 +1,7 @@
 ﻿namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
-    /// It contains the content 'data' of the error class used in application.
+    /// It represents the content 'data' of the error class used in application.
     /// </summary>
     public sealed class OperationError
     {
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// The erro message.
+        /// The error message.
         /// </summary>
         public string Message { get; }
 

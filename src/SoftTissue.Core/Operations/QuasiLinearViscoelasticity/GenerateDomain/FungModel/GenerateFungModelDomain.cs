@@ -22,7 +22,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         /// <summary>
         /// The base path to domain analysis.
         /// </summary>
-        public virtual string TemplateBasePath => Path.Combine(Constants.FungModelBasePath, "Domain");
+        public virtual string TemplateBasePath => Path.Combine(BasePaths.FungModel, "Domain");
 
         /// <summary>
         /// The header to solution file.
@@ -34,7 +34,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         /// The header to solution file.
         /// This property depends on what wants to write on file.
         /// </summary>
-        public virtual string SolutionFileHeader => $"Time;Left Size/Right Size";
+        public virtual string SolutionFileHeader => $"Time;Left Size;Right Size";
 
         /// <summary>
         /// The main folder for each analysis.
@@ -70,7 +70,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
                     {
                         FastRelaxationTime = fastRelaxationTime,
                         SlowRelaxationTime = slowRelaxationTime,
-                        InitialTime = 0,
                         TimeStep = request.TimeStep,
                         FinalTime = request.FinalTime
                     });

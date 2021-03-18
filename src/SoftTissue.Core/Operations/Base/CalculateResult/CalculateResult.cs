@@ -1,6 +1,7 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations;
 using SoftTissue.Core.Models.Viscoelasticity;
-using SoftTissue.DataContract.OperationBase;
+using SoftTissue.DataContract.CalculateResult;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -14,9 +15,9 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
     /// <typeparam name="TResponseData"></typeparam>
     /// <typeparam name="TInput"></typeparam>
     public abstract class CalculateResult<TRequest, TResponse, TResponseData, TInput> : OperationBase<TRequest, TResponse, TResponseData>, ICalculateResult<TRequest, TResponse, TResponseData, TInput>
-        where TRequest : OperationRequestBase
-        where TResponse : OperationResponseBase<TResponseData>, new()
-        where TResponseData : OperationResponseData, new()
+        where TRequest : CalculateResultRequest
+        where TResponse : CalculateResultResponse<TResponseData>, new()
+        where TResponseData : CalculateResultResponseData, new()
         where TInput : ViscoelasticModelInput, new()
     {
         /// <summary>
@@ -36,7 +37,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         protected abstract string SolutionFileHeader { get; }
 
         /// <summary>
-        /// This method builds a list with the inputs based on the request.
+        /// This method builds a list of inputs based on the request.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -51,7 +52,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         {
             var fileInfo = new FileInfo(Path.Combine(
                 this.TemplateBasePath,
-                $"InputData_{input.SoftTissueType}.csv"));
+                $"InputData_{input.SoftTissueType}_{DateTime.UtcNow:yyyy-MM-dd}.csv"));
 
             if (fileInfo.Directory.Exists == false)
             {
@@ -70,7 +71,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         {
             var fileInfo = new FileInfo(Path.Combine(
                 this.TemplateBasePath,
-                $"Solution_{input.SoftTissueType}.csv"));
+                $"Solution_{input.SoftTissueType}_{DateTime.UtcNow:yyyy-MM-dd}.csv"));
 
             if (fileInfo.Directory.Exists == false)
             {

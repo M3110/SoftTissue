@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
+using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
+using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensitivityAnalysis.MaxwellModel;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
+using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrainSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
+using SoftTissue.DataContract.LinearViscoelasticity.CalculateStressSensitivityAnalysis;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers

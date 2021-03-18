@@ -8,8 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{E468E120-4BDD-4C72-AD36-FA44CB23642E}"
 	ProjectSection(SolutionItems) = preProject
 		etc\CHANGELOG.md = etc\CHANGELOG.md
-		etc\Equations.docx = etc\Equations.docx
-		etc\Notes.txt = etc\Notes.txt
 		etc\README.md = etc\README.md
 	EndProjectSection
 EndProject
@@ -28,13 +26,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FungModel", "FungModel", "{
 		requests\Fung Model\Numerical Approximation.json = requests\Fung Model\Numerical Approximation.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Infrastructure", "src\SoftTissue.Infrastructure\SoftTissue.Infrastructure.csproj", "{B7FF86B2-22EE-403C-9240-3DBF59154382}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.DataContract", "src\SoftTissue.DataContract\SoftTissue.DataContract.csproj", "{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Core", "src\SoftTissue.Core\SoftTissue.Core.csproj", "{A213E321-0FB1-4F42-919C-7956DD4E328A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftTissue.Application", "src\SoftTissue.Application\SoftTissue.Application.csproj", "{94B2841B-01F0-4A7B-A3F8-5723E0B26175}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Obsoleted", "Obsoleted", "{7CC90511-7B2D-422C-9F30-19D84A7989D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +40,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7FF86B2-22EE-403C-9240-3DBF59154382}.Release|Any CPU.Build.0 = Release|Any CPU
 		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,11 +57,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AB0244EC-0F89-4D3A-A983-5C7DFFD90FC0} = {800A2B1C-918C-4FE6-9A30-5857E38AE44E}
-		{B7FF86B2-22EE-403C-9240-3DBF59154382} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
+		{AB0244EC-0F89-4D3A-A983-5C7DFFD90FC0} = {7CC90511-7B2D-422C-9F30-19D84A7989D6}
 		{483EA96A-1FE7-46E0-AFB4-42C3CDD08EAC} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
 		{A213E321-0FB1-4F42-919C-7956DD4E328A} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
 		{94B2841B-01F0-4A7B-A3F8-5723E0B26175} = {E3669B78-1697-493A-9D3E-A2276A9277CE}
+		{7CC90511-7B2D-422C-9F30-19D84A7989D6} = {800A2B1C-918C-4FE6-9A30-5857E38AE44E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8EB3BFD4-D84B-40E2-AAC1-B5DC59B9923F}

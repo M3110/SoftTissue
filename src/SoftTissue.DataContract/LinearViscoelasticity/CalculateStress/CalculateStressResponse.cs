@@ -1,9 +1,9 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.CalculateResult;
 
 namespace SoftTissue.DataContract.LinearViscoelasticity.CalculateStress
 {
     /// <summary>
-    /// It contains the content of response for CalculateStress operation.
+    /// It represents the response content for CalculateStress operation of Linear Viscoelasticity Model.
     /// </summary>
-    public class CalculateStressResponse : OperationResponseBase<CalculateStressResponseData> { }
+    public sealed class CalculateStressResponse : CalculateResultResponse<CalculateStressResponseData> { }
 }

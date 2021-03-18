@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2021-03-17
+### Added
+- Data contracts to CalculateResult operation.
+- Operation SkipPoints.
+- Operation AnalyzeAndExtrapolateResults.
+- Operation GenerateDomain.
+- Operation CalculateConvergenceTime.
+- Operation to calculate stress for experimental models.
+- Enum ViscoelasticConsideration with each viscoelastic consideration.
+- Nuget package CsvHelper.
+- Nuget package Microsoft.AspNetCore.Mvc.NewtonsoftJson.
+- Nuget package Newtonsoft.Json.
+### Changed
+- Concrete classes in the DataContracts project to be sealed and 'set' method to be private.
+- Generic classes in the DataContracts project to be abstract and 'set' method to be protected.
+- Data contracts of operations that inheriting from CalculteResult inherite from CalculateResult data contract.
+- Quasi-linear operations considering multiple relaxations.
+- RelavativePrecision from 5e-3 to 1e-3 and Precision from 1e-10 to 1e-6.
+- Moved sensitivity analysis operations to a new folder.
+- CalculateStress operations for Quasi-Linear Viscoelastic model to process considering ramp time or not, or considering Reduced Relaxation Function or Simplified Reduced Relaxation Function.
+
 ## [1.1.0] - 2020-11-01
 ### Added
 - Operation CalculateResult and CalculateResultSensitivityAnalysis with the generical methods and properties shared between operations.

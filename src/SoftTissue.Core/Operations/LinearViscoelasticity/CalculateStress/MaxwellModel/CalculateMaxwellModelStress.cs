@@ -19,6 +19,6 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.Maxwe
         /// <summary>
         /// The base path to files.
         /// </summary>
-        protected override string TemplateBasePath => Path.Combine(Constants.MaxwellModelBasePath, "Stress");
+        protected override string TemplateBasePath => Path.Combine(BasePaths.MaxwellModel, "Stress");
     }
 }

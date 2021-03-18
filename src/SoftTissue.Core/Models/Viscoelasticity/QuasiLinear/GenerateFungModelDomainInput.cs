@@ -3,12 +3,14 @@
     public class GenerateFungModelDomainInput : ViscoelasticModelInput
     {
         /// <summary>
-        /// Tau 1.
+        /// The fast relaxation time. Tau 1.
+        /// Unit: s (second).
         /// </summary>
         public double FastRelaxationTime { get; set; }
 
         /// <summary>
-        /// Tau 2.
+        /// The slow relaxation time. Tau 2.
+        /// Unit: s (second).
         /// </summary>
         public double SlowRelaxationTime { get; set; }
     }
