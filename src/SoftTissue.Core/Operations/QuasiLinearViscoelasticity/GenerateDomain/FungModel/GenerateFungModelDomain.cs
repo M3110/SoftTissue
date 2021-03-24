@@ -122,12 +122,12 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         }
 
         /// <summary>
-        /// This method generates the domain for slow and fast relaxation times.
+        /// Asynchronously, this method generates the domain for slow and fast relaxation times.
         /// The valid domain is where the variables usaed for slow and fast relaxation times obey the inequation below for all times.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<GenerateDomainResponse> ProcessOperation(GenerateDomainRequest request)
+        protected override Task<GenerateDomainResponse> ProcessOperationAsync(GenerateDomainRequest request)
         {
             var response = new GenerateDomainResponse { Data = new GenerateDomainResponseData() };
             response.SetSuccessCreated();

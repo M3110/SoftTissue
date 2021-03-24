@@ -180,11 +180,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         }
 
         /// <summary>
-        /// This method analyzes and predicts the experimental results.
+        /// Asynchronously, this method analyzes and predicts the experimental results.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<AnalyzeAndExtrapolateResultsResponse> ProcessOperation(AnalyzeAndExtrapolateResultsRequest request)
+        protected override Task<AnalyzeAndExtrapolateResultsResponse> ProcessOperationAsync(AnalyzeAndExtrapolateResultsRequest request)
         {
             var response = new AnalyzeAndExtrapolateResultsResponse { Data = new AnalyzeAndExtrapolateResultsResponseData() };
 
@@ -267,13 +267,13 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         }
 
         /// <summary>
-        /// This method validates the <see cref="AnalyzeAndExtrapolateResultsRequest"/>.
+        /// Asynchronously, this method validates the <see cref="AnalyzeAndExtrapolateResultsRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override async Task<AnalyzeAndExtrapolateResultsResponse> ValidateOperation(AnalyzeAndExtrapolateResultsRequest request)
+        public override async Task<AnalyzeAndExtrapolateResultsResponse> ValidateOperationAsync(AnalyzeAndExtrapolateResultsRequest request)
         {
-            var response = await base.ValidateOperation(request);
+            var response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
             if (response.Success == false)
             {
                 return response;

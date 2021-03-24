@@ -32,7 +32,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] IAnalyzeAndExtrapolateResults analyzeAndExtrapolateResults,
             [FromQuery] AnalyzeAndExtrapolateResultsRequest request)
         {
-            AnalyzeAndExtrapolateResultsResponse response = await analyzeAndExtrapolateResults.Process(request).ConfigureAwait(false);
+            AnalyzeAndExtrapolateResultsResponse response = await analyzeAndExtrapolateResults.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

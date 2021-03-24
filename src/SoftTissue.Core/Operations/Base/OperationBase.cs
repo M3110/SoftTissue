@@ -18,26 +18,25 @@ namespace SoftTissue.Core.Operations.Base
         where TResponseData : OperationResponseData, new()
     {
         /// <summary>
-        /// This method processes the operation.
+        /// Asynchronously, this method processes the operation.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected abstract Task<TResponse> ProcessOperation(TRequest request);
+        protected abstract Task<TResponse> ProcessOperationAsync(TRequest request);
 
         /// <summary>
-        /// This method validates the request sent to operation.
+        /// Asynchronously, this method validates the request sent to operation.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual Task<TResponse> ValidateOperation(TRequest request)
+        public virtual Task<TResponse> ValidateOperationAsync(TRequest request)
         {
             var response = new TResponse();
             response.SetSuccessCreated();
 
             if (request == null)
             {
-                response.AddError(OperationErrorCode.RequestValidationError, "Request cannot be null");
-                response.SetBadRequestError();
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Request cannot be null.");
             }
 
             return Task.FromResult(response);
@@ -45,11 +44,11 @@ namespace SoftTissue.Core.Operations.Base
 
         /// <summary>
         /// The main method of all operations.
-        /// This method orchestrates the operations.
+        /// Asynchronously, this method orchestrates the operations.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<TResponse> Process(TRequest request)
+        public async Task<TResponse> ProcessAsync(TRequest request)
         {
             // Sets the current culture like invariant.
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
@@ -58,7 +57,7 @@ namespace SoftTissue.Core.Operations.Base
 
             try
             {
-                response = await ValidateOperation(request).ConfigureAwait(false);
+                response = await this.ValidateOperationAsync(request).ConfigureAwait(false);
                 if (response.Success == false)
                 {
                     response.SetBadRequestError();
@@ -66,11 +65,11 @@ namespace SoftTissue.Core.Operations.Base
                     return response;
                 }
 
-                response = await ProcessOperation(request).ConfigureAwait(false);
+                response = await this.ProcessOperationAsync(request).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                response.AddError(OperationErrorCode.InternalServerError, $"{ex.Message}", HttpStatusCode.InternalServerError);
+                response.SetInternalServerError(OperationErrorCode.InternalServerError, $"{ex.Message}");
             }
 
             return response;
