@@ -14,18 +14,18 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
         /// <summary>
-        /// This method calculates the initial conditions for Fung model analysis.
+        /// Asynchronously, this method calculates the initial conditions for Fung model analysis.
         /// </summary>
         /// <returns></returns>
-        Task<TResult> CalculateInitialConditions();
+        Task<TResult> CalculateInitialConditionsAsync();
 
         /// <summary>
-        /// This method calculates the results for a quasi-linear viscoelastic model.
+        /// Asynchronously, this method calculates the results for a quasi-linear viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        Task<TResult> CalculateResults(TInput input, double time);
+        Task<TResult> CalculateResultsAsync(TInput input, double time);
 
         /// <summary>
         /// This method calculates the strain derivative.

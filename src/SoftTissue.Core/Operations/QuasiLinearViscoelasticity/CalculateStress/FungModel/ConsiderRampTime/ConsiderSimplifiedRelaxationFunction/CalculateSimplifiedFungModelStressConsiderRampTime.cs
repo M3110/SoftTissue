@@ -101,13 +101,13 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         }
 
         /// <summary>
-        /// This method validates the request sent to operation.
+        /// Asynchronously, this method validates the request sent to operation.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override async Task<CalculateSimplifiedFungModelStressConsiderRampTimeResponse> ValidateOperation(CalculateSimplifiedFungModelStressConsiderRampTimeRequest request)
+        public override async Task<CalculateSimplifiedFungModelStressConsiderRampTimeResponse> ValidateOperationAsync(CalculateSimplifiedFungModelStressConsiderRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse response = await base.ValidateOperation(request).ConfigureAwait(false);
+            CalculateSimplifiedFungModelStressConsiderRampTimeResponse response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
 
             if (response.Success == false)
             {

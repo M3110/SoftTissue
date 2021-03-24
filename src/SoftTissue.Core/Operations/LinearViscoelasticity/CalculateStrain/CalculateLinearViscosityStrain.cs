@@ -56,11 +56,11 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain
         }
 
         /// <summary>
-        /// This method executes an analysis to calculate the strain for a linear viscoelasticity model.
+        /// Asynchronously, this method executes an analysis to calculate the strain for a linear viscoelasticity model.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateStrainResponse> ProcessOperation(CalculateStrainRequest request)
+        protected override Task<CalculateStrainResponse> ProcessOperationAsync(CalculateStrainRequest request)
         {
             var response = new CalculateStrainResponse { Data = new CalculateStrainResponseData() };
             response.SetSuccessCreated();

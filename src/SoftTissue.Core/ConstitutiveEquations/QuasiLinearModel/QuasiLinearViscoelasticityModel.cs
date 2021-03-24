@@ -31,6 +31,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// Class constructor.
         /// </summary>
         /// <param name="simpsonRuleIntegration"></param>
+        /// <param name="derivative"></param>
         public QuasiLinearViscoelasticityModel(ISimpsonRuleIntegration simpsonRuleIntegration, IDerivative derivative)
         {
             this._simpsonRuleIntegration = simpsonRuleIntegration;
@@ -38,10 +39,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         }
 
         /// <summary>
-        /// This method calculates the initial conditions for Fung model analysis.
+        /// Asynchronously, this method calculates the initial conditions for Fung model analysis.
         /// </summary>
         /// <returns></returns>
-        public virtual Task<TResult> CalculateInitialConditions()
+        public virtual Task<TResult> CalculateInitialConditionsAsync()
         {
             return Task.FromResult(new TResult
             {
@@ -55,15 +56,14 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         }
 
         /// <summary>
-        /// This method calculates the results for a quasi-linear viscoelastic model.
+        /// Asynchronously, this method calculates the results for a quasi-linear viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
-        /// <param name="streamWriter"></param>
-        public virtual async Task<TResult> CalculateResults(TInput input, double time)
+        public virtual async Task<TResult> CalculateResultsAsync(TInput input, double time)
         {
             if (time <= Constants.Precision)
-                return await this.CalculateInitialConditions();
+                return await this.CalculateInitialConditionsAsync().ConfigureAwait(false);
 
             input.RelaxationNumber = this.CalculateRelaxationNumber(input, time);
 

@@ -32,7 +32,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ISkipPoints operation,
             [FromBody] SkipPointsRequest request)
         {
-            SkipPointsResponse response = await operation.Process(request).ConfigureAwait(false);
+            SkipPointsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }
