@@ -1,9 +1,9 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
+using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
-using SoftTissue.DataContract.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,12 +15,12 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// </summary>
     public class CalculateSimplifiedFungModelStressConsiderRampTime :
         CalculateQuasiLinearViscoelasticityStress<
-            CalculateSimplifiedFungModelStressConsiderRampTimeRequest, 
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse, 
+            CalculateSimplifiedFungModelStressConsiderRampTimeRequest,
+            CalculateSimplifiedFungModelStressConsiderRampTimeResponse,
             CalculateSimplifiedFungModelStressConsiderRampTimeResponseData,
             SimplifiedFungModelInput,
             SimplifiedReducedRelaxationFunctionData,
-            SimplifiedFungModelResult>, 
+            SimplifiedFungModelResult>,
         ICalculateSimplifiedFungModelStressConsiderRampTime
     {
         /// <summary>
@@ -120,7 +120,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
 
                 if (requestData.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 {
-                    response.AddError(OperationErrorCode.RequestValidationError, $"{errorMessage}. The 'ViscoelasticConsideration' cannot be {requestData.ViscoelasticConsideration} to that operation because the ramp time must be considered.");
+                    response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"{errorMessage}. The 'ViscoelasticConsideration' cannot be {requestData.ViscoelasticConsideration} to that operation because the ramp time must be considered.");
                 }
             }
 

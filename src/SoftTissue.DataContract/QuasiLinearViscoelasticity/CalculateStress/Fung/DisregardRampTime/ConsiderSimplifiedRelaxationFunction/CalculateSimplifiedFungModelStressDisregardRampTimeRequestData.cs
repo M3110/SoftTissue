@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.DisregardRampTime;
-using SoftTissue.DataContract.Models;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction
 {
@@ -10,30 +9,9 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
     public sealed class CalculateSimplifiedFungModelStressDisregardRampTimeRequestData : CalculateStressDisregardRampTimeRequestData
     {
         /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="softTissueType"></param>
-        /// <param name="timeStep"></param>
-        /// <param name="finalTime"></param>
-        /// <param name="strain"></param>
-        /// <param name="initialStress"></param>
-        [JsonConstructor]
-        public CalculateSimplifiedFungModelStressDisregardRampTimeRequestData(
-            string softTissueType,
-            double? timeStep,
-            double? finalTime,
-            double strain,
-            double initialStress,
-            SimplifiedReducedRelaxationFunctionData reducedRelaxationFunctionData)
-            : base(softTissueType, timeStep, finalTime, strain, initialStress)
-        {
-            this.ReducedRelaxationFunctionData = reducedRelaxationFunctionData;
-        }
-
-        /// <summary>
         /// The input data to Simplified Reduced Relaxation Function.
         /// </summary>
-        public SimplifiedReducedRelaxationFunctionData ReducedRelaxationFunctionData { get; private set; }
+        public SimplifiedReducedRelaxationFunctionData ReducedRelaxationFunctionData { get; set; }
 
         /// <summary>
         /// This method creates a new instance of <see cref="CalculateSimplifiedFungModelStressDisregardRampTimeRequestData"/>.
@@ -52,6 +30,14 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fun
             SimplifiedReducedRelaxationFunctionData reducedRelaxationFunctionData, 
             double? timeStep = null, 
             double? finalTime = null)
-            => new CalculateSimplifiedFungModelStressDisregardRampTimeRequestData(softTissueType, timeStep, finalTime, strain, initialStress, reducedRelaxationFunctionData);
+            => new CalculateSimplifiedFungModelStressDisregardRampTimeRequestData
+            {
+                SoftTissueType = softTissueType, 
+                TimeStep = timeStep,
+                FinalTime = finalTime, 
+                Strain = strain, 
+                InitialStress = initialStress, 
+                ReducedRelaxationFunctionData = reducedRelaxationFunctionData
+            };
     }
 }

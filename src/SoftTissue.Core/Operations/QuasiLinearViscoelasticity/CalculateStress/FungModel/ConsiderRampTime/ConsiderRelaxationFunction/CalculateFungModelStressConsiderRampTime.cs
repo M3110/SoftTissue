@@ -122,7 +122,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
 
                 if (requestData.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 {
-                    response.AddError(OperationErrorCode.RequestValidationError, $"{errorMessage}. The 'ViscoelasticConsideration' cannot be {requestData.ViscoelasticConsideration} to that operation because the ramp time must be considered.");
+                    response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"{errorMessage}. The 'ViscoelasticConsideration' cannot be {requestData.ViscoelasticConsideration} to that operation because the ramp time must be considered.");
                 }
             }
 

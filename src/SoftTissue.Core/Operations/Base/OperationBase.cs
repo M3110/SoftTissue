@@ -1,7 +1,6 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Globalization;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.Base
@@ -36,8 +35,7 @@ namespace SoftTissue.Core.Operations.Base
 
             if (request == null)
             {
-                response.AddError(OperationErrorCode.RequestValidationError, "Request cannot be null");
-                response.SetBadRequestError();
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Request cannot be null");
             }
 
             return Task.FromResult(response);
@@ -70,7 +68,7 @@ namespace SoftTissue.Core.Operations.Base
             }
             catch (Exception ex)
             {
-                response.AddError(OperationErrorCode.InternalServerError, $"{ex.Message}", HttpStatusCode.InternalServerError);
+                response.SetInternalServerError(OperationErrorCode.InternalServerError, $"{ex.Message}");
             }
 
             return response;
