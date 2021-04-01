@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.OperationBase;
-using SoftTissue.DataContract.Models;
 
 namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
 {
@@ -10,47 +9,27 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
     public sealed class GenerateDomainRequest : OperationRequestBase
     {
         /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="timeStep"></param>
-        /// <param name="finalTime"></param>
-        /// <param name="fastRelaxationTimeList"></param>
-        /// <param name="slowRelaxationTimeList"></param>
-        [JsonConstructor]
-        public GenerateDomainRequest(
-            double timeStep, 
-            double finalTime, 
-            Value fastRelaxationTimeList, 
-            Value slowRelaxationTimeList)
-        {
-            this.TimeStep = timeStep;
-            this.FinalTime = finalTime;
-            this.FastRelaxationTimeList = fastRelaxationTimeList;
-            this.SlowRelaxationTimeList = slowRelaxationTimeList;
-        }
-
-        /// <summary>
         /// Time step.
         /// Unit: s (second).
         /// </summary>
-        public double TimeStep { get; private set; }
+        public double TimeStep { get; set; }
 
         /// <summary>
         /// Final time.
         /// Unit: s (second).
         /// </summary>
-        public double FinalTime { get; private set; }
+        public double FinalTime { get; set; }
 
         /// <summary>
         /// Tau 1.
         /// List of fast relaxation time.
         /// </summary>
-        public Value FastRelaxationTimeList { get; private set; }
+        public Value FastRelaxationTimeList { get; set; }
 
         /// <summary>
         /// Tau 2.
         /// List of slow relaxation time.
         /// </summary>
-        public Value SlowRelaxationTimeList { get; private set; }
+        public Value SlowRelaxationTimeList { get; set; }
     }
 }

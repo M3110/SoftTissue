@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.OperationBase;
 
 namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
@@ -8,34 +7,6 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResu
     /// </summary>
     public sealed class AnalyzeAndExtrapolateResultsRequest : OperationRequestBase
     {
-        /// <summary>
-        /// Basic class constructor.
-        /// </summary>
-        public AnalyzeAndExtrapolateResultsRequest() { }
-
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="fileUri"></param>
-        /// <param name="timeStep"></param>
-        /// <param name="finalTime"></param>
-        /// <param name="useFileTimeStep"></param>
-        [JsonConstructor]
-        public AnalyzeAndExtrapolateResultsRequest(
-            string fileName,
-            string fileUri,
-            double timeStep,
-            double finalTime,
-            bool useFileTimeStep)
-        {
-            this.FileName = fileName;
-            this.FileUri = fileUri;
-            this.TimeStep = timeStep;
-            this.FinalTime = finalTime;
-            this.UseFileTimeStep = useFileTimeStep;
-        }
-
         /// <summary>
         /// The file name with the experimental results.
         /// </summary>
