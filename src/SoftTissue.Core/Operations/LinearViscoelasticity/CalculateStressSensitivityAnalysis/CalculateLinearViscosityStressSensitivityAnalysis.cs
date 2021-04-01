@@ -8,7 +8,6 @@ using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -170,8 +169,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
             }
             catch (Exception ex)
             {
-                response.AddError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.", HttpStatusCode.InternalServerError);
-                response.SetInternalServerError();
+                response.SetInternalServerError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.");
             }
 
             return Task.FromResult(response);

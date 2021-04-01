@@ -39,20 +39,6 @@ namespace SoftTissue.DataContract.OperationBase
         public TResponseData Data { get; set; }
 
         /// <summary>
-        /// This method adds error on list of errors.
-        /// </summary>
-        /// <param name="errorCode"></param>
-        /// <param name="errorMessage"></param>
-        /// <param name="httpStatusCode"></param>
-        public void AddError(string errorCode, string errorMessage, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
-        {
-            this.Errors.Add(new OperationError(errorCode, errorMessage));
-
-            this.HttpStatusCode = httpStatusCode;
-            this.Success = false;
-        }
-
-        /// <summary>
         /// This method adds a list of errors.
         /// </summary>
         /// <param name="errors"></param>
@@ -128,6 +114,20 @@ namespace SoftTissue.DataContract.OperationBase
         {
             if (errorMessage != null)
                 this.Errors.Add(new OperationError(errorCode, errorMessage));
+
+            this.HttpStatusCode = httpStatusCode;
+            this.Success = false;
+        }
+
+        /// <summary>
+        /// This method adds error on list of errors.
+        /// </summary>
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
+        /// <param name="httpStatusCode"></param>
+        protected void AddError(string errorCode, string errorMessage, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
+        {
+            this.Errors.Add(new OperationError(errorCode, errorMessage));
 
             this.HttpStatusCode = httpStatusCode;
             this.Success = false;

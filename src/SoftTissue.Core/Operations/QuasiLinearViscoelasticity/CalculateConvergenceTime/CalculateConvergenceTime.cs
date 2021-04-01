@@ -79,7 +79,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConverg
 
                 if (time >= request.FinalTime)
                 {
-                    response.AddError(OperationErrorCode.InternalServerError, $"Was not possible to calculate the convergence time before {request.FinalTime} seconds.", HttpStatusCode.InternalServerError);
+                    response.SetInternalServerError(OperationErrorCode.InternalServerError, $"Was not possible to calculate the convergence time before {request.FinalTime} seconds.");
                 }
             }
 

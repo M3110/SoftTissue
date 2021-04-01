@@ -6,7 +6,6 @@ using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
@@ -92,7 +91,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                     }
                     catch (Exception ex)
                     {
-                        response.AddError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.", HttpStatusCode.InternalServerError);
+                        response.SetInternalServerError(OperationErrorCode.InternalServerError, $"Error trying to calculate and write the solutions in file. {ex.Message}.");
                     }
                 }));
             }
