@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.OperationBase;
 
 namespace SoftTissue.DataContract.FileManager.SkipPoints
 {
@@ -8,23 +7,6 @@ namespace SoftTissue.DataContract.FileManager.SkipPoints
     /// </summary>
     public sealed class SkipPointsRequest : OperationRequestBase
     {
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="fileUri"></param>
-        /// <param name="fileName"></param>
-        /// <param name="pointsToSkip"></param>
-        [JsonConstructor]
-        public SkipPointsRequest(
-            string fileUri, 
-            string fileName, 
-            int pointsToSkip)
-        {
-            this.FileUri = fileUri;
-            this.FileName = fileName;
-            this.PointsToSkip = pointsToSkip;
-        }
-
         /// <summary>
         /// The file URI.
         /// </summary>

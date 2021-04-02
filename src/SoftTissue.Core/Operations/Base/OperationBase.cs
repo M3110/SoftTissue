@@ -1,7 +1,6 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Globalization;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.Base

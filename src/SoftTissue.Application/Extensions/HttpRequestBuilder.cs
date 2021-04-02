@@ -1,6 +1,5 @@
 ﻿using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
-using SoftTissue.DataContract.Models;
 using System;
 using System.Collections.Generic;
 

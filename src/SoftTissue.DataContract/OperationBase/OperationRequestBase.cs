@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace SoftTissue.DataContract.OperationBase
+﻿namespace SoftTissue.DataContract.OperationBase
 {
     /// <summary>
     /// It represents the request content to all operations.
@@ -14,18 +12,8 @@ namespace SoftTissue.DataContract.OperationBase
     public abstract class OperationRequestBase<T> : OperationRequestBase
     {
         /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="data"></param>
-        [JsonConstructor]
-        protected OperationRequestBase(T data)
-        {
-            this.Data = data;
-        }
-
-        /// <summary>
         /// Request data.
         /// </summary>
-        public T Data { get; protected set; }
+        public T Data { get; set; }
     }
 }
