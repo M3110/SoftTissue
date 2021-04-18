@@ -21,14 +21,9 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
     public class AnalyzeAndExtrapolateResults : OperationBase<AnalyzeAndExtrapolateResultsRequest, AnalyzeAndExtrapolateResultsResponse, AnalyzeAndExtrapolateResultsResponseData>, IAnalyzeAndExtrapolateResults
     {
         /// <summary>
-        /// The last valid derivative.
+        /// The last valid result.
         /// </summary>
-        private double _previousDerivative;
-
-        /// <summary>
-        /// The time of last valid derivative.
-        /// </summary>
-        private double _previousTime;
+        private AnalyzedExperimentalResult _previousResult;
 
         /// <summary>
         /// The experimental results obtained in the file passed on request.
@@ -77,29 +72,66 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         }
 
         /// <summary>
-        /// This method calculates the second derivative.
+        /// This method analyzes the results.
         /// </summary>
-        /// <param name="previousDerivative"></param>
-        /// <param name="previousTime"></param>
-        /// <param name="currentDerivative"></param>
-        /// <param name="currentTime"></param>
+        /// <param name="previousResult"></param>
+        /// <param name="experimentalResult"></param>
         /// <returns></returns>
-        public double? CalculateSecondDerivative(double previousDerivative, double previousTime, double currentDerivative, double currentTime)
+        public AnalyzedExperimentalResult AnalyzeResults(AnalyzedExperimentalResult previousResult, ExperimentalResult experimentalResult)
         {
-            // If the previous derivative is valid, this value will be saved.
-            if ((this._previousDerivative == 0 && previousDerivative.IsNegative()) || Math.Abs(previousDerivative) < Math.Abs(this._previousDerivative))
+            // Creates the result based on the experimental result.
+            var currentResult = new AnalyzedExperimentalResult(experimentalResult);
+
+            // If the previous result is null, it means that it was the first line.
+            if (previousResult == null)
             {
-                this._previousTime = previousTime;
-                this._previousDerivative = previousDerivative;
+                // It is necessary to set the previous result like null to ensure that it will only be filled in when the current result was invalid.
+                this._previousResult = null;
+
+                currentResult.IsValid = true;
+                return currentResult;
             }
 
-            // Checks if the current derivative is valid. If not, the second derivative cannot be calculated to current time.
-            if (currentDerivative.IsPositive() || (Math.Abs(currentDerivative) > Math.Abs(previousDerivative) && Math.Abs(currentDerivative) > Math.Abs(this._previousDerivative)))
+            // The stress must decrease over the time, so the previous stress must be less than the current stress to continue to next step.
+            if (currentResult.Stress > previousResult.Stress && currentResult.Stress > this._previousResult.Stress)
             {
-                return null;
+                // Saves the previous results to be used to calculate the first and second derivatives at the next step.
+                this._previousResult = previousResult;
+
+                currentResult.IsValid = false;
+                return currentResult;
             }
 
-            return this._derivative.Calculate(this._previousDerivative, currentDerivative, currentTime - this._previousTime);
+            currentResult.Derivative = this._derivative.Calculate(previousResult.Stress, currentResult.Stress, currentResult.Time - previousResult.Time);
+
+            // The previous derivative must exists to continue to next step.
+            if (previousResult.Derivative.HasValue == false)
+            {
+                // It is necessary to set the previous result like null to ensure that it will only be filled in when the current result was invalid.
+                this._previousResult = null;
+
+                currentResult.IsValid = true;
+                return currentResult;
+            }
+
+            // The stress derivative must increase over the time, so the previous stress derivative must be greather than the current stress derivative to continue to next step.
+            if (currentResult.Derivative < previousResult.Derivative && currentResult.Derivative < this._previousResult.Derivative)
+            {
+                // Saves the previous results to be used to calculate the first and second derivatives at the next step.
+                this._previousResult = previousResult;
+
+                currentResult.IsValid = false;
+                return currentResult;
+            }
+
+            if (this._previousResult != null)
+            {
+                currentResult.SecondDerivative = this._derivative.Calculate(this._previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - this._previousResult.Time);
+                return currentResult;
+            }
+
+            currentResult.SecondDerivative = this._derivative.Calculate(previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - previousResult.Time);
+            return currentResult;
         }
 
         /// <summary>
@@ -149,7 +181,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// <param name="timeStep"></param>
         /// <param name="finalSecondDerivative"></param>
         /// <returns></returns>
-        public AnalyzedExperimentalResult CalculateExtrapolatedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative)
+        public AnalyzedExperimentalResult ExtrapolateResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative)
         {
             // Step 6.1 - Creates the analyzed experimental results.
             var extrapolatedResult = new AnalyzedExperimentalResult { Time = previousResult.Time + timeStep };
@@ -209,27 +241,20 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
                 // Instantiate the variable to contain the final second derivative.
                 double finalSecondDerivative = 0;
 
-                // Step 4 - Analyze the experimental results.
-                // Here is necessary to skip 2 lines, beacause that lines was already analyzed.
-                foreach (ExperimentalResult experimentalResult in this._experimentalResults.Skip(2))
+                // Step 4 - Analyze the experimental results avoiding the points that are invalid.
+                foreach (ExperimentalResult experimentalResult in this._experimentalResults)
                 {
-                    // Step 4.1 - Converts the experimental result.
-                    var analyzedResult = new AnalyzedExperimentalResult(experimentalResult);
+                    // Step 4.1 - Analyzes the experimental result.
+                    AnalyzedExperimentalResult analyzedResult = this.AnalyzeResults(previousResult, experimentalResult);
 
-                    // Step 4.2 - Calculates the derivative and second derivative.
-                    // For an utopian case:
-                    // - The derivative must be negative to indicates that the values is decreasing.
-                    // - The second derivative must be positive to indicate that the curve's concavity is upward.
-                    analyzedResult.Derivative = this._derivative.Calculate(previousResult.Stress, analyzedResult.Stress, analyzedResult.Time - previousResult.Time);
-                    analyzedResult.SecondDerivative = this.CalculateSecondDerivative(previousResult.Derivative.Value, previousResult.Time, analyzedResult.Derivative.Value, analyzedResult.Time);
+                    // Step 4.2 - Writes the result in the file if it is valid.
+                    if (analyzedResult.IsValid == true)
+                        streamWriter.WriteLine($"{analyzedResult.Time},{analyzedResult.Stress},,");
 
-                    // Step 4.3 - Writes the result in the file.
-                    streamWriter.WriteLine($"{analyzedResult.Time},{analyzedResult.Stress},,");
-
-                    // Step 4.4 - Saves the current result to be used in the next iteration.
+                    // Step 4.3 - Saves the current result to be used in the next iteration.
                     previousResult = analyzedResult;
 
-                    // Step 4.5 - Sets the smallest second derivative.
+                    // Step 4.4 - Sets the smallest second derivative.
                     finalSecondDerivative = this.CalculateFinalSecondDerivative(finalSecondDerivative, analyzedResult.SecondDerivative);
                 }
 
@@ -242,7 +267,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
                     // Step 6.1 - Creates the analyzed experimental results.
                     // Step 6.2 - Calculates the derivative.
                     // Step 6.3 - Calculates the stress.
-                    AnalyzedExperimentalResult extrapolatedResult = this.CalculateExtrapolatedResult(previousResult, timeStep, finalSecondDerivative);
+                    AnalyzedExperimentalResult extrapolatedResult = this.ExtrapolateResult(previousResult, timeStep, finalSecondDerivative);
 
                     // If the derivative is equals to zero, the stress reached to asymptote, so should map the time and stress to the response.
                     if (extrapolatedResult.Derivative == 0 && response.Data.AsymptoteTime.HasValue == false)

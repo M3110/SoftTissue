@@ -17,14 +17,12 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         string CreateSolutionFile(string fileName);
 
         /// <summary>
-        /// This method calculates the second derivative.
+        /// This method analyzes the results.
         /// </summary>
-        /// <param name="previousDerivative"></param>
-        /// <param name="previousTime"></param>
-        /// <param name="currentDerivative"></param>
-        /// <param name="currentTime"></param>
+        /// <param name="previousResult"></param>
+        /// <param name="experimentalResult"></param>
         /// <returns></returns>
-        double? CalculateSecondDerivative(double previousDerivative, double previousTime, double currentDerivative, double currentTime);
+        AnalyzedExperimentalResult AnalyzeResults(AnalyzedExperimentalResult previousResult, ExperimentalResult experimentalResult);
 
         /// <summary>
         /// This method calculates the final second derivative to be used when extrapolateing results.
@@ -48,6 +46,6 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// <param name="timeStep"></param>
         /// <param name="finalSecondDerivative"></param>
         /// <returns></returns>
-        AnalyzedExperimentalResult CalculateExtrapolatedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative);
+        AnalyzedExperimentalResult ExtrapolateResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative);
     }
 }
