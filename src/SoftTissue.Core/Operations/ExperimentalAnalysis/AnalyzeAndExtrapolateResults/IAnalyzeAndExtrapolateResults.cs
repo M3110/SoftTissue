@@ -5,7 +5,7 @@ using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
 namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
-    /// It is responsible to analyze and predict the experimental results.
+    /// It is responsible to analyze and extrapolate the experimental results.
     /// </summary>
     public interface IAnalyzeAndExtrapolateResults : IOperationBase<AnalyzeAndExtrapolateResultsRequest, AnalyzeAndExtrapolateResultsResponse, AnalyzeAndExtrapolateResultsResponseData> 
     {
@@ -15,14 +15,6 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// <param name="fileName"></param>
         /// <returns></returns>
         string CreateSolutionFile(string fileName);
-
-        /// <summary>
-        /// This method analyzes the results.
-        /// </summary>
-        /// <param name="previousResult"></param>
-        /// <param name="experimentalResult"></param>
-        /// <returns></returns>
-        AnalyzedExperimentalResult AnalyzeResults(AnalyzedExperimentalResult previousResult, ExperimentalResult experimentalResult);
 
         /// <summary>
         /// This method calculates the final second derivative to be used when extrapolateing results.

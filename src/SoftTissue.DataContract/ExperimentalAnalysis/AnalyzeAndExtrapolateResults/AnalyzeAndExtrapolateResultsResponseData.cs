@@ -3,12 +3,12 @@
 namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
-    /// It represents the 'data' content of AnalyzeAndPredictResults operation response.
+    /// It represents the 'data' content of AnalyzeAndExtrapolateResults operation response.
     /// </summary>
     public sealed class AnalyzeAndExtrapolateResultsResponseData : OperationResponseData
     {
         /// <summary>
-        /// The file name with the experimental results analyzed and predicted.
+        /// The file name with the experimental results analyzed and extrapolateed.
         /// </summary>
         public string FileName { get; set; }
 

@@ -10,6 +10,7 @@ using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.NumericalMethods.Integral.Simpson;
 using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
+using SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults;
 using SoftTissue.Core.Operations.FileManager.SkipPoints;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel;
@@ -56,6 +57,7 @@ namespace SoftTissue.Application
 
             // Register Operations for Experimental analysis.
             services.AddScoped<IAnalyzeAndExtrapolateResults, AnalyzeAndExtrapolateResults>();
+            services.AddScoped<IAnalyzeResults, AnalyzeResults>();
             // Register Operations for FileManager.
             services.AddScoped<ISkipPoints, SkipPoints>();
             // Register Operations for Linear Viscoelastic Model.
