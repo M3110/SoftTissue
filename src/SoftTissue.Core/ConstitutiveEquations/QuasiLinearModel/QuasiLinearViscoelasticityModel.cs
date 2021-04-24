@@ -154,41 +154,41 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
             // time = 0 
             //     --> strain = 0
-            if (time <= Constants.Precision)
+            if (time == input.InitialTime)
                 return 0;
 
-            // 0 < time <= first ramp time
+            // 0 < time < first ramp time
             //     --> strain = strain rate * time
-            if (time > Constants.Precision && time <= input.FirstRampTime)
+            if (time > input.InitialTime && time < input.FirstRampTime)
                 return input.StrainRate * time;
 
-            // first ramp time < time <= first relaxation total time
+            // first ramp time <= time < first relaxation total time
             // OBS: first relaxation total time = first ramp time + time with constant maximum strain
             //     --> strain = maximum strain
-            if (time > input.FirstRampTime && time <= input.FirstRelaxationTotalTime)
+            if (time >= input.FirstRampTime && time < input.FirstRelaxationTotalTime)
                 return input.MaximumStrain;
 
             // This part is used only for the second relaxations and next.
-            if (time > input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MaximumStrain -
                     input.StrainDecreaseRate * (time - (input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime));
 
-            if (time > this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MinimumStrain;
 
-            if (time > this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MinimumStrain +
                     input.StrainRate * (time - (this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime));
 
-            if (time > this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainIncreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainIncreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MaximumStrain;
 
             // If the time is bigger than all relaxations time, it means that it is on the last relaxation and the strain is kept at the maximum till the end of analysis.
-            if (time > input.FirstRelaxationTotalTime + (input.NumerOfRelaxations - 1) * input.RelaxationTotalTime)
+            if (time >= input.FirstRelaxationTotalTime + (input.NumerOfRelaxations - 1) * input.RelaxationTotalTime)
                 return input.MaximumStrain;
 
             // The default value returned must be equals to zero.

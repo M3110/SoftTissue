@@ -52,7 +52,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         {
             var fileInfo = new FileInfo(Path.Combine(
                 this.TemplateBasePath,
-                $"InputData_{input.SoftTissueType}_{DateTime.UtcNow:yyyy-MM-dd}.csv"));
+                $"InputData_{input.SoftTissueType}_{DateTime.Now:yyyy-MM-dd}.csv"));
 
             if (fileInfo.Directory.Exists == false)
             {
@@ -71,7 +71,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResult
         {
             var fileInfo = new FileInfo(Path.Combine(
                 this.TemplateBasePath,
-                $"Solution_{input.SoftTissueType}_{DateTime.UtcNow:yyyy-MM-dd}.csv"));
+                $"Solution_{input.SoftTissueType}_{DateTime.Now:yyyy-MM-dd}.csv"));
 
             if (fileInfo.Directory.Exists == false)
             {

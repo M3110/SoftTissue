@@ -52,6 +52,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             var response = new TResponse { Data = new TResponseData() };
             response.SetSuccessCreated();
 
+            // Step 1 - Builds the input data list based on request.
             List<TInput> inputList = this.BuildInputList(request);
 
             var tasks = new List<Task>();
@@ -60,20 +61,25 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             {
                 tasks.Add(Task.Run(async () =>
                 {
+                    // Step 2 - Saves the model's parameters in a file.
                     this.WriteInput(input);
-
-                    double time = input.InitialTime;
-
-                    var previousResult = new TResult();
 
                     try
                     {
+                        // Step 3 - Creates the solution file.
+                        // Criar propriedade FileName dentro do Input? Para já ter o nome do arquivo e poder verificar se ele existe ou não. NÃO QUERO SOBRESCREVER ARQUIVOS
+                        // Construir lista de input no validate e verificar se os arquivos existem.
                         using (var streamWriter = new StreamWriter(this.CreateSolutionFile(input)))
                         {
+                            // Step 4 - Writes the header in the file.
                             streamWriter.WriteLine(this.SolutionFileHeader);
 
+                            var previousResult = new TResult();
+
+                            double time = input.InitialTime;
                             while (time <= input.FinalTime)
                             {
+                                // Step 5 - Calculate the results.
                                 TResult result = await this._viscoelasticModel.CalculateResultsAsync(input, time).ConfigureAwait(false);
 
                                 streamWriter.WriteLine($"{time},{result}");
@@ -85,6 +91,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                                 //    time += input.TimeStep;
                                 time += input.TimeStep;
 
+                                // Step 6  - Saves the current result.
                                 previousResult = result;
                             }
                         }
@@ -96,9 +103,15 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
                 }));
             }
 
+            // TODO: preencher o fileUri e fileName do response.
+
             await Task.WhenAll(tasks).ConfigureAwait(false);
 
             return response;
         }
+
+        // TODO: adicionar validação para não permitir mais de 10 modelos no request.
+        // requestData.Cont <= 10
+        // Criar arquivo de configurações contendo a quantidade máxima de request para cada modelo e com as pastas de cada modelo e operação.
     }
 }
