@@ -68,6 +68,7 @@ namespace SoftTissue.Core.Operations.Base
             }
             catch (Exception ex)
             {
+                response.Data = null;
                 response.SetInternalServerError(OperationErrorCode.InternalServerError, $"{ex.Message}");
             }
 

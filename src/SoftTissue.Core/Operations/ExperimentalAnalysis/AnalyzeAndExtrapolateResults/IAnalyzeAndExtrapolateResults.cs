@@ -22,7 +22,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// <param name="previousSecondDerivative"></param>
         /// <param name="currentSecondDerivative"></param>
         /// <returns></returns>
-        double CalculateFinalSecondDerivative(double previousSecondDerivative, double? currentSecondDerivative);
+        double CalculateFinalSecondDerivative(double previousSecondDerivative, double currentSecondDerivative);
 
         /// <summary>
         /// This method calculates the time step that is used when extrapolateing the results.

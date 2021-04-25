@@ -1,10 +1,12 @@
 ﻿using CsvHelper;
+using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.ExperimentalAnalysis;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.Operations.Base;
 using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeResults;
 using SoftTissue.DataContract.OperationBase;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -24,15 +26,10 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         private AnalyzedExperimentalResult _previousResult;
 
         /// <summary>
-        /// The experimental results obtained in the file passed on request.
-        /// </summary>
-        private List<ExperimentalResult> _experimentalResults;
-
-        /// <summary>
         /// The header to solution file.
         /// The file is built that way to help when using Origin to plot results, separating the stress and the extrapoleted stress.
         /// </summary>
-        private readonly string _fileHeader = "Time,Stress,Time,Derivative,Second Derivative";
+        private readonly string _fileHeader = "Time,Stress";
 
         /// <summary>
         /// The base path to files.
@@ -40,6 +37,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         private readonly string _templateBasePath = BasePaths.AnalyzeResults;
 
         private readonly IDerivative _derivative;
+
+        /// <summary>
+        /// The experimental results obtained in the file passed on request.
+        /// </summary>
+        public List<ExperimentalResult> ExperimentalResults { get; set; }
 
         /// <summary>
         /// Class constructor.
@@ -59,7 +61,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         {
             var fileInfo = new FileInfo(Path.Combine(
                 this._templateBasePath,
-                $"{Path.GetFileNameWithoutExtension(fileName)}_analyze.csv"));
+                $"{Path.GetFileNameWithoutExtension(fileName)}_analyzed.csv"));
 
             if (fileInfo.Directory.Exists == false)
             {
@@ -70,70 +72,107 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         }
 
         /// <summary>
+        /// This method calculates the second valid result and its index at experimental file.
+        /// </summary>
+        /// <param name="firstResult"></param>
+        /// <param name="experimentalResults"></param>
+        /// <returns></returns>
+        public (AnalyzedExperimentalResult SecondResult, int SecondResultIndex) CalculateSecondResultAndIndex(AnalyzedExperimentalResult firstResult, List<ExperimentalResult> experimentalResults)
+        {
+            // The code below uses the method Skip(1) to avoid the first result in the list.
+            foreach (var experimentalResult in experimentalResults.Skip(1))
+            {
+                AnalyzedExperimentalResult secondResult = new AnalyzedExperimentalResult(experimentalResult);
+
+                // To be a valid result, stress must decrease over the time.
+                if (firstResult.Stress > secondResult.Stress)
+                {
+                    secondResult.Derivative = this._derivative.Calculate(firstResult.Stress, secondResult.Stress, secondResult.Time - firstResult.Time);
+                    secondResult.IsValid = true;
+
+                    int secondResultIndex = experimentalResults.IndexOf(experimentalResult);
+
+                    return (secondResult, secondResultIndex);
+                }
+            }
+
+            throw new ArgumentException("Ocurred error while calculating the second result, so, it means that in the experimental results do not exist any valid result.");
+        }
+
+        /// <summary>
+        /// This method calculates the third valid result and its index at experimental file.
+        /// </summary>
+        /// <param name="secondResult"></param>
+        /// <param name="secondResultIndex"></param>
+        /// <param name="experimentalResults"></param>
+        /// <returns></returns>
+        public (AnalyzedExperimentalResult ThirdResult, int ThirdResultIndex) CalculateThirdResultAndIndex(AnalyzedExperimentalResult secondResult, int secondResultIndex, List<ExperimentalResult> experimentalResults)
+        {
+            // The code below uses the method Skip(secondResultIndex + 1) to avoid the lines that was previously analyzed to calculate the second valid result.
+            foreach (var experimentalResult in experimentalResults.Skip(secondResultIndex + 1))
+            {
+                AnalyzedExperimentalResult thirdResult = new AnalyzedExperimentalResult(experimentalResult);
+
+                // To be a valid result, stress must decrease over the time.
+                if (secondResult.Stress > thirdResult.Stress)
+                {
+                    thirdResult.Derivative = this._derivative.Calculate(secondResult.Stress, thirdResult.Stress, thirdResult.Time - secondResult.Time);
+
+                    // To be a valid result, derivative must increase over the time.
+                    if (secondResult.Derivative < thirdResult.Derivative)
+                    {
+                        thirdResult.SecondDerivative = this._derivative.Calculate(secondResult.Derivative.Value, thirdResult.Derivative.Value, thirdResult.Time - secondResult.Time);
+                        thirdResult.IsValid = true;
+
+                        int thirdResultIndex = experimentalResults.IndexOf(experimentalResult);
+
+                        return (thirdResult, thirdResultIndex);
+                    }
+                }
+            }
+
+            throw new ArgumentException("Ocurred error while calculating the third result, so, it means that in the experimental results do not exist any valid result.");
+        }
+
+        /// <summary>
         /// This method analyzes the experimental results informing if the current result is valid.
         /// </summary>
         /// <param name="previousResult"></param>
         /// <param name="experimentalResult"></param>
         /// <returns></returns>
-        public AnalyzedExperimentalResult AnalyzeExperimentalResults(AnalyzedExperimentalResult previousResult, ExperimentalResult experimentalResult)
+        public AnalyzedExperimentalResult AnalyzeExperimentalResult(AnalyzedExperimentalResult previousResult, ExperimentalResult experimentalResult)
         {
             // Creates the result based on the experimental result.
             var currentResult = new AnalyzedExperimentalResult(experimentalResult);
 
-            // If the previous result is null, it means that it was the first line.
-            if (previousResult == null)
-            {
-                // Saves the current results to be used to calculate the first and second derivatives at the next step.
-                this._previousResult = currentResult;
-
-                currentResult.IsValid = true;
-                return currentResult;
-            }
-
-            // The stress must decrease over the time, so the previous stress must be less than the current stress to continue to next step.
-            if ((currentResult.Stress > previousResult.Stress && previousResult.IsValid == true) || currentResult.Stress > this._previousResult.Stress)
-            {
-                // Saves the previous results to be used to calculate the first and second derivatives at the next step.
-                if (previousResult.IsValid == true)
-                    this._previousResult = previousResult;
-
-                currentResult.IsValid = false;
-                return currentResult;
-            }
-
+            // Calculates the first and second derivative using the previous result passed on method.
             currentResult.Derivative = this._derivative.Calculate(previousResult.Stress, currentResult.Stress, currentResult.Time - previousResult.Time);
+            currentResult.SecondDerivative = this._derivative.Calculate(previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - previousResult.Time);
 
-            // The previous derivative must exists to continue to next step.
-            // The derivative only does not exist at the first result time.
-            if (previousResult.Derivative.HasValue == false && previousResult.Time == this._experimentalResults[0].Time)
+            if (currentResult.Derivative.IsNegative() && currentResult.SecondDerivative.IsPositive())
             {
-                // Saves the current results to be used to calculate the first and second derivatives at the next step.
                 this._previousResult = currentResult;
 
                 currentResult.IsValid = true;
                 return currentResult;
             }
 
-            // The stress derivative must increase over the time, so the previous stress derivative must be greather than the current stress derivative to continue to next step.
-            if ((currentResult.Derivative < previousResult.Derivative && previousResult.IsValid == true) || currentResult.Derivative < this._previousResult.Derivative)
+            if (this._previousResult != null)
             {
-                // Saves the previous results to be used to calculate the first and second derivatives at the next step.
-                if (previousResult.IsValid == true)
-                    this._previousResult = previousResult;
+                // Calculates the first and second derivative using the previous result passed on method.
+                currentResult.Derivative = this._derivative.Calculate(this._previousResult.Stress, currentResult.Stress, currentResult.Time - this._previousResult.Time);
+                currentResult.SecondDerivative = this._derivative.Calculate(this._previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - this._previousResult.Time);
 
-                currentResult.IsValid = false;
-                return currentResult;
+                if (currentResult.Derivative.IsNegative() && currentResult.SecondDerivative.IsPositive())
+                {
+                    this._previousResult = currentResult;
+
+                    currentResult.IsValid = true;
+                    return currentResult;
+                }
             }
 
-            if (previousResult.IsValid == true)
-            {
-                currentResult.IsValid = true;
-                currentResult.SecondDerivative = this._derivative.Calculate(previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - previousResult.Time);
-                return currentResult;
-            }
-
-            currentResult.IsValid = true;
-            currentResult.SecondDerivative = this._derivative.Calculate(this._previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - this._previousResult.Time);
+            currentResult.IsValid = false;
             return currentResult;
         }
 
@@ -144,7 +183,8 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         /// <returns></returns>
         protected override Task<AnalyzeResultsResponse> ProcessOperationAsync(AnalyzeResultsRequest request)
         {
-            var response = new AnalyzeResultsResponse { Data = new AnalyzeResultsResponseData() };
+            var response = new AnalyzeResultsResponse();
+            response.SetSuccessCreated();
 
             string solutionFileName = this.CreateSolutionFile(request.FileName);
             using (var streamWriter = new StreamWriter(solutionFileName))
@@ -152,40 +192,35 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
                 // Step 1 - Writes the file header.
                 streamWriter.WriteLine(this._fileHeader);
 
-                // Step 2 - Instantiate the previous results.
-                AnalyzedExperimentalResult previousResult = null;
+                // Step 2 - Writes the first line in the file.
+                var firstResult = new AnalyzedExperimentalResult(this.ExperimentalResults[0]);
+                streamWriter.WriteLine($"{this.ExperimentalResults[0].Time},{this.ExperimentalResults[0].Stress}");
 
-                //// Step 3 - Writes the first line in the file.
-                //var firstResult = new AnalyzedExperimentalResult(this._experimentalResults[0]);
-                //streamWriter.WriteLine($"{firstResult.Time},{firstResult.Stress},,");
-                //
-                //// Step 4 - Writes the second line in the file.
-                //var secondResult = new AnalyzedExperimentalResult(this._experimentalResults[1]);
-                //secondResult.Derivative = this._derivative.Calculate(firstResult.Stress, secondResult.Stress, secondResult.Time - firstResult.Time);
-                //streamWriter.WriteLine($"{secondResult.Time},{secondResult.Stress},{secondResult.Derivative},{secondResult.SecondDerivative}");
-                //
-                //// Step 5 - Writes the third line in the file.
-                //var thirdResult = new AnalyzedExperimentalResult(this._experimentalResults[2]);
-                //secondResult.Derivative = this._derivative.Calculate(secondResult.Stress, thirdResult.Stress, thirdResult.Time - secondResult.Time);
-                //secondResult.SecondDerivative = this._derivative.Calculate(secondResult.Stress, thirdResult.Stress, thirdResult.Time - secondResult.Time);
-                //streamWriter.WriteLine($"{secondResult.Time},{secondResult.Stress},{secondResult.Derivative},{secondResult.SecondDerivative}");
+                // Step 3 - Calculates the second result and write its in the file.
+                (AnalyzedExperimentalResult secondResult, int secondResultIndex) = this.CalculateSecondResultAndIndex(firstResult, this.ExperimentalResults);
+                streamWriter.WriteLine($"{secondResult.Time},{secondResult.Stress}");
 
-                // Step 3 - Analyze the experimental results avoiding the points that are invalid.
-                foreach (ExperimentalResult experimentalResult in this._experimentalResults)
+                // Step 4 - Calculates the third result and write its in the file.
+                // The third result is the previous result that will be used in next step.
+                (AnalyzedExperimentalResult previousResult, int previousResultIndex) = this.CalculateThirdResultAndIndex(secondResult, secondResultIndex, this.ExperimentalResults);
+                streamWriter.WriteLine($"{previousResult.Time},{previousResult.Stress}");
+
+                // Step 5 - Analyze the experimental results avoiding the points that are invalid.
+                foreach (ExperimentalResult experimentalResult in this.ExperimentalResults.Skip(previousResultIndex + 1))
                 {
-                    // Step 3.1 - Analyzes the experimental result.
-                    AnalyzedExperimentalResult analyzedResult = this.AnalyzeExperimentalResults(previousResult, experimentalResult);
+                    // Step 5.1 - Analyzes the experimental result.
+                    AnalyzedExperimentalResult analyzedResult = this.AnalyzeExperimentalResult(previousResult, experimentalResult);
 
-                    // Step 3.2 - Writes the result in the file if it is valid.
+                    // Step 5.2 - Writes the result in the file if it is valid.
                     if (analyzedResult.IsValid == true)
                         streamWriter.WriteLine($"{analyzedResult.Time},{analyzedResult.Stress},{analyzedResult.Derivative},{analyzedResult.SecondDerivative}");
 
-                    // Step 3.3 - Saves the current result to be used in the next iteration.
+                    // Step 5.3 - Saves the current result to be used in the next iteration.
                     previousResult = analyzedResult;
                 }
             }
 
-            // Step 4 - Maps to response.
+            // Step 6 - Maps to response.
             response.Data.FileUri = Path.GetDirectoryName(solutionFileName);
             response.Data.FileName = Path.GetFileName(solutionFileName);
 
@@ -209,11 +244,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
             using (var streamReader = new StreamReader(Path.Combine(request.FileUri, request.FileName)))
             using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
             {
-                this._experimentalResults = csvReader.GetRecords<ExperimentalResult>().ToList();
+                this.ExperimentalResults = csvReader.GetRecords<ExperimentalResult>().ToList();
             }
 
             // The file must be at least a specific number of lines to be possible to execute the operation.
-            if (this._experimentalResults.Count <= Constants.MinimumFileNumberOfLines)
+            if (this.ExperimentalResults.Count <= Constants.MinimumFileNumberOfLines)
             {
                 response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.");
 
