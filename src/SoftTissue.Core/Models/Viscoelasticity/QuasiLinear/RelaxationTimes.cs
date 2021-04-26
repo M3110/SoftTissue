@@ -43,5 +43,14 @@
         /// The time when the strain ends to increase.
         /// </summary>
         public double StrainIncreaseFinalTime { get; }
+
+        public bool IsEmpty()
+        {
+            if (this.StrainDecreaseStartTime == 0 && this.StrainDecreaseFinalTime == 0 &&
+                this.StrainIncreaseStartTime == 0 && this.StrainIncreaseFinalTime == 0)
+                return true;
+
+            return false;
+        }
     }
 }

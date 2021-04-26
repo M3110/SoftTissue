@@ -19,6 +19,8 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         where TInput : QuasiLinearViscoelasticityModelInput<TRelaxationFunction>, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
+        // TODO: remover ViscoelasticConsideration.ViscoelasticEffectAfterRampTime
+
         /// <summary>
         /// The important relaxation times.
         /// </summary>
@@ -66,6 +68,9 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                 return await this.CalculateInitialConditionsAsync().ConfigureAwait(false);
 
             input.RelaxationNumber = this.CalculateRelaxationNumber(input, time);
+
+            if (this._relaxationTimes.IsEmpty() == true)
+                this._relaxationTimes = this.BuildRelaxationTimes(input);
 
             var tasks = new List<Task>();
 
@@ -146,9 +151,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public override double CalculateStrain(TInput input, double time)
         {
-            if (this._relaxationTimes.Equals(default) == true)
-                this._relaxationTimes = this.BuildRelaxationTimes(input);
-
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return input.MaximumStrain;
 
@@ -203,32 +205,29 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public virtual double CalculateStrainDerivative(TInput input, double time)
         {
-            if (this._relaxationTimes.Equals(default) == true)
-                this._relaxationTimes = this.BuildRelaxationTimes(input);
-
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return 0;
 
-            if (time <= input.FirstRampTime)
+            if (time < input.FirstRampTime)
                 return input.StrainRate;
 
-            if (time > input.FirstRampTime && time <= input.FirstRelaxationTotalTime)
+            if (time >= input.FirstRampTime && time < input.FirstRelaxationTotalTime)
                 return 0;
 
-            if (time > input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return -input.StrainDecreaseRate;
 
-            if (time > this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return 0;
 
-            if (time > this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.StrainRate;
 
-            if (time > this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time <= this._relaxationTimes.StrainIncreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+            if (time >= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+                time < this._relaxationTimes.StrainIncreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return 0;
 
             // The default value returned must be equals to zero.
@@ -295,10 +294,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return input.InitialStress * this.CalculateReducedRelaxationFunction(input, time);
 
-            if (time <= Constants.Precision)
+            if (time < Constants.Precision)
                 return 0;
 
-            if (time > Constants.Precision && time <= input.FirstRampTime)
+            if (time >= Constants.Precision && time < input.FirstRampTime)
             {
                 if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
                     return this.CalculateElasticResponse(input, time);
@@ -313,7 +312,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                     });
             }
 
-            if (time <= input.FirstRelaxationTotalTime && time > input.FirstRampTime)
+            if (time < input.FirstRelaxationTotalTime && time >= input.FirstRampTime)
                 return this._simpsonRuleIntegration.Calculate(
                     (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
                     new IntegralInput
