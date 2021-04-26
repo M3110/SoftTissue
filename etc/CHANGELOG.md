@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [2.1.1] - 2021-04-26
 ### Fixed
 - File .gitignore to ignore folder bibliographies.
+### Removed
+- Folder bibliographies.
 
 ## [2.1.0] - 2021-04-25
 ### Fixed
