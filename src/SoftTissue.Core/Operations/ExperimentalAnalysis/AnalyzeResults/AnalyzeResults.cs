@@ -213,7 +213,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
 
                     // Step 5.2 - Writes the result in the file if it is valid.
                     if (analyzedResult.IsValid == true)
-                        streamWriter.WriteLine($"{analyzedResult.Time},{analyzedResult.Stress},{analyzedResult.Derivative},{analyzedResult.SecondDerivative}");
+                        streamWriter.WriteLine($"{analyzedResult.Time},{analyzedResult.Stress}");
 
                     // Step 5.3 - Saves the current result to be used in the next iteration.
                     previousResult = analyzedResult;
