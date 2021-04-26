@@ -5,7 +5,7 @@ using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults;
 namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
-    /// It is responsible to analyze and predict the experimental results.
+    /// It is responsible to analyze and extrapolate the experimental results.
     /// </summary>
     public interface IAnalyzeAndExtrapolateResults : IOperationBase<AnalyzeAndExtrapolateResultsRequest, AnalyzeAndExtrapolateResultsResponse, AnalyzeAndExtrapolateResultsResponseData> 
     {
@@ -17,22 +17,12 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         string CreateSolutionFile(string fileName);
 
         /// <summary>
-        /// This method calculates the second derivative.
-        /// </summary>
-        /// <param name="previousDerivative"></param>
-        /// <param name="previousTime"></param>
-        /// <param name="currentDerivative"></param>
-        /// <param name="currentTime"></param>
-        /// <returns></returns>
-        double? CalculateSecondDerivative(double previousDerivative, double previousTime, double currentDerivative, double currentTime);
-
-        /// <summary>
         /// This method calculates the final second derivative to be used when extrapolateing results.
         /// </summary>
         /// <param name="previousSecondDerivative"></param>
         /// <param name="currentSecondDerivative"></param>
         /// <returns></returns>
-        double CalculateFinalSecondDerivative(double previousSecondDerivative, double? currentSecondDerivative);
+        double CalculateFinalSecondDerivative(double previousSecondDerivative, double currentSecondDerivative);
 
         /// <summary>
         /// This method calculates the time step that is used when extrapolateing the results.
@@ -48,6 +38,6 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
         /// <param name="timeStep"></param>
         /// <param name="finalSecondDerivative"></param>
         /// <returns></returns>
-        AnalyzedExperimentalResult CalculateExtrapolatedResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative);
+        AnalyzedExperimentalResult ExtrapolateResult(AnalyzedExperimentalResult previousResult, double timeStep, double finalSecondDerivative);
     }
 }
