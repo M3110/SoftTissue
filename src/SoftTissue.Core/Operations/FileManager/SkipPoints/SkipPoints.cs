@@ -12,11 +12,11 @@ namespace SoftTissue.Core.Operations.FileManager.SkipPoints
     public class SkipPoints : OperationBase<SkipPointsRequest, SkipPointsResponse, SkipPointsResponseData>, ISkipPoints
     {
         /// <summary>
-        /// This method skips points into the file, increasing the time step and generating a new file.
+        /// Asynchronously, this method skips points into the file, increasing the time step and generating a new file.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<SkipPointsResponse> ProcessOperation(SkipPointsRequest request)
+        protected override Task<SkipPointsResponse> ProcessOperationAsync(SkipPointsRequest request)
         {
             var response = new SkipPointsResponse { Data = new SkipPointsResponseData() };
 

@@ -147,11 +147,11 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
         }
 
         /// <summary>
-        /// This method executes an analysis to calculate the stress for a linear viscoelasticity model.
+        /// Asynchronously, this method executes an analysis to calculate the stress for a linear viscoelasticity model.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateStressResponse> ProcessOperation(CalculateStressSensitivityAnalysisRequest request)
+        protected override Task<CalculateStressResponse> ProcessOperationAsync(CalculateStressSensitivityAnalysisRequest request)
         {
             var response = new CalculateStressResponse { Data = new CalculateStressResponseData() };
             response.SetSuccessCreated();

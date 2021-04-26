@@ -42,7 +42,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ICalculateFungModelStressConsiderRampTime operation,
             [FromBody] CalculateFungModelStressConsiderRampTimeRequest request)
         {
-            CalculateFungModelStressConsiderRampTimeResponse response = await operation.Process(request).ConfigureAwait(false);
+            CalculateFungModelStressConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -65,7 +65,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ICalculateFungModelStressDisregardRampTime operation,
             [FromBody] CalculateFungModelStressDisregardRampTimeRequest request)
         {
-            CalculateFungModelStressDisregardRampTimeResponse response = await operation.Process(request).ConfigureAwait(false);
+            CalculateFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -88,7 +88,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ICalculateSimplifiedFungModelStressConsiderRampTime operation,
             [FromBody] CalculateSimplifiedFungModelStressConsiderRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse response = await operation.Process(request).ConfigureAwait(false);
+            CalculateSimplifiedFungModelStressConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -111,7 +111,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ICalculateSimplifiedFungModelStressDisregardRampTime operation,
             [FromBody] CalculateSimplifiedFungModelStressDisregardRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.Process(request).ConfigureAwait(false);
+            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -134,7 +134,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ICalculateSimplifiedFungModelStressDisregardRampTime operation,
             [FromBody] CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest request)
         {
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.Process(request.CreateQuasiLinearRequest()).ConfigureAwait(false);
+            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request.CreateQuasiLinearRequest()).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -204,7 +204,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] IGenerateFungModelDomain operation,
             [FromBody] GenerateDomainRequest request)
         {
-            GenerateDomainResponse response = await operation.Process(request).ConfigureAwait(false);
+            GenerateDomainResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -227,7 +227,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ICalculateConvergenceTime operation,
             [FromQuery] CalculateConvergenceTimeRequest request)
         {
-            CalculateConvergenceTimeResponse response = await operation.Process(request).ConfigureAwait(false);
+            CalculateConvergenceTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response;
         }
     }

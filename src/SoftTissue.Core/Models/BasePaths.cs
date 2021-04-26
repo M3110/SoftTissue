@@ -53,6 +53,11 @@ namespace SoftTissue.Core.Models
         public static string AnalyzeAndExtrapolateResults => Path.Combine(BasePaths.Experimental, "Analyze and extrapolate");
 
         /// <summary>
+        /// The base path to response files of AnalyzeResults operation.
+        /// </summary>
+        public static string AnalyzeResults => Path.Combine(BasePaths.Experimental, "Analyze");
+
+        /// <summary>
         /// The base path to response files of SkipPoints operation.
         /// </summary>
         public static string SkipPoints => Path.Combine(BasePaths.Experimental, "Skip points");

@@ -43,11 +43,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
         public abstract void WriteInput(TInput input);
 
         /// <summary>
-        /// This method executes an analysis to calculate the stress for a quasi-linear viscoelasticity model.
+        /// Asynchronously, this method executes an analysis to calculate the stress for a quasi-linear viscoelasticity model.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override async Task<TResponse> ProcessOperation(TRequest request)
+        protected override async Task<TResponse> ProcessOperationAsync(TRequest request)
         {
             var response = new TResponse { Data = new TResponseData() };
             response.SetSuccessCreated();
@@ -74,7 +74,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 
                             while (time <= input.FinalTime)
                             {
-                                TResult result = await this._viscoelasticModel.CalculateResults(input, time).ConfigureAwait(false);
+                                TResult result = await this._viscoelasticModel.CalculateResultsAsync(input, time).ConfigureAwait(false);
 
                                 streamWriter.WriteLine($"{time},{result}");
 
@@ -99,11 +99,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
             await Task.WhenAll(tasks).ConfigureAwait(false);
 
             return response;
-        }
-
-        protected int CalculateRelaxationNumber(TInput input, double time)
-        {
-            throw new NotImplementedException();
         }
     }
 }

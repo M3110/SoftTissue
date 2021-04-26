@@ -44,5 +44,10 @@
         /// Unit: MPa/s² (Mega-Pascal per second squared).
         /// </summary>
         public double? SecondDerivative { get; set; }
+
+        /// <summary>
+        /// True, if the result is valid. Otherwise, false.
+        /// </summary>
+        public bool IsValid { get; set; }
     }
 }

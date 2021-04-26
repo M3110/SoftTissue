@@ -19,13 +19,13 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConverg
             this._simpsonRuleIntegration = simpsonRuleIntegration;
         }
 
-        protected override async Task<CalculateConvergenceTimeResponse> ProcessOperation(CalculateConvergenceTimeRequest request)
+        protected override async Task<CalculateConvergenceTimeResponse> ProcessOperationAsync(CalculateConvergenceTimeRequest request)
         {
             var response = new CalculateConvergenceTimeResponse { Data = new CalculateConvergenceTimeResponseData() };
 
             var tasks = new List<Task>();
-            tasks.Add(Task.Run(async () => await this.CalculateConvergenceTimeFirstWay(request)));
-            tasks.Add(Task.Run(async () => await this.CalculateConvergenceTimeSecondWay(request)));
+            tasks.Add(Task.Run(async () => await this.CalculateConvergenceTimeFirstWay(request).ConfigureAwait(false)));
+            tasks.Add(Task.Run(async () => await this.CalculateConvergenceTimeSecondWay(request).ConfigureAwait(false)));
 
             await Task.WhenAll(tasks).ConfigureAwait(false);
 

@@ -3,7 +3,7 @@
 namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeAndExtrapolateResults
 {
     /// <summary>
-    /// It represents the request content to AnalyzeAndPredictResults operation.
+    /// It represents the request content to AnalyzeAndExtrapolateResults operation.
     /// </summary>
     public sealed class AnalyzeAndExtrapolateResultsRequest : OperationRequestBase
     {
