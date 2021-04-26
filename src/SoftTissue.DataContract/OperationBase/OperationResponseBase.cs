@@ -8,7 +8,7 @@ namespace SoftTissue.DataContract.OperationBase
     /// </summary>
     /// <typeparam name="TResponseData"></typeparam>
     public abstract class OperationResponseBase<TResponseData>
-        where TResponseData : OperationResponseData
+        where TResponseData : OperationResponseData, new()
     {
         /// <summary>
         /// Class constructor.
@@ -16,6 +16,7 @@ namespace SoftTissue.DataContract.OperationBase
         public OperationResponseBase()
         {
             this.Errors = new List<OperationError>();
+            this.Data = new TResponseData();
         }
 
         /// <summary>
