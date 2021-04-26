@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
 - Improved QuasiLinearViscoelasticityModel based on bibliographies.
 
+## [2.1.1] - 2021-04-26
+### Fixed
+- File .gitignore to ignore folder bibliographies.
+### Removed
+- Folder bibliographies.
+
 ## [2.1.0] - 2021-04-25
 ### Fixed
 - Operation AnalyzeAndExtrapolateResults that was writing invalid results in the solution file and moved main parts that analyze the results to a new operation.
