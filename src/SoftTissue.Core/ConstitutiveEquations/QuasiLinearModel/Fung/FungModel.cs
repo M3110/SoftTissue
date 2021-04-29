@@ -31,17 +31,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <returns></returns>
         public override double CalculateReducedRelaxationFunction(FungModelInput input, double time)
         {
-            // When considering that the viscoelastic effect ocurrer just after the ramp time, the reduced relaxation function must not
-            // be considered in calculations and, after the ramp time, the time that will be used, must be adjusted to the initial time
-            // be the ramp time.
-            if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
-            {
-                if (time <= input.FirstRampTime)
-                    return 1;
-                else
-                    time -= input.FirstRampTime;
-            }
-
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
             // is called in another methods, that error must be considered to times near to zero.
@@ -68,22 +57,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         public override double CalculateReducedRelaxationFunctionDerivative(FungModelInput input, double time)
         {
             var reducedRelaxationFunctionInput = input.ReducedRelaxationFunctionInput;
-
-            // When considering that the viscoelastic effect ocurrer just after the ramp time, the reduced relaxation function must not
-            // be considered in calculations and, after the rampa time, the time that will be used, must be adjusted to the initial time
-            // be the ramp time.
-            if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
-            {
-                if (time <= input.FirstRampTime)
-                {
-                    return
-                        reducedRelaxationFunctionInput.RelaxationIndex
-                        * (-1 / reducedRelaxationFunctionInput.FastRelaxationTime + 1 / reducedRelaxationFunctionInput.SlowRelaxationTime)
-                        / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
-                }
-                else
-                    time -= input.FirstRampTime;
-            }
 
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function

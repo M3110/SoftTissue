@@ -299,9 +299,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
             if (time >= Constants.Precision && time < input.FirstRampTime)
             {
-                if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
-                    return this.CalculateElasticResponse(input, time);
-
                 return this._simpsonRuleIntegration.Calculate(
                     (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
                     new IntegralInput

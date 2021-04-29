@@ -27,17 +27,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
         /// <returns></returns>
         public override double CalculateReducedRelaxationFunction(SimplifiedFungModelInput input, double time)
         {
-            // When considering that the viscoelastic effect ocurrer just after the ramp time, the reduced relaxation function must not
-            // be considered in calculations and, after the rampa time, the time that will be used, must be adjusted to the initial time
-            // be the ramp time.
-            if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
-            {
-                if (time <= input.FirstRampTime)
-                    return 1;
-
-                return time -= input.FirstRampTime;
-            }
-
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
             // is called in another methods, that error must be considered to times near to zero.
@@ -64,17 +53,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
         /// <returns></returns>
         public override double CalculateReducedRelaxationFunctionDerivative(SimplifiedFungModelInput input, double time)
         {
-            // When considering that the viscoelastic effect ocurrer just after the ramp time, the reduced relaxation function must not
-            // be considered in calculations and, after the rampa time, the time that will be used, must be adjusted to the initial time
-            // be the ramp time.
-            if (input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTime)
-            {
-                if (time <= input.FirstRampTime)
-                    return 0;
-                else
-                    time -= input.FirstRampTime;
-            }
-
             // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
             // is called in another methods, that error must be considered to times near to zero.
