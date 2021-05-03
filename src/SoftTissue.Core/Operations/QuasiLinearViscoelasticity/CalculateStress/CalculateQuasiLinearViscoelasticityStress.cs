@@ -112,6 +112,6 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 
         // TODO: adicionar validação para não permitir mais de 10 modelos no request.
         // requestData.Cont <= 10
-        // Criar arquivo de configurações contendo a quantidade máxima de request para cada modelo e com as pastas de cada modelo e operação.
+        // Criar arquivo de configurações contendo a quantidade máxima de request.Data para cada modelo e com as pastas de cada modelo e operação.
     }
 }
