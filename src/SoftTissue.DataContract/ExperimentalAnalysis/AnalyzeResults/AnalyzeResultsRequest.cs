@@ -1,4 +1,5 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.Models;
+using SoftTissue.DataContract.OperationBase;
 
 namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeResults
 {
@@ -16,5 +17,10 @@ namespace SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeResults
         /// The file URI.
         /// </summary>
         public string FileUri { get; set; }
+
+        /// <summary>
+        /// The stress direction, indicating if stress increase or decrease.
+        /// </summary>
+        public StressDirection StressDirection { get; set; }
     }
 }

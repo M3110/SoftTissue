@@ -1,5 +1,4 @@
-﻿using CsvHelper;
-using SoftTissue.Core.ExtensionMethods;
+﻿using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.ExperimentalAnalysis;
 using SoftTissue.Core.Operations.Base;
@@ -9,7 +8,6 @@ using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeResults;
 using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
