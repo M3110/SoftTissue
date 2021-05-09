@@ -170,7 +170,6 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
                 {
                     thirdResult.Derivative = this._derivative.Calculate(secondResult.Stress, thirdResult.Stress, thirdResult.Time - secondResult.Time);
 
-                    // To be a valid result, derivative must increase over the time.
                     if (this.IsDerivativeValid(secondResult.Derivative.Value, thirdResult.Derivative.Value, stressDirection))
                     {
                         thirdResult.SecondDerivative = this._derivative.Calculate(secondResult.Derivative.Value, thirdResult.Derivative.Value, thirdResult.Time - secondResult.Time);
