@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Enum StressDirection that indicates if the stress is increasing or decreasing.
  - Property StressDirection in AnalyzeResultsRequest.
 ### Changed
- - Operation AnalyzeResults to also consider when the stress increase.
+- Operation AnalyzeResults to also consider when the stress increase.
+- Changed SkipPoints controller to use FromQuery instead of FromBody.
 
 ## [2.1.2] - 2021-04-26
 ### Fixed
