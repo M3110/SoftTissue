@@ -30,7 +30,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("skip-points")]
         public async Task<ActionResult<SkipPointsResponse>> SkipPoints(
             [FromServices] ISkipPoints operation,
-            [FromBody] SkipPointsRequest request)
+            [FromQuery] SkipPointsRequest request)
         {
             SkipPointsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
