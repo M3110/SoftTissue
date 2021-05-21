@@ -11,7 +11,7 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
         public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double time)
             where TInput : ViscoelasticModelInput
         {
-            double currentValue = Equation(input, time);
+            double currentValue = Equation(input, time - input.TimeStep);
             double nextValue = Equation(input, time + input.TimeStep);
 
             return (nextValue - currentValue) / input.TimeStep;
@@ -19,7 +19,7 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
 
         public double Calculate(Func<double, double> Equation, double step, double time)
         {
-            double currentValue = Equation(time);
+            double currentValue = Equation(time - step);
             double nextValue = Equation(time + step);
 
             return (nextValue - currentValue) / step;
