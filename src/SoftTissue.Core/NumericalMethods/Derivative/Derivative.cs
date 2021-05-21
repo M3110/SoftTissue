@@ -14,7 +14,7 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
             double currentValue = Equation(input, time - input.TimeStep);
             double nextValue = Equation(input, time + input.TimeStep);
 
-            return (nextValue - currentValue) / input.TimeStep;
+            return (nextValue - currentValue) / (2 * input.TimeStep);
         }
 
         public double Calculate(Func<double, double> Equation, double step, double time)
@@ -22,7 +22,7 @@ namespace SoftTissue.Core.NumericalMethods.Derivative
             double currentValue = Equation(time - step);
             double nextValue = Equation(time + step);
 
-            return (nextValue - currentValue) / step;
+            return (nextValue - currentValue) / (2 * step);
         }
 
         public double Calculate(double initialPoint, double finalPoint, double step)
