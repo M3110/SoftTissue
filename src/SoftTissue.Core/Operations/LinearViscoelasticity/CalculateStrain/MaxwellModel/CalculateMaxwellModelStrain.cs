@@ -1,6 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell;
 using SoftTissue.Core.Models;
-using SoftTissue.Core.Models.Viscoelasticity.Linear;
+using SoftTissue.Core.Models.Viscoelasticity.Linear.Maxwell;
 using System.IO;
 
 namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel

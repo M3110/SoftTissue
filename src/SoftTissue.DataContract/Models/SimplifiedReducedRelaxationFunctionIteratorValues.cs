@@ -7,6 +7,7 @@
     {
         /// <summary>
         /// The viscoelastic stiffness. The constante that multiplies the exponencial.
+        /// Dimensionless.
         /// </summary>
         public double ViscoelasticStiffness { get; set; }
 

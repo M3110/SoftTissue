@@ -1,32 +1,17 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
-using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
     /// <summary>
-    /// It represents the quasi-linear viscoelastic model.
+    /// It represents a quasi-linear viscoelastic model.
     /// </summary>
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <typeparam name="TRelaxationFunction"></typeparam>
-    public interface IQuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction> : IViscoelasticModel<TInput>
+    public interface IQuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction> : IViscoelasticModel<TInput, TResult>
         where TInput : QuasiLinearViscoelasticityModelInput<TRelaxationFunction>, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
-        /// <summary>
-        /// Asynchronously, this method calculates the initial conditions for Fung model analysis.
-        /// </summary>
-        /// <returns></returns>
-        Task<TResult> CalculateInitialConditionsAsync();
-
-        /// <summary>
-        /// Asynchronously, this method calculates the results for a quasi-linear viscoelastic model.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        Task<TResult> CalculateResultsAsync(TInput input, double time);
-
         /// <summary>
         /// This method calculates the strain derivative.
         /// </summary>
@@ -78,7 +63,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
         /// <summary>
         /// This method calculates the stress using the equation 8.b from Fung, at page 279.
-        /// That equation do not returns a satisfactory result.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>

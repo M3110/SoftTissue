@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations
 {
@@ -6,9 +7,24 @@ namespace SoftTissue.Core.ConstitutiveEquations
     /// It represents a generic viscoelastic model.
     /// </summary>
     /// <typeparam name="TInput"></typeparam>
-    public interface IViscoelasticModel<TInput>
+    /// <typeparam name="TResult"></typeparam>
+    public interface IViscoelasticModel<TInput, TResult>
         where TInput : ViscoelasticModelInput, new()
+        where TResult : ViscoelasticModelResult, new()
     {
+        /// <summary>
+        /// Asynchronously, this method calculates the initial conditions for a generic viscoelastic model analysis.
+        /// </summary>
+        /// <returns></returns>
+        Task<TResult> CalculateInitialConditionsAsync();
+
+        /// <summary>
+        /// Asynchronously, this method calculates the results for a generic viscoelastic model analysis.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        Task<TResult> CalculateResultsAsync(TInput input, double time);
+
         /// <summary>
         /// This method calculates the stress for a specific time.
         /// </summary>

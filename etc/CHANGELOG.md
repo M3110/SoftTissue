@@ -5,15 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## UNRELEASED
+### Changed
+ - Improved generalizations at Viscoelastic Models.
+ - Operation AnalyzeResults to also consider when the stress increase.
+ - Changed SkipPoints controller to use FromQuery instead of FromBody.
+### Added
+ - Methods CalculateResultsAsync and CalculateInitialConditionsAsync to be generic for viscoelastic models.
+ - Enum StressDirection that indicates if the stress is increasing or decreasing.
+ - Property StressDirection in AnalyzeResultsRequest.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.
-### Added
- - Enum StressDirection that indicates if the stress is increasing or decreasing.
- - Property StressDirection in AnalyzeResultsRequest.
-### Changed
- - Operation AnalyzeResults to also consider when the stress increase.
- - Changed SkipPoints controller to use FromQuery instead of FromBody.
 
 ## [2.1.2] - 2021-04-26
 ### Fixed

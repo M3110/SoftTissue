@@ -8,7 +8,7 @@ using System;
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
 {
     /// <summary>
-    /// It represents the viscoelastic Fung Model considering the Simplified Relaxation Function.
+    /// It represents the Fung Model considering the Simplified Relaxation Function.
     /// </summary>
     public class SimplifiedFungModel : QuasiLinearViscoelasticityModel<SimplifiedFungModelInput, SimplifiedFungModelResult, SimplifiedReducedRelaxationFunctionData>, ISimplifiedFungModel
     {
@@ -31,9 +31,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
             // is called in another methods, that error must be considered to times near to zero.
             if (time <= Constants.Precision)
-            {
                 return 1;
-            }
 
             double result = input.ReducedRelaxationFunctionInput.FirstViscoelasticStiffness;
 
@@ -53,14 +51,6 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
         /// <returns></returns>
         public override double CalculateReducedRelaxationFunctionDerivative(SimplifiedFungModelInput input, double time)
         {
-            // Here is applied the boundary conditions for Reduced Relaxation Function for time equals to zero.
-            // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
-            // is called in another methods, that error must be considered to times near to zero.
-            if (time <= Constants.Precision)
-            {
-                return 0;
-            }
-
             double result = 0;
 
             foreach (var iteratorValues in input.ReducedRelaxationFunctionInput.IteratorValues)

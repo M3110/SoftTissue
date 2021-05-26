@@ -10,17 +10,15 @@ using System.Threading.Tasks;
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
     /// <summary>
-    /// It represents the quasi-linear viscoelastic model.
+    /// It represents a quasi-linear viscoelastic model.
     /// </summary>
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <typeparam name="TRelaxationFunction"></typeparam>
-    public abstract class QuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction> : ViscoelasticModel<TInput>, IQuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction>
+    public abstract class QuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction> : ViscoelasticModel<TInput, TResult>, IQuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction>
         where TInput : QuasiLinearViscoelasticityModelInput<TRelaxationFunction>, new()
         where TResult : QuasiLinearViscoelasticityModelResult, new()
     {
-        // TODO: remover ViscoelasticConsideration.ViscoelasticEffectAfterRampTime
-
         /// <summary>
         /// The important relaxation times.
         /// </summary>
@@ -41,16 +39,17 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         }
 
         /// <summary>
-        /// Asynchronously, this method calculates the initial conditions for Fung model analysis.
+        /// Asynchronously, this method calculates the initial conditions for a quasi-linear viscoelastic model analysis.
         /// </summary>
         /// <returns></returns>
-        public virtual Task<TResult> CalculateInitialConditionsAsync()
+        public override Task<TResult> CalculateInitialConditionsAsync()
         {
             return Task.FromResult(new TResult
             {
-                ReducedRelaxationFunction = 1,
+                Time = 0,
                 Strain = 0,
                 ElasticResponse = 0,
+                ReducedRelaxationFunction = 1,
                 Stress = 0,
                 StressByIntegralDerivative = 0,
                 StressByReducedRelaxationFunctionDerivative = 0
@@ -58,13 +57,13 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         }
 
         /// <summary>
-        /// Asynchronously, this method calculates the results for a quasi-linear viscoelastic model.
+        /// Asynchronously, this method calculates the results for a quasi-linear viscoelastic model analysis.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
-        public virtual async Task<TResult> CalculateResultsAsync(TInput input, double time)
+        public override async Task<TResult> CalculateResultsAsync(TInput input, double time)
         {
-            if (time <= Constants.Precision)
+            if (time <= 0)
                 return await this.CalculateInitialConditionsAsync().ConfigureAwait(false);
 
             input.RelaxationNumber = this.CalculateRelaxationNumber(input, time);
@@ -75,45 +74,28 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             var tasks = new List<Task>();
 
             double strain = 0;
-            tasks.Add(Task.Run(() =>
-            {
-                strain = this.CalculateStrain(input, time);
-            }));
+            tasks.Add(Task.Run(() => { strain = this.CalculateStrain(input, time); }));
 
             double reducedRelaxationFunction = 0;
-            tasks.Add(Task.Run(() =>
-            {
-                reducedRelaxationFunction = this.CalculateReducedRelaxationFunction(input, time);
-            }));
+            tasks.Add(Task.Run(() => { reducedRelaxationFunction = this.CalculateReducedRelaxationFunction(input, time); }));
 
             double elasticResponse = 0;
-            tasks.Add(Task.Run(() =>
-            {
-                elasticResponse = this.CalculateElasticResponse(input, time);
-            }));
+            tasks.Add(Task.Run(() => { elasticResponse = this.CalculateElasticResponse(input, time); }));
 
             double stress = 0;
-            tasks.Add(Task.Run(() =>
-            {
-                stress = this.CalculateStress(input, time);
-            }));
+            tasks.Add(Task.Run(() => { stress = this.CalculateStress(input, time); }));
 
             double stressByReducedRelaxationFunctionDerivative = 0;
-            tasks.Add(Task.Run(() =>
-            {
-                stressByReducedRelaxationFunctionDerivative = this.CalculateStressByReducedRelaxationFunctionDerivative(input, time);
-            }));
+            tasks.Add(Task.Run(() => { stressByReducedRelaxationFunctionDerivative = this.CalculateStressByReducedRelaxationFunctionDerivative(input, time); }));
 
             double stressByIntegralDerivative = 0;
-            tasks.Add(Task.Run(() =>
-            {
-                stressByIntegralDerivative = this.CalculateStressByIntegralDerivative(input, time);
-            }));
+            tasks.Add(Task.Run(() => { stressByIntegralDerivative = this.CalculateStressByIntegralDerivative(input, time); }));
 
             await Task.WhenAll(tasks);
 
             return new TResult
             {
+                Time = time,
                 Strain = strain,
                 ReducedRelaxationFunction = reducedRelaxationFunction,
                 ElasticResponse = elasticResponse,
@@ -236,6 +218,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
         /// <summary>
         /// This method calculates the elastic response.
+        /// Equation used: Elastic stress = A * [exp(B * strain) - 1]
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
@@ -245,12 +228,12 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return input.InitialStress;
 
-            // Elastic stress = A * [exp(B * strain) - 1]
             return input.ElasticStressConstant * (Math.Exp(input.ElasticPowerConstant * this.CalculateStrain(input, time)) - 1);
         }
 
         /// <summary>
         /// This method calculates the derivtive of elastic response.
+        /// Equation used: Elastic Stress Derivative = A * B * (d/dt)(strain) * exp(B * strain)
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>

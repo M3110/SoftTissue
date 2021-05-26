@@ -8,7 +8,7 @@ using System;
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
 {
     /// <summary>
-    /// It represents the viscoelastic Fung Model.
+    /// It represents the Fung Model.
     /// </summary>
     public class FungModel : QuasiLinearViscoelasticityModel<FungModelInput, FungModelResult, ReducedRelaxationFunctionData>, IFungModel
     {
@@ -35,9 +35,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
             // is called in another methods, that error must be considered to times near to zero.
             if (time <= Constants.Precision)
-            {
                 return 1;
-            }
 
             var reducedRelaxationFunctionInput = input.ReducedRelaxationFunctionInput;
 
@@ -62,15 +60,11 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
             // is called in another methods, that error must be considered to times near to zero.
             if (time <= Constants.Precision)
-            {
-                return
-                    reducedRelaxationFunctionInput.RelaxationIndex
+                return reducedRelaxationFunctionInput.RelaxationIndex
                     * (-1 / reducedRelaxationFunctionInput.FastRelaxationTime + 1 / reducedRelaxationFunctionInput.SlowRelaxationTime)
                     / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
-            }
 
-            return
-                reducedRelaxationFunctionInput.RelaxationIndex
+            return reducedRelaxationFunctionInput.RelaxationIndex
                 * (Math.Exp(-time / reducedRelaxationFunctionInput.FastRelaxationTime) - Math.Exp(-time / reducedRelaxationFunctionInput.SlowRelaxationTime))
                 / (time * (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime)));
         }
@@ -87,15 +81,15 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
         /// <returns></returns>
         public double CalculateI(double slowRelaxationTime, double fastRelaxationTime, double timeStep, double time)
         {
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), "The time cannot be negative.");
+
             if (time == 0)
-            {
                 return Math.Log(fastRelaxationTime / slowRelaxationTime);
-            }
 
             double initialTime = time / slowRelaxationTime;
             double step = this.SetIntegrationStep(initialTime, timeStep);
-            double finalTime = time / fastRelaxationTime > Constants.EquationE1MaximumFinalTime
-                    ? Constants.EquationE1MaximumFinalTime : time / fastRelaxationTime;
+            double finalTime = time / fastRelaxationTime > Constants.EquationE1MaximumFinalTime ? Constants.EquationE1MaximumFinalTime : time / fastRelaxationTime;
 
             double result = 0;
             double integralTime = initialTime;

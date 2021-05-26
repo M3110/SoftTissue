@@ -1,4 +1,4 @@
-﻿using SoftTissue.Core.Models.Viscoelasticity.Linear;
+﻿using SoftTissue.Core.Models.Viscoelasticity.Linear.Maxwell;
 
 namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel
 {

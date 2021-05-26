@@ -1,22 +1,39 @@
 ﻿namespace SoftTissue.Core.Models.Viscoelasticity
 {
+    /// <summary>
+    /// It contains the results for a generic Viscoelastic Model.
+    /// </summary>
     public class ViscoelasticModelResult
     {
+        /// <summary>
+        /// Unit: s (second).
+        /// </summary>
         public double Time { get; set; }
 
+        /// <summary>
+        /// Dimensioless.
+        /// </summary>
         public double Strain { get; set; }
 
-        public double ReducedRelaxationFunction { get; set; }
-
+        /// <summary>
+        /// Unit: Pa (Pascal).
+        /// </summary>
         public double Stress { get; set; }
 
+        /// <summary>
+        /// This method returns a string that represents the current object.
+        /// </summary>
+        /// <param name="separator"></param>
+        /// <returns></returns>
         public virtual string ToString(string separator)
             => $"{this.Time}" +
             $"{separator}{this.Strain}" +
-            $"{separator}{this.ReducedRelaxationFunction}" +
             $"{separator}{this.Stress}";
 
-        public override string ToString()
-            => $"{this.Strain},{this.ReducedRelaxationFunction},{this.Stress}";
+        /// <summary>
+        /// This method returns a string that represents the current object with each element separated by comma.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => $"{this.Strain},{this.Stress}";
     }
 }

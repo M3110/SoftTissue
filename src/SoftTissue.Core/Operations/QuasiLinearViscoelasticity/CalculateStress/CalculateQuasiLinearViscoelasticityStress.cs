@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress
 {
+    // TODO: Generalizar as operçaões CalculateStress para ser usada em todas as operações. (Nome da nova classe = CalculateViscoelasticResult)
     /// <summary>
     /// It is responsible to calculate the stress to a quasi-linear viscoelastic model.
     /// </summary>
