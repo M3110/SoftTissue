@@ -12,41 +12,18 @@ namespace SoftTissue.Application.Extensions
     public static class HttpRequestBuilder
     {
         /// <summary>
-        /// This method creates <see cref="CalculateStressSensitivityAnalysisRequest"/> based on <see cref="CalculateStressSensitivityAnalysisExplicitRequest"/>.
-        /// </summary>
-        /// <param name="analysisExplicitRequest"></param>
-        /// <returns></returns>
-        //public static CalculateStressSensitivityAnalysisRequest MapToSensitivityAnalysis(this CalculateStressSensitivityAnalysisExplicitRequest analysisExplicitRequest)
-        //{
-        //    if (analysisExplicitRequest == null)
-        //    {
-        //        return null;
-        //    }
-        //
-        //    return new CalculateStressSensitivityAnalysisRequest
-        //    {
-        //        TimeStep = analysisExplicitRequest.TimeStep,
-        //        FinalTime = analysisExplicitRequest.FinalTime,
-        //        UseSimplifiedReducedRelaxationFunction = analysisExplicitRequest.UseSimplifiedReducedRelaxationFunction,
-        //        MaximumStrainList = analysisExplicitRequest.MaximumStrainList.ToEnumerable(),
-        //        StrainRateList = analysisExplicitRequest.StrainRateList.ToEnumerable(),
-        //        ElasticStressConstantList = analysisExplicitRequest.ElasticStressConstantList.ToEnumerable(),
-        //        ElasticPowerConstantList = analysisExplicitRequest.ElasticPowerConstantList.ToEnumerable(),
-        //        RelaxationIndexList = analysisExplicitRequest.RelaxationIndexList.ToEnumerable(),
-        //        FastRelaxationTimeList = analysisExplicitRequest.FastRelaxationTimeList.ToEnumerable(),
-        //        SlowRelaxationTimeList = analysisExplicitRequest.SlowRelaxationTimeList.ToEnumerable(),
-        //        SimplifiedReducedRelaxationFunctionDataList = analysisExplicitRequest.SimplifiedReducedRelaxationFunctionDataList
-        //    };
-        //}
-
-        /// <summary>
         /// This method creates a new instance of <see cref="CalculateSimplifiedFungModelResultsDisregardRampTimeRequest"/> based on <see cref="CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         public static CalculateSimplifiedFungModelResultsDisregardRampTimeRequest CreateQuasiLinearRequest(this CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest request)
         {
-            var calculateQuasiLinearViscoelasticityStressRequest = CalculateSimplifiedFungModelResultsDisregardRampTimeRequest.Create(request.TimeStep, request.FinalTime);
+            var calculateQuasiLinearViscoelasticityStressRequest = new CalculateSimplifiedFungModelResultsDisregardRampTimeRequest
+            {
+                TimeStep = request.TimeStep,
+                FinalTime = request.FinalTime,
+                DataList = new List<CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData>()
+            };
 
             switch (request.ExperimentalModel)
             {

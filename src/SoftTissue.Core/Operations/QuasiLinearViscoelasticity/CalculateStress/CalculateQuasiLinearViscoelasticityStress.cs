@@ -2,7 +2,7 @@
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
 using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResults;
-using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis;
 using System;
 using System.Collections.Generic;
 using System.IO;

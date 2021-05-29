@@ -1,6 +1,6 @@
 ﻿using SoftTissue.DataContract.Models;
 
-namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis.Linear
+namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear
 {
     /// <summary>
     /// It represents the request content to CalculateMaxwellModelResultsSensitivityAnalysis operation.

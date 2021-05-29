@@ -3,5 +3,5 @@
     /// <summary>
     /// It represents the request content to CalculateSimplifiedFungModelResultsConsiderRampTime operation.
     /// </summary>
-    public sealed class CalculateSimplifiedFungModelResultsConsiderRampTimeRequest : CalculateResultsSentivityAnalysisRequest<CalculateSimplifiedFungModelResultsConsiderRampTimeRequestData> { }
+    public sealed class CalculateSimplifiedFungModelResultsConsiderRampTimeRequest : CalculateResultsRequest<CalculateSimplifiedFungModelResultsConsiderRampTimeRequestData> { }
 }

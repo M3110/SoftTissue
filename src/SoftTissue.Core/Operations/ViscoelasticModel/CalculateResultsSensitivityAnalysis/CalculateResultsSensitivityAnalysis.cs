@@ -1,7 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations;
 using SoftTissue.Core.Models.Viscoelasticity;
-using SoftTissue.DataContract.ViscoelasticModel.CalculateResults;
-using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -9,28 +8,33 @@ using System.Text;
 namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
 {
     /// <summary>
-    /// It contains methods and parameters shared between operations to calculate a result.
+    /// It contains methods and parameters shared between operations to calculate a result .
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
-    /// <typeparam name="TResponse"></typeparam>
-    /// <typeparam name="TResponseData"></typeparam>
     /// <typeparam name="TInput"></typeparam>
-    public abstract class CalculateResultSensitivityAnalysis<TRequest, TResponse, TResponseData, TInput> : OperationBase<TRequest, TResponse, TResponseData>, ICalculateResultSensitivityAnalysis<TRequest, TResponse, TResponseData, TInput>
-        where TRequest : CalculateResultsRequest
-        where TResponse : CalculateResultsResponse<TResponseData>, new()
-        where TResponseData : CalculateResultsResponseData, new()
-        where TInput : ViscoelasticModelInput, new()
+    /// <typeparam name="TResult"></typeparam>
+    public abstract class CalculateResultsSensitivityAnalysis<TRequest, TInput, TResult> : OperationBase<TRequest, CalculateResultsSensitivityAnalysisResponse, CalculateResultsSensitivityAnalysisResponseData>, ICalculateResultsSensitivityAnalysis<TRequest, TInput, TResult>
+        where TRequest : CalculateResultsSensitivityAnalysisRequest
+        where TInput : ViscoelasticModelInput
+        where TResult : ViscoelasticModelResult, new()
     {
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="viscoelasticModel"></param>
-        public CalculateResultSensitivityAnalysis(IViscoelasticModel<TInput> viscoelasticModel) { }
-
         /// <summary>
         /// The base path to files.
         /// </summary>
         protected abstract string TemplateBasePath { get; }
+
+        /// <summary>
+        /// The header to solution file.
+        /// </summary>
+        protected abstract string SolutionFileHeader { get; }
+
+        protected IViscoelasticModel<TInput, TResult> ViscoelasticModel { get; }
+
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        /// <param name="viscoelasticModel"></param>
+        public CalculateResultsSensitivityAnalysis(IViscoelasticModel<TInput, TResult> viscoelasticModel) { }
 
         /// <summary>
         /// This method builds a list with the inputs based on the request.

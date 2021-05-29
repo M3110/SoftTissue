@@ -4,7 +4,7 @@ using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
 using SoftTissue.DataContract.OperationBase;
-using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis.Linear;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +16,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
     /// <summary>
     /// It is responsible to calculate the strain to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStrainSensitivityAnalysis<TInput> : CalculateResultSensitivityAnalysis<CalculateMaxwellModelResultsSensitivityAnalysisRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>, ICalculateLinearViscosityStrainSensitivityAnalysis<TInput>
+    public abstract class CalculateLinearViscosityStrainSensitivityAnalysis<TInput> : CalculateResultsSensitivityAnalysis<CalculateMaxwellModelResultsSensitivityAnalysisRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>, ICalculateLinearViscosityStrainSensitivityAnalysis<TInput>
         where TInput : LinearModelInput, new()
     {
         private readonly ILinearModel<TInput> _viscoelasticModel;

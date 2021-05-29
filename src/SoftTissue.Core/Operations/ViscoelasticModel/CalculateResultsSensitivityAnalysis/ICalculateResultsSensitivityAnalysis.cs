@@ -1,6 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity;
-using SoftTissue.DataContract.ViscoelasticModel.CalculateResults;
-using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,14 +9,12 @@ namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
     /// It contains methods and parameters shared between operations to calculate a result.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
-    /// <typeparam name="TResponse"></typeparam>
-    /// <typeparam name="TResponseData"></typeparam>
     /// <typeparam name="TInput"></typeparam>
-    public interface ICalculateResultSensitivityAnalysis<TRequest, TResponse, TResponseData, TInput> : IOperationBase<TRequest, TResponse, TResponseData>
-        where TRequest : CalculateResultsRequest
-        where TResponse : CalculateResultsResponse<TResponseData>, new()
-        where TResponseData : CalculateResultsResponseData, new()
-        where TInput : ViscoelasticModelInput, new()
+    /// <typeparam name="TResult"></typeparam>
+    public interface ICalculateResultsSensitivityAnalysis<TRequest, TInput, TResult> : IOperationBase<TRequest, CalculateResultsSensitivityAnalysisResponse, CalculateResultsSensitivityAnalysisResponseData>
+        where TRequest : CalculateResultsSensitivityAnalysisRequest
+        where TInput : ViscoelasticModelInput
+        where TResult : ViscoelasticModelResult, new()
     {
         /// <summary>
         /// This method builds an input list based on request.

@@ -1,11 +1,11 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 
-namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis
+namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis
 {
     /// <summary>
-    /// It represents the request content to CalculateResultsSentivityAnalysis operations.
+    /// It represents the request content to CalculateResultsSensitivityAnalysis operations.
     /// </summary>
-    public abstract class CalculateResultsSentivityAnalysisRequest : OperationRequestBase
+    public abstract class CalculateResultsSensitivityAnalysisRequest : OperationRequestBase
     {
         /// <summary>
         /// Time step.

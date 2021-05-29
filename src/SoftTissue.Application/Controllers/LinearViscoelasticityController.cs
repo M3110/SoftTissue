@@ -12,7 +12,7 @@ using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear.CalculateStrain.Maxwell;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear.CalculateStress.Maxwell;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear.Maxwell;
-using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis.Linear;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers

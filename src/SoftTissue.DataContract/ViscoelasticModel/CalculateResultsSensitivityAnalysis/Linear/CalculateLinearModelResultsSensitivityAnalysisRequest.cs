@@ -1,11 +1,11 @@
 ﻿using SoftTissue.DataContract.Models;
 
-namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis.Linear
+namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear
 {
     /// <summary>
     /// It represents the request content to CalculateLinearModelResultsSensitivityAnalysis operation.
     /// </summary>
-    public abstract class CalculateLinearModelResultsSensitivityAnalysisRequest : CalculateResultsSentivityAnalysisRequest
+    public abstract class CalculateLinearModelResultsSensitivityAnalysisRequest : CalculateResultsSensitivityAnalysisRequest
     {
         /// <summary>
         /// List of initial strain.
