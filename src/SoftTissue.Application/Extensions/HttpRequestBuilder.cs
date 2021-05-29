@@ -1,5 +1,6 @@
 ﻿using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung;
 using System;
 using System.Collections.Generic;
 
@@ -39,22 +40,23 @@ namespace SoftTissue.Application.Extensions
         //}
 
         /// <summary>
-        /// This method creates a new instance of <see cref="CalculateSimplifiedFungModelStressDisregardRampTimeRequest"/> based on <see cref="CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest"/>.
+        /// This method creates a new instance of <see cref="CalculateSimplifiedFungModelResultsDisregardRampTimeRequest"/> based on <see cref="CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static CalculateSimplifiedFungModelStressDisregardRampTimeRequest CreateQuasiLinearRequest(this CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest request)
+        public static CalculateSimplifiedFungModelResultsDisregardRampTimeRequest CreateQuasiLinearRequest(this CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest request)
         {
-            var calculateQuasiLinearViscoelasticityStressRequest = CalculateSimplifiedFungModelStressDisregardRampTimeRequest.Create(request.TimeStep, request.FinalTime);
+            var calculateQuasiLinearViscoelasticityStressRequest = CalculateSimplifiedFungModelResultsDisregardRampTimeRequest.Create(request.TimeStep, request.FinalTime);
 
             switch (request.ExperimentalModel)
             {
                 case ExperimentalModel.AnteriorCruciateLigamentFirstRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 2.48,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 2.48,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.85068 / 2.48,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -75,15 +77,17 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.12388 / 2.48
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 case ExperimentalModel.AnteriorCruciateLigamentSecondRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 2.02,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 2.02,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.60098 / 2.02,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -104,15 +108,17 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.24713 / 2.02
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 case ExperimentalModel.LateralCollateralLigamentFirstRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 4.41,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 4.41,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 3.79214 / 4.41,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -133,15 +139,17 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.3221 / 4.41
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 case ExperimentalModel.LateralCollateralLigamentSecondRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 4.1,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 4.1,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 3.5735 / 4.1,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -162,15 +170,17 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.24084 / 4.1
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 case ExperimentalModel.MedialCollateralLigamentFirstRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 0.97,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 0.97,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 0.85415 / 0.97,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -191,15 +201,17 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.0579 / 0.97
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 case ExperimentalModel.MedialCollateralLigamentSecondRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 0.91,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 0.91,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 0.8084 / 0.91,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -220,15 +232,17 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.04534 / 0.91
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 case ExperimentalModel.PosteriorCruciateLigamentFirstRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 1.65,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 1.65,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.45 / 1.65,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -249,15 +263,17 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.11294 / 1.65
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 case ExperimentalModel.PosteriorCruciateLigamentSecondRelaxation:
-                    calculateQuasiLinearViscoelasticityStressRequest.Data.Add(CalculateSimplifiedFungModelStressDisregardRampTimeRequestData.Create(
-                        softTissueType: request.ExperimentalModel.ToString(),
-                        strain: request.Strain,
-                        initialStress: 1.53,
-                        reducedRelaxationFunctionData: new SimplifiedReducedRelaxationFunctionData
+                    calculateQuasiLinearViscoelasticityStressRequest.DataList.Add(new CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData
+                    {
+                        SoftTissueType = request.ExperimentalModel.ToString(),
+                        Strain = request.Strain,
+                        InitialStress = 1.53,
+                        ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.38406 / 1.53,
                             IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
@@ -278,7 +294,8 @@ namespace SoftTissue.Application.Extensions
                                     ViscoelasticStiffness = 0.07758 / 1.53
                                 },
                             }
-                        }));
+                        }
+                    });
                     break;
 
                 default:

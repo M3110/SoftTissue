@@ -16,16 +16,16 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStressSensitivityAnalysis<TInput> : CalculateResultSensitivityAnalysis<CalculateStressSensitivityAnalysisRequest, CalculateStressResponse, CalculateStressResponseData, TInput>, ICalculateLinearViscosityStressSensitivityAnalysis<TInput>
-        where TInput : LinearViscoelasticityModelInput, new()
+    public abstract class CalculateLinearViscosityStressSensitivityAnalysis<TInput> : CalculateResultSensitivityAnalysis<CalculateStressSensitivityAnalysisRequest, CalculateMaxwellModelResultsResponse, CalculateMaxwellModelResultsResponseData, TInput>, ICalculateLinearViscosityStressSensitivityAnalysis<TInput>
+        where TInput : LinearModelInput, new()
     {
-        private readonly ILinearViscoelasticityModel<TInput> _viscoelasticModel;
+        private readonly ILinearModel<TInput> _viscoelasticModel;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateLinearViscosityStressSensitivityAnalysis(ILinearViscoelasticityModel<TInput> viscoelasticModel) : base(viscoelasticModel)
+        public CalculateLinearViscosityStressSensitivityAnalysis(ILinearModel<TInput> viscoelasticModel) : base(viscoelasticModel)
         {
             _viscoelasticModel = viscoelasticModel;
         }
@@ -151,9 +151,9 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateStressResponse> ProcessOperationAsync(CalculateStressSensitivityAnalysisRequest request)
+        protected override Task<CalculateMaxwellModelResultsResponse> ProcessOperationAsync(CalculateStressSensitivityAnalysisRequest request)
         {
-            var response = new CalculateStressResponse { Data = new CalculateStressResponseData() };
+            var response = new CalculateMaxwellModelResultsResponse { Data = new CalculateMaxwellModelResultsResponseData() };
             response.SetSuccessCreated();
 
             List<TInput> inputList = BuildInputList(request);

@@ -10,8 +10,8 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensit
     /// <summary>
     /// It is responsible to calculate the stress to a linear viscoelastic model.
     /// </summary>
-    public interface ICalculateLinearViscosityStressSensitivityAnalysis<TInput> : ICalculateResultSensitivityAnalysis<CalculateStressSensitivityAnalysisRequest, CalculateStressResponse, CalculateStressResponseData, TInput>
-        where TInput : LinearViscoelasticityModelInput, new()
+    public interface ICalculateLinearViscosityStressSensitivityAnalysis<TInput> : ICalculateResultSensitivityAnalysis<CalculateStressSensitivityAnalysisRequest, CalculateMaxwellModelResultsResponse, CalculateMaxwellModelResultsResponseData, TInput>
+        where TInput : LinearModelInput, new()
     {
         /// <summary>
         /// This method writes the input data into a file.

@@ -3,8 +3,8 @@ using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
-using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrainSensitivityAnalysis;
 using SoftTissue.DataContract.OperationBase;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis.Linear;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,16 +16,16 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
     /// <summary>
     /// It is responsible to calculate the strain to a linear viscoelastic model.
     /// </summary>
-    public abstract class CalculateLinearViscosityStrainSensitivityAnalysis<TInput> : CalculateResultSensitivityAnalysis<CalculateStrainSensitivityAnalysisRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>, ICalculateLinearViscosityStrainSensitivityAnalysis<TInput>
-        where TInput : LinearViscoelasticityModelInput, new()
+    public abstract class CalculateLinearViscosityStrainSensitivityAnalysis<TInput> : CalculateResultSensitivityAnalysis<CalculateMaxwellModelResultsSensitivityAnalysisRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>, ICalculateLinearViscosityStrainSensitivityAnalysis<TInput>
+        where TInput : LinearModelInput, new()
     {
-        private readonly ILinearViscoelasticityModel<TInput> _viscoelasticModel;
+        private readonly ILinearModel<TInput> _viscoelasticModel;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateLinearViscosityStrainSensitivityAnalysis(ILinearViscoelasticityModel<TInput> viscoelasticModel) : base(viscoelasticModel)
+        public CalculateLinearViscosityStrainSensitivityAnalysis(ILinearModel<TInput> viscoelasticModel) : base(viscoelasticModel)
         {
             this._viscoelasticModel = viscoelasticModel;
         }
@@ -35,7 +35,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override List<TInput> BuildInputList(CalculateStrainSensitivityAnalysisRequest request)
+        public override List<TInput> BuildInputList(CalculateMaxwellModelResultsSensitivityAnalysisRequest request)
         {
             var inputList = new List<TInput>();
 
@@ -151,7 +151,7 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateStrainResponse> ProcessOperationAsync(CalculateStrainSensitivityAnalysisRequest request)
+        protected override Task<CalculateStrainResponse> ProcessOperationAsync(CalculateMaxwellModelResultsSensitivityAnalysisRequest request)
         {
             var response = new CalculateStrainResponse { Data = new CalculateStrainResponseData() };
             response.SetSuccessCreated();

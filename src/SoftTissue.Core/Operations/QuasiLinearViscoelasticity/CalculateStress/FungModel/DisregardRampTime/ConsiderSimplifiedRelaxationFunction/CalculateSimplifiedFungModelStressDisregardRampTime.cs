@@ -1,10 +1,10 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.DataContract.Models;
 using System.Collections.Generic;
 using System.IO;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction
 {
@@ -13,9 +13,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// </summary>
     public class CalculateSimplifiedFungModelStressDisregardRampTime :
         CalculateQuasiLinearViscoelasticityStress<
-            CalculateSimplifiedFungModelStressDisregardRampTimeRequest, 
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponse,
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponseData,
+            CalculateSimplifiedFungModelResultsDisregardRampTimeRequest, 
+            CalculateSimplifiedFungModelResultsDisregardRampTimeResponse,
+            CalculateSimplifiedFungModelResultsDisregardRampTimeResponseData,
             SimplifiedFungModelInput,
             SimplifiedReducedRelaxationFunctionData,
             SimplifiedFungModelResult>, 
@@ -37,11 +37,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override List<SimplifiedFungModelInput> BuildInputList(CalculateSimplifiedFungModelStressDisregardRampTimeRequest request)
+        public override List<SimplifiedFungModelInput> BuildInputList(CalculateSimplifiedFungModelResultsDisregardRampTimeRequest request)
         {
             var inputs = new List<SimplifiedFungModelInput>();
 
-            foreach (var requestData in request.Data)
+            foreach (var requestData in request.DataList)
             {
                 inputs.Add(new SimplifiedFungModelInput
                 {

@@ -1,7 +1,7 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.Linear;
 using SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
-using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrainSensitivityAnalysis;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis.Linear;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,8 +10,8 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
     /// <summary>
     /// It is responsible to calculate the strain to a linear viscoelastic model.
     /// </summary>
-    public interface ICalculateLinearViscosityStrainSensitivityAnalysis<TInput> : ICalculateResultSensitivityAnalysis<CalculateStrainSensitivityAnalysisRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>
-        where TInput : LinearViscoelasticityModelInput, new()
+    public interface ICalculateLinearViscosityStrainSensitivityAnalysis<TInput> : ICalculateResultSensitivityAnalysis<CalculateMaxwellModelResultsSensitivityAnalysisRequest, CalculateStrainResponse, CalculateStrainResponseData, TInput>
+        where TInput : LinearModelInput, new()
     {
         /// <summary>
         /// This method writes the input data into a file.

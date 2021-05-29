@@ -34,6 +34,6 @@
         /// This method returns a string that represents the current object with each element separated by comma.
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => $"{this.Strain},{this.Stress}";
+        public override string ToString() => $"{this.Time},{this.Strain},{this.Stress}";
     }
 }

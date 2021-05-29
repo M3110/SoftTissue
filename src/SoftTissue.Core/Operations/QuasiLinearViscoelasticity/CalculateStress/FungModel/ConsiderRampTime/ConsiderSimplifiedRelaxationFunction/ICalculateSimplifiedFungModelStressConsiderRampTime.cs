@@ -1,6 +1,6 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.DataContract.Models;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.SimplifiedFung;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction
 {
@@ -9,9 +9,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// </summary>
     public interface ICalculateSimplifiedFungModelStressConsiderRampTime :
         ICalculateQuasiLinearViscoelasticityStress<
-            CalculateSimplifiedFungModelStressConsiderRampTimeRequest, 
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse, 
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponseData,
+            CalculateSimplifiedFungModelResultsConsiderRampTimeRequest, 
+            CalculateSimplifiedFungModelResultsConsiderRampTimeResponse, 
+            CalculateSimplifiedFungModelResultsConsiderRampTimeResponseData,
             SimplifiedFungModelInput,
             SimplifiedReducedRelaxationFunctionData,
             SimplifiedFungModelResult> 

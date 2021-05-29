@@ -10,7 +10,7 @@ namespace SoftTissue.Core.ConstitutiveEquations
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     public abstract class ViscoelasticModel<TInput, TResult> : IViscoelasticModel<TInput, TResult>
-        where TInput : ViscoelasticModelInput, new()
+        where TInput : ViscoelasticModelInput
         where TResult : ViscoelasticModelResult, new()
     {
         /// <summary>

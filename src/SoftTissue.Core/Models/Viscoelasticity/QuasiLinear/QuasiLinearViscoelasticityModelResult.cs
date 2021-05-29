@@ -27,7 +27,8 @@
 
         /// <inheritdoc/>
         public override string ToString(string separator)
-            => $"{this.Strain}" +
+            => $"{this.Time}" +
+            $"{separator}{this.Strain}" +
             $"{separator}{this.ReducedRelaxationFunction}" +
             $"{separator}{this.ElasticResponse}" +
             $"{separator}{this.Stress}" +
@@ -35,11 +36,12 @@
             $"{separator}{this.StressByReducedRelaxationFunctionDerivative}";
 
         /// <inheritdoc/>
-        public override string ToString() => $"{this.Strain}" +
-            $",{this.ReducedRelaxationFunction}" +
-            $",{this.ElasticResponse}" +
-            $",{this.Stress}" +
-            $",{this.StressByIntegralDerivative}" +
-            $",{this.StressByReducedRelaxationFunctionDerivative}";
+        public override string ToString() 
+            => $"{this.Time},{this.Strain},{this.ReducedRelaxationFunction},{this.ElasticResponse},{this.Stress},{this.StressByIntegralDerivative},{this.StressByReducedRelaxationFunctionDerivative}";
+
+        /// <summary>
+        /// The sequence of the values, indicanting the order that it is writen in method <see cref="ToString()"/>
+        /// </summary>
+        public const string ValueSequence = "Creep Compliance,Strain,Relaxation Function,Stress";
     }
 }

@@ -1,10 +1,10 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderRelaxationFunction;
 using SoftTissue.DataContract.Models;
 using System.Collections.Generic;
 using System.IO;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.Fung;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderRelaxationFunction
 {
@@ -13,9 +13,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// </summary>
     public class CalculateFungModelStressDisregardRampTime :
         CalculateQuasiLinearViscoelasticityStress<
-            CalculateFungModelStressDisregardRampTimeRequest,
-            CalculateFungModelStressDisregardRampTimeResponse,
-            CalculateFungModelStressDisregardRampTimeResponseData,
+            CalculateFungModelResultsDisregardRampTimeRequest,
+            CalculateFungModelResultsDisregardRampTimeResponse,
+            CalculateFungModelResultsDisregardRampTimeResponseData,
             FungModelInput,
             ReducedRelaxationFunctionData,
             FungModelResult>, 
@@ -37,11 +37,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override List<FungModelInput> BuildInputList(CalculateFungModelStressDisregardRampTimeRequest request)
+        public override List<FungModelInput> BuildInputList(CalculateFungModelResultsDisregardRampTimeRequest request)
         {
             var inputs = new List<FungModelInput>();
 
-            foreach (var requestData in request.Data)
+            foreach (var requestData in request.DataList)
             {
                 inputs.Add(new FungModelInput
                 {

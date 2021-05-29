@@ -5,5 +5,5 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
     /// <summary>
     /// It represents the Maxwell Model.
     /// </summary>
-    public interface IMaxwellModel : ILinearViscoelasticityModel<MaxwellModelInput, MaxwellModelResult> { }
+    public interface IMaxwellModel : ILinearModel<MaxwellModelInput, MaxwellModelResult> { }
 }

@@ -3,7 +3,7 @@ using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
 using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.OperationBase;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.SimplifiedFung;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,9 +15,9 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
     /// </summary>
     public class CalculateSimplifiedFungModelStressConsiderRampTime :
         CalculateQuasiLinearViscoelasticityStress<
-            CalculateSimplifiedFungModelStressConsiderRampTimeRequest,
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse,
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponseData,
+            CalculateSimplifiedFungModelResultsConsiderRampTimeRequest,
+            CalculateSimplifiedFungModelResultsConsiderRampTimeResponse,
+            CalculateSimplifiedFungModelResultsConsiderRampTimeResponseData,
             SimplifiedFungModelInput,
             SimplifiedReducedRelaxationFunctionData,
             SimplifiedFungModelResult>,
@@ -39,11 +39,11 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override List<SimplifiedFungModelInput> BuildInputList(CalculateSimplifiedFungModelStressConsiderRampTimeRequest request)
+        public override List<SimplifiedFungModelInput> BuildInputList(CalculateSimplifiedFungModelResultsConsiderRampTimeRequest request)
         {
             var inputs = new List<SimplifiedFungModelInput>();
 
-            foreach (var requestData in request.Data)
+            foreach (var requestData in request.DataList)
             {
                 inputs.Add(new SimplifiedFungModelInput
                 {
@@ -105,18 +105,18 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override async Task<CalculateSimplifiedFungModelStressConsiderRampTimeResponse> ValidateOperationAsync(CalculateSimplifiedFungModelStressConsiderRampTimeRequest request)
+        public override async Task<CalculateSimplifiedFungModelResultsConsiderRampTimeResponse> ValidateOperationAsync(CalculateSimplifiedFungModelResultsConsiderRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
+            CalculateSimplifiedFungModelResultsConsiderRampTimeResponse response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
 
             if (response.Success == false)
             {
                 return response;
             }
 
-            foreach (var requestData in request.Data)
+            foreach (var requestData in request.DataList)
             {
-                string errorMessage = $"Error on request Data index {request.Data.IndexOf(requestData)}";
+                string errorMessage = $"Error on request Data index {request.DataList.IndexOf(requestData)}";
 
                 if (requestData.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 {

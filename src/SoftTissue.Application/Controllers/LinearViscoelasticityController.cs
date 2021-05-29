@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
-using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel;
-using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStress.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensitivityAnalysis.MaxwellModel;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear.CalculateStrain.MaxwellModel;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear.CalculateStress.MaxwellModel;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrain;
-using SoftTissue.DataContract.LinearViscoelasticity.CalculateStrainSensitivityAnalysis;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStress;
 using SoftTissue.DataContract.LinearViscoelasticity.CalculateStressSensitivityAnalysis;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear.CalculateStrain.Maxwell;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear.CalculateStress.Maxwell;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.Linear.Maxwell;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSentivityAnalysis.Linear;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers
@@ -36,9 +40,9 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("calculate-stress/maxwell-model")]
         public async Task<ActionResult<CalculateStrainResponse>> CalculateStress(
             [FromServices] ICalculateMaxwellModelStress calculateMaxwellModelStress,
-            [FromQuery] CalculateStressRequest request)
+            [FromQuery] CalculateMaxwellModelResultsRequest request)
         {
-            CalculateStressResponse response = await calculateMaxwellModelStress.ProcessAsync(request).ConfigureAwait(false);
+            CalculateMaxwellModelResultsResponse response = await calculateMaxwellModelStress.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -61,7 +65,7 @@ namespace SoftTissue.Application.Controllers
             [FromServices] ICalculateMaxwellModelStressSensitivityAnalysis calculateMaxwellModelStressSensitivityAnalysis,
             [FromQuery] CalculateStressSensitivityAnalysisRequest request)
         {
-            CalculateStressResponse response = await calculateMaxwellModelStressSensitivityAnalysis.ProcessAsync(request).ConfigureAwait(false);
+            CalculateMaxwellModelResultsResponse response = await calculateMaxwellModelStressSensitivityAnalysis.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -82,7 +86,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("calculate-strain/maxwell-model")]
         public async Task<ActionResult<CalculateStrainResponse>> CalculateStrain(
             [FromServices] ICalculateMaxwellModelStrain calculateMaxwellModelStrain,
-            [FromQuery] CalculateStrainRequest request)
+            [FromQuery] CalculateMaxwellModelStrainRequest request)
         {
             CalculateStrainResponse response = await calculateMaxwellModelStrain.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
@@ -105,7 +109,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("calculate-strain/maxwell-model/sensitivity-analysis")]
         public async Task<ActionResult<CalculateStrainResponse>> CalculateStrain(
             [FromServices] ICalculateMaxwellModelStrainSensitivityAnalysis calculateMaxwellModelStrainSensitivityAnalysis,
-            [FromQuery] CalculateStrainSensitivityAnalysisRequest request)
+            [FromQuery] CalculateMaxwellModelResultsSensitivityAnalysisRequest request)
         {
             CalculateStrainResponse response = await calculateMaxwellModelStrainSensitivityAnalysis.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

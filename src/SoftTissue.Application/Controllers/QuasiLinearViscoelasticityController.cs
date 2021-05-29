@@ -8,11 +8,12 @@ using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.Fung
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderRelaxationFunction;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderRelaxationFunction;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.Fung;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.SimplifiedFung;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.Fung;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers
@@ -38,11 +39,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("calculate-stress/fung-model/consider-ramp-time")]
-        public async Task<ActionResult<CalculateFungModelStressConsiderRampTimeResponse>> CalculateFungModelStressConsiderRampTime(
+        public async Task<ActionResult<CalculateFungModelResultsConsiderRampTimeResponse>> CalculateFungModelStressConsiderRampTime(
             [FromServices] ICalculateFungModelStressConsiderRampTime operation,
-            [FromBody] CalculateFungModelStressConsiderRampTimeRequest request)
+            [FromBody] CalculateFungModelResultsConsiderRampTimeRequest request)
         {
-            CalculateFungModelStressConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateFungModelResultsConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -61,11 +62,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("calculate-stress/fung-model/disregard-ramp-time")]
-        public async Task<ActionResult<CalculateFungModelStressDisregardRampTimeResponse>> CalculateFungModelStressDisregardRampTime(
+        public async Task<ActionResult<CalculateFungModelResultsDisregardRampTimeResponse>> CalculateFungModelStressDisregardRampTime(
             [FromServices] ICalculateFungModelStressDisregardRampTime operation,
-            [FromBody] CalculateFungModelStressDisregardRampTimeRequest request)
+            [FromBody] CalculateFungModelResultsDisregardRampTimeRequest request)
         {
-            CalculateFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateFungModelResultsDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -84,11 +85,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("calculate-stress/simplified-fung-model/consider-ramp-time")]
-        public async Task<ActionResult<CalculateSimplifiedFungModelStressConsiderRampTimeResponse>> CalculateSimplifiedFungModelStressConsiderRampTime(
+        public async Task<ActionResult<CalculateSimplifiedFungModelResultsConsiderRampTimeResponse>> CalculateSimplifiedFungModelStressConsiderRampTime(
             [FromServices] ICalculateSimplifiedFungModelStressConsiderRampTime operation,
-            [FromBody] CalculateSimplifiedFungModelStressConsiderRampTimeRequest request)
+            [FromBody] CalculateSimplifiedFungModelResultsConsiderRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateSimplifiedFungModelResultsConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -107,11 +108,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("calculate-stress/simplified-fung-model/disregard-ramp-time")]
-        public async Task<ActionResult<CalculateSimplifiedFungModelStressDisregardRampTimeResponse>> CalculateSimplifiedFungModelStressDisregardRampTime(
+        public async Task<ActionResult<CalculateSimplifiedFungModelResultsDisregardRampTimeResponse>> CalculateSimplifiedFungModelStressDisregardRampTime(
             [FromServices] ICalculateSimplifiedFungModelStressDisregardRampTime operation,
-            [FromBody] CalculateSimplifiedFungModelStressDisregardRampTimeRequest request)
+            [FromBody] CalculateSimplifiedFungModelResultsDisregardRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateSimplifiedFungModelResultsDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -130,11 +131,11 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("calculate-stress/simplifiedfung-model/disregard-ramp-time/experimental-model")]
-        public async Task<ActionResult<CalculateSimplifiedFungModelStressDisregardRampTimeResponse>> CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModel(
+        public async Task<ActionResult<CalculateSimplifiedFungModelResultsDisregardRampTimeResponse>> CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModel(
             [FromServices] ICalculateSimplifiedFungModelStressDisregardRampTime operation,
             [FromBody] CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest request)
         {
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request.CreateQuasiLinearRequest()).ConfigureAwait(false);
+            CalculateSimplifiedFungModelResultsDisregardRampTimeResponse response = await operation.ProcessAsync(request.CreateQuasiLinearRequest()).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 

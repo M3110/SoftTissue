@@ -6,7 +6,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
     /// <summary>
     /// It represents the Maxwell Model.
     /// </summary>
-    public class MaxwellModel : LinearViscoelasticityModel<MaxwellModelInput, MaxwellModelResult>, IMaxwellModel
+    public class MaxwellModel : LinearModel<MaxwellModelInput, MaxwellModelResult>, IMaxwellModel
     {
         /// <summary>
         /// This method calculates the relaxation function.
