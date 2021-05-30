@@ -15,9 +15,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <typeparam name="TRelaxationFunction"></typeparam>
-    public abstract class QuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction> : ViscoelasticModel<TInput, TResult>, IQuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction>
-        where TInput : QuasiLinearViscoelasticityModelInput<TRelaxationFunction>, new()
-        where TResult : QuasiLinearViscoelasticityModelResult, new()
+    public abstract class QuasiLinearModel<TInput, TResult, TRelaxationFunction> : ViscoelasticModel<TInput, TResult>, IQuasiLinearModel<TInput, TResult, TRelaxationFunction>
+        where TInput : QuasiLinearModelInput<TRelaxationFunction>, new()
+        where TResult : QuasiLinearModelResult, new()
+        where TRelaxationFunction : class
     {
         /// <summary>
         /// The important relaxation times.
@@ -32,7 +33,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// </summary>
         /// <param name="simpsonRuleIntegration"></param>
         /// <param name="derivative"></param>
-        public QuasiLinearViscoelasticityModel(ISimpsonRuleIntegration simpsonRuleIntegration, IDerivative derivative)
+        public QuasiLinearModel(ISimpsonRuleIntegration simpsonRuleIntegration, IDerivative derivative)
         {
             this._simpsonRuleIntegration = simpsonRuleIntegration;
             this._derivative = derivative;

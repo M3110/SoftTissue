@@ -81,7 +81,8 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults
         /// <returns></returns>
         protected virtual async Task CalculateAndWriteResultAsync(StreamWriter streamWriter, TInput input, double time)
         {
-            streamWriter.WriteLine(await this.ViscoelasticModel.CalculateResultsAsync(input, time).ConfigureAwait(false));
+            TResult results = await this.ViscoelasticModel.CalculateResultsAsync(input, time).ConfigureAwait(false);
+            streamWriter.WriteLine($"{results}");
         }
 
         /// <summary>
@@ -154,22 +155,10 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults
                 return response;
             }
 
-            if (request.TimeStep.IsNegative())
-            {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Time step cannot be negative.");
-                return response;
-            }
-
-            if (request.FinalTime.IsNegative())
-            {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Final time cannot be negative.");
-                return response;
-            }
-
-            if (request.TimeStep >= request.FinalTime)
-            {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Time step must be smaller than the final time.");
-            }
+            response
+                .AddErrorIfNegativeOrZero(request.TimeStep, nameof(request.TimeStep))
+                .AddErrorIfNegativeOrZero(request.FinalTime, nameof(request.TimeStep))
+                .AddErrorIf(() => request.TimeStep >= request.FinalTime, "Time step must be smaller than the final time.");
 
             return response;
         }

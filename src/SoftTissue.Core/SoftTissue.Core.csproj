@@ -14,11 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Operations\ViscoelasticModel\CalculateResults\QuasiLinear\ConsiderRampTime\Fung\" />
-    <Folder Include="Operations\ViscoelasticModel\CalculateResults\QuasiLinear\ConsiderRampTime\" />
-    <Folder Include="Operations\ViscoelasticModel\CalculateResults\QuasiLinear\ConsiderRampTime\SimplifiedFung\" />
-    <Folder Include="Operations\ViscoelasticModel\CalculateResults\QuasiLinear\DisregardRampTime\Fung\" />
-    <Folder Include="Operations\ViscoelasticModel\CalculateResults\QuasiLinear\DisregardRampTime\SimplifiedFung\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\Linear\Maxwell\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\DisregardRampTime\Fung\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\DisregardRampTime\SimplifiedFung\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\ConsiderRampTime\Fung\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\ConsiderRampTime\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\ConsiderRampTime\SimplifiedFung\" />
   </ItemGroup>
 
 </Project>

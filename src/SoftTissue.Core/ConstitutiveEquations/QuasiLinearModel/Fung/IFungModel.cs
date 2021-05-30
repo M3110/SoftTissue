@@ -6,7 +6,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
     /// <summary>
     /// It represents the Fung Model.
     /// </summary>
-    public interface IFungModel : IQuasiLinearViscoelasticityModel<FungModelInput, FungModelResult, ReducedRelaxationFunctionData>
+    public interface IFungModel : IQuasiLinearModel<FungModelInput, FungModelResult, ReducedRelaxationFunctionData>
     {
         /// <summary>
         /// This method calculates the equation I(t) where t is the time.

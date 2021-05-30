@@ -8,9 +8,10 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
     /// <typeparam name="TInput"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <typeparam name="TRelaxationFunction"></typeparam>
-    public interface IQuasiLinearViscoelasticityModel<TInput, TResult, TRelaxationFunction> : IViscoelasticModel<TInput, TResult>
-        where TInput : QuasiLinearViscoelasticityModelInput<TRelaxationFunction>, new()
-        where TResult : QuasiLinearViscoelasticityModelResult, new()
+    public interface IQuasiLinearModel<TInput, TResult, TRelaxationFunction> : IViscoelasticModel<TInput, TResult>
+        where TInput : QuasiLinearModelInput<TRelaxationFunction>
+        where TResult : QuasiLinearModelResult, new()
+        where TRelaxationFunction : class
     {
         /// <summary>
         /// This method calculates the strain derivative.

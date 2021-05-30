@@ -3,5 +3,5 @@
     /// <summary>
     /// It contains the results for Fung Model.
     /// </summary>
-    public class FungModelResult : QuasiLinearViscoelasticityModelResult { }
+    public class FungModelResult : QuasiLinearModelResult { }
 }

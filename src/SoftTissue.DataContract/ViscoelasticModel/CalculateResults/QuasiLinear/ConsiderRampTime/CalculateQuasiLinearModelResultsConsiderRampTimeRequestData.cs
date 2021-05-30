@@ -3,9 +3,11 @@
 namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime
 {
     /// <summary>
-    /// It represents the 'data' content to CalculateResultsDisregardRampTime operation request.
+    /// It represents the 'data' content to CalculateResultsConsiderRampTime operation request.
     /// </summary>
-    public abstract class CalculateResultsConsiderRampTimeRequestData : CalculateResultsRequestData
+    /// <typeparam name="TRelaxationFunction"></typeparam>
+    public abstract class CalculateQuasiLinearModelResultsConsiderRampTimeRequestData<TRelaxationFunction> : CalculateResultsRequestData
+        where TRelaxationFunction : class
     {
         #region Relaxation parameters.
 
@@ -75,6 +77,15 @@ namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear
         /// Unit: Dimensionless.
         /// </summary>
         public double ElasticPowerConstant { get; set; }
+
+        #endregion
+
+        #region Reduced Relaxation Function parameters
+
+        /// <summary>
+        /// The input data to Reduced Relaxation Function.
+        /// </summary>
+        public TRelaxationFunction ReducedRelaxationFunctionData { get; set; }
 
         #endregion
     }

@@ -15,6 +15,6 @@ namespace SoftTissue.DataContract.Models
         /// <summary>
         /// The values for each iteration to Simplified Reduced Relaxation Function.
         /// </summary>
-        public IEnumerable<SimplifiedReducedRelaxationFunctionIteratorValues> IteratorValues { get; set; }
+        public IEnumerable<SimplifiedReducedRelaxationFunctionIteratorValue> IteratorValues { get; set; }
     }
 }

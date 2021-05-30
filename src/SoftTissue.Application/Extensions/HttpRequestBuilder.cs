@@ -36,19 +36,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.85068 / 2.48,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 27.91285,
                                     ViscoelasticStiffness = 0.27817 / 2.48
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 27.89834,
                                     ViscoelasticStiffness = 0.21177 / 2.48
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 27.96472,
                                     ViscoelasticStiffness = 0.12388 / 2.48
@@ -67,19 +67,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.60098 / 2.02,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 3.46446,
                                     ViscoelasticStiffness = 0.05836 / 2.02
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 26.32488,
                                     ViscoelasticStiffness = 0.095 / 2.02
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 258.84436,
                                     ViscoelasticStiffness = 0.24713 / 2.02
@@ -98,19 +98,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 3.79214 / 4.41,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 1.17552,
                                     ViscoelasticStiffness = 0.11477 / 4.41
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 8.24771,
                                     ViscoelasticStiffness = 0.18532 / 4.41
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 56.76771,
                                     ViscoelasticStiffness = 0.3221 / 4.41
@@ -129,19 +129,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 3.5735 / 4.1,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 2.1685,
                                     ViscoelasticStiffness = 0.19165 / 4.1
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 16.72283,
                                     ViscoelasticStiffness = 0.17699 / 4.1
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 155.50761,
                                     ViscoelasticStiffness = 0.24084 / 4.1
@@ -160,19 +160,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 0.85415 / 0.97,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 0.9759,
                                     ViscoelasticStiffness = 0.03055 / 0.97
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 8.14266,
                                     ViscoelasticStiffness = 0.04098 / 0.97
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 61.36836,
                                     ViscoelasticStiffness = 0.0579 / 0.97
@@ -191,19 +191,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 0.8084 / 0.91,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 1.84464,
                                     ViscoelasticStiffness = 0.04431 / 0.91
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 15.65552,
                                     ViscoelasticStiffness = 0.03257 / 0.91
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 163.02567,
                                     ViscoelasticStiffness = 0.04534 / 0.91
@@ -222,19 +222,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.45 / 1.65,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 1.07199,
                                     ViscoelasticStiffness = 0.03191 / 1.65
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 7.32883,
                                     ViscoelasticStiffness = 0.05549 / 1.65
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 54.66115,
                                     ViscoelasticStiffness = 0.11294 / 1.65
@@ -253,19 +253,19 @@ namespace SoftTissue.Application.Extensions
                         ReducedRelaxationFunctionData = new SimplifiedReducedRelaxationFunctionData
                         {
                             FirstViscoelasticStiffness = 1.38406 / 1.53,
-                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValues>
+                            IteratorValues = new List<SimplifiedReducedRelaxationFunctionIteratorValue>
                             {
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 1.87972,
                                     ViscoelasticStiffness = 0.03412 / 1.53
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 14.66308,
                                     ViscoelasticStiffness = 0.04735 / 1.53
                                 },
-                                new SimplifiedReducedRelaxationFunctionIteratorValues
+                                new SimplifiedReducedRelaxationFunctionIteratorValue
                                 {
                                     RelaxationTime = 139.22114,
                                     ViscoelasticStiffness = 0.07758 / 1.53

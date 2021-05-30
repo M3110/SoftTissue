@@ -10,7 +10,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
     /// <summary>
     /// It represents the Fung Model.
     /// </summary>
-    public class FungModel : QuasiLinearViscoelasticityModel<FungModelInput, FungModelResult, ReducedRelaxationFunctionData>, IFungModel
+    public class FungModel : QuasiLinearModel<FungModelInput, FungModelResult, ReducedRelaxationFunctionData>, IFungModel
     {
         /// <summary>
         /// Class constructor.
@@ -42,8 +42,8 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             // The original equation was rewritten to simplify the E1 equation.
             // Instead of calculate E1 twice, was unified the dominion of both integration. See the explanation on Equation.docx.
             return
-                (1 + reducedRelaxationFunctionInput.RelaxationIndex * this.CalculateI(reducedRelaxationFunctionInput.SlowRelaxationTime, reducedRelaxationFunctionInput.FastRelaxationTime, input.TimeStep, time))
-                / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
+                (1 + reducedRelaxationFunctionInput.RelaxationStiffness * this.CalculateI(reducedRelaxationFunctionInput.SlowRelaxationTime, reducedRelaxationFunctionInput.FastRelaxationTime, input.TimeStep, time))
+                / (1 + reducedRelaxationFunctionInput.RelaxationStiffness * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
         }
 
         /// <summary>
@@ -60,13 +60,13 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.Fung
             // The comparison with Constants.Precision is used because the operations with double have an error and, when that function
             // is called in another methods, that error must be considered to times near to zero.
             if (time <= Constants.Precision)
-                return reducedRelaxationFunctionInput.RelaxationIndex
+                return reducedRelaxationFunctionInput.RelaxationStiffness
                     * (-1 / reducedRelaxationFunctionInput.FastRelaxationTime + 1 / reducedRelaxationFunctionInput.SlowRelaxationTime)
-                    / (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
+                    / (1 + reducedRelaxationFunctionInput.RelaxationStiffness * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime));
 
-            return reducedRelaxationFunctionInput.RelaxationIndex
+            return reducedRelaxationFunctionInput.RelaxationStiffness
                 * (Math.Exp(-time / reducedRelaxationFunctionInput.FastRelaxationTime) - Math.Exp(-time / reducedRelaxationFunctionInput.SlowRelaxationTime))
-                / (time * (1 + reducedRelaxationFunctionInput.RelaxationIndex * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime)));
+                / (time * (1 + reducedRelaxationFunctionInput.RelaxationStiffness * Math.Log(reducedRelaxationFunctionInput.SlowRelaxationTime / reducedRelaxationFunctionInput.FastRelaxationTime)));
         }
 
         /// <summary>

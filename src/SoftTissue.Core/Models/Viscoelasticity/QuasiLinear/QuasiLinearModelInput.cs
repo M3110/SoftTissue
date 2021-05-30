@@ -5,7 +5,8 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
     /// <summary>
     /// It contains the input data for Quasi-Linear Viscoelasticity Model.
     /// </summary>
-    public abstract class QuasiLinearViscoelasticityModelInput<TRelaxationFunction> : ViscoelasticModelInput
+    public abstract class QuasiLinearModelInput<TRelaxationFunction> : ViscoelasticModelInput
+        where TRelaxationFunction : class
     {
         #region Relaxation parameters.
 

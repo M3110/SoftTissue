@@ -10,7 +10,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
     /// <summary>
     /// It represents the Fung Model considering the Simplified Relaxation Function.
     /// </summary>
-    public class SimplifiedFungModel : QuasiLinearViscoelasticityModel<SimplifiedFungModelInput, SimplifiedFungModelResult, SimplifiedReducedRelaxationFunctionData>, ISimplifiedFungModel
+    public class SimplifiedFungModel : QuasiLinearModel<SimplifiedFungModelInput, SimplifiedFungModelResult, SimplifiedReducedRelaxationFunctionData>, ISimplifiedFungModel
     {
         /// <summary>
         /// Class constructor.

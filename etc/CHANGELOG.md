@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+# TODO
+ ALTERAR NOME DAS OPERAÇÕES, PORQUE ESTÃO MUITO GRANDES E RESOLVER AS CONCORRÊNCIAS PELO NAMESPACE, EX:
+ - LINEARMODEL.CALCULATERESULTS
+ - QUASILINEARMODEL.CALCULATERESULTS
+
 ## UNRELEASED
 ### Changed
  - Improved generalizations at Viscoelastic Models.
@@ -15,6 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Methods CalculateResultsAsync and CalculateInitialConditionsAsync to be generic for viscoelastic models.
  - Enum StressDirection that indicates if the stress is increasing or decreasing.
  - Property StressDirection in AnalyzeResultsRequest.
+ - Generic contract OperationResponseBase that do not contain ResponseData.
+ - Extension method for OperationResponseBase.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.

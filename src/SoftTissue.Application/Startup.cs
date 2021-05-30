@@ -15,13 +15,13 @@ using SoftTissue.Core.Operations.FileManager.SkipPoints;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel;
 using SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStressSensitivityAnalysis.MaxwellModel;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderRelaxationFunction;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderRelaxationFunction;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
 using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear.CalculateStrain.MaxwellModel;
 using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear.CalculateStress.MaxwellModel;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.Fung;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.SimplifiedFung;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.Fung;
 
 namespace SoftTissue.Application
 {
@@ -66,8 +66,8 @@ namespace SoftTissue.Application
             services.AddScoped<ICalculateMaxwellModelStrain, CalculateMaxwellModelStrain>();
             services.AddScoped<ICalculateMaxwellModelStressSensitivityAnalysis, CalculateMaxwellModelStressSensitivityAnalysis>();
             // Register Operations for Quasi-Linear Viscoelastic Model.
-            services.AddScoped<ICalculateFungModelStressConsiderRampTime, CalculateFungModelStressConsiderRampTime>();
-            services.AddScoped<ICalculateSimplifiedFungModelStressConsiderRampTime, CalculateSimplifiedFungModelStressConsiderRampTime>();
+            services.AddScoped<ICalculateFungModelResultsConsiderRampTime, CalculateFungModelResultsConsiderRampTime>();
+            services.AddScoped<ICalculateSimplifiedFungModelResultsConsiderRampTime, CalculateSimplifiedFungModelResultsConsiderRampTime>();
             services.AddScoped<ICalculateFungModelStressDisregardRampTime, CalculateFungModelStressDisregardRampTime>();
             services.AddScoped<ICalculateSimplifiedFungModelStressDisregardRampTime, CalculateSimplifiedFungModelStressDisregardRampTime>();
             services.AddScoped<IGenerateFungModelDomain, GenerateFungModelDomain>();

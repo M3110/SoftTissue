@@ -3,7 +3,7 @@
     /// <summary>
     /// It contains the results for a quasi-linear Viscoelastic Model.
     /// </summary>
-    public class QuasiLinearViscoelasticityModelResult : ViscoelasticModelResult
+    public class QuasiLinearModelResult : ViscoelasticModelResult
     {
         /// <summary>
         /// Unit: Pa (Pascal).

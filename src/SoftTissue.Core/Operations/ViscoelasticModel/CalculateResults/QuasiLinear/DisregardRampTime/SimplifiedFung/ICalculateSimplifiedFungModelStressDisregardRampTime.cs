@@ -1,19 +1,19 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime;
 using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung;
 
 namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction
 {
     /// <summary>
-    /// It is responsible to calculate the stress disregarding the ramp time and considering the Simplified Reduced Relaxation Function to Fung Model.
+    /// It is responsible to calculate the results disregarding the ramp time to Simplified Fung Model.
     /// </summary>
     public interface ICalculateSimplifiedFungModelStressDisregardRampTime :
-        ICalculateQuasiLinearViscoelasticityStress<
+        ICalculateQuasiLinearModelResultsDisregardRampTime<
             CalculateSimplifiedFungModelResultsDisregardRampTimeRequest,
-            CalculateSimplifiedFungModelResultsDisregardRampTimeResponse,
-            CalculateSimplifiedFungModelResultsDisregardRampTimeResponseData,
+            CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData,
             SimplifiedFungModelInput,
-            SimplifiedReducedRelaxationFunctionData,
-            SimplifiedFungModelResult> 
+            SimplifiedFungModelResult,
+            SimplifiedReducedRelaxationFunctionData>
     { }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// It contains the values for each iteration to Simplified Reduced Relaxation Function.
     /// </summary>
-    public class SimplifiedReducedRelaxationFunctionIteratorValues
+    public class SimplifiedReducedRelaxationFunctionIteratorValue
     {
         /// <summary>
         /// The viscoelastic stiffness. The constante that multiplies the exponencial.

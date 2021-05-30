@@ -5,15 +5,5 @@ namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear
     /// <summary>
     /// It represents the 'data' content to CalculateSimplifiedFungModelResultsConsiderRampTime operation request.
     /// </summary>
-    public sealed class CalculateSimplifiedFungModelResultsConsiderRampTimeRequestData : CalculateResultsConsiderRampTimeRequestData
-    {
-        #region Reduced Relaxation Function parameters
-
-        /// <summary>
-        /// The input data to Reduced Relaxation Function.
-        /// </summary>
-        public SimplifiedReducedRelaxationFunctionData ReducedRelaxationFunctionData { get; set; }
-
-        #endregion
-    }
+    public sealed class CalculateSimplifiedFungModelResultsConsiderRampTimeRequestData : CalculateQuasiLinearModelResultsConsiderRampTimeRequestData<SimplifiedReducedRelaxationFunctionData> { }
 }

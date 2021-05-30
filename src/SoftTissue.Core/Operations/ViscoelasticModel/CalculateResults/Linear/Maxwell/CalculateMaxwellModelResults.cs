@@ -19,5 +19,31 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear.M
         /// </summary>
         /// <param name="viscoelasticModel"></param>
         public CalculateMaxwellModelResults(IMaxwellModel viscoelasticModel) : base(viscoelasticModel) { }
+
+        /// <summary>
+        /// This method builds a list with <see cref="MaxwellModelInput"/> based on <see cref="CalculateMaxwellModelResultsRequest"/>.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public override List<MaxwellModelInput> BuildInputList(CalculateMaxwellModelResultsRequest request)
+        {
+            var inputList = new List<MaxwellModelInput>();
+
+            foreach (var requestData in request.DataList)
+            {
+                inputList.Add(new MaxwellModelInput
+                {
+                    FinalTime = requestData.FinalTime ?? request.FinalTime,
+                    TimeStep = requestData.TimeStep ?? request.TimeStep,
+                    InitialStress = requestData.InitialStress,
+                    InitialStrain = requestData.InitialStrain,
+                    Stiffness = requestData.Stiffness,
+                    Viscosity = requestData.Viscosity,
+                    SoftTissueType = requestData.SoftTissueType
+                });
+            }
+
+            return inputList;
+        }
     }
 }
