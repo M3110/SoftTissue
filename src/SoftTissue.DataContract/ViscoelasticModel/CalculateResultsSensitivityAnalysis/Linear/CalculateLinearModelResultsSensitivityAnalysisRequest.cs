@@ -8,15 +8,15 @@ namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityA
     public abstract class CalculateLinearModelResultsSensitivityAnalysisRequest : CalculateResultsSensitivityAnalysisRequest
     {
         /// <summary>
-        /// List of initial strain.
+        /// Range for initial strain.
         /// Unit: Dimensionless.
         /// </summary>
-        public Value InitialStrainList { get; set; }
+        public Range InitialStrainRange { get; set; }
 
         /// <summary>
-        /// List of initial stress.
+        /// Range for initial stress.
         /// Unit: Pa (Pascal).
         /// </summary>
-        public Value InitialStressList { get; set; }
+        public Range InitialStressRange { get; set; }
     }
 }

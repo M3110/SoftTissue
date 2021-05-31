@@ -4,7 +4,7 @@ using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnaly
 namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
 {
     /// <summary>
-    /// It contains methods and parameters shared between operations to calculate a result.
+    /// It contains methods and parameters shared between operations to calculate a result with sensitivity analysis.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <typeparam name="TInput"></typeparam>

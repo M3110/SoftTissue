@@ -6,7 +6,7 @@ namespace SoftTissue.Core.ExtensionMethods
     /// <summary>
     /// It contains extension methods for relaxation functions.
     /// </summary>
-    public static class RelaxationFunction
+    public static class RelaxationFunctionExtensions
     {
         /// <summary>
         /// This method validates if the parameters for Reduced Relaxation Function is valid and writes the errors in response.

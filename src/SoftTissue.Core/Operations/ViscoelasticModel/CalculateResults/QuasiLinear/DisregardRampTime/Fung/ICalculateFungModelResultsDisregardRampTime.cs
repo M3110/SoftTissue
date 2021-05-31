@@ -7,7 +7,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLin
     /// <summary>
     /// It is responsible to calculate the results disregarding the ramp time to Fung Model.
     /// </summary>
-    public interface ICalculateFungModelStressDisregardRampTime :
+    public interface ICalculateFungModelResultsDisregardRampTime :
         ICalculateQuasiLinearModelResultsDisregardRampTime<
             CalculateFungModelResultsDisregardRampTimeRequest,
             CalculateFungModelResultsDisregardRampTimeRequestData,

@@ -9,7 +9,7 @@ namespace SoftTissue.Core.ExtensionMethods
     public static class OperationResponseBaseExtensions
     {
         /// <summary>
-        /// This method adds error if the value is negative or equals to zero.
+        /// This method adds error if the value is negative or equal to zero.
         /// </summary>
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="response"></param>
@@ -26,12 +26,38 @@ namespace SoftTissue.Core.ExtensionMethods
             string operationErrorCode = OperationErrorCode.RequestValidationError)
             where TResponse : OperationResponseBase
         {
-            string errorMessage = $"The '{parameterName}' cannot be negative or equals to zero.";
+            string errorMessage = $"The '{parameterName}' cannot be negative or equal to zero.";
 
             if (aditionalMessage != null)
                 errorMessage = $"{aditionalMessage} {errorMessage}";
 
             return response.AddErrorIf(() => parameter <= 0, errorMessage, operationErrorCode);
+        }
+
+        /// <summary>
+        /// This method adds error if the value is equal to zero.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="response"></param>
+        /// <param name="parameter"></param>
+        /// <param name="parameterName"></param>
+        /// <param name="aditionalMessage"></param>
+        /// <param name="operationErrorCode"></param>
+        /// <returns></returns>
+        public static TResponse AddErrorIfZero<TResponse>(
+            this TResponse response,
+            double parameter,
+            string parameterName,
+            string aditionalMessage = null,
+            string operationErrorCode = OperationErrorCode.RequestValidationError)
+            where TResponse : OperationResponseBase
+        {
+            string errorMessage = $"The '{parameterName}' cannot be equal to zero.";
+
+            if (aditionalMessage != null)
+                errorMessage = $"{aditionalMessage} {errorMessage}";
+
+            return response.AddErrorIf(() => parameter == 0, errorMessage, operationErrorCode);
         }
 
         /// <summary>

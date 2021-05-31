@@ -8,15 +8,15 @@ namespace SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityA
     public sealed class CalculateMaxwellModelResultsSensitivityAnalysisRequest : CalculateLinearModelResultsSensitivityAnalysisRequest
     {
         /// <summary>
-        /// List of viscosity.
+        /// Range for viscosity.
         /// Unit: N.s/m (Newton-second per meter).
         /// </summary>
-        public Value ViscosityList { get; set; }
+        public Range ViscosityRange { get; set; }
 
         /// <summary>
-        /// List of stiffness.
+        /// Range for stiffness.
         /// Unit: Pa (Pascal).
         /// </summary>
-        public Value StiffnessList { get; set; }
+        public Range StiffnessRange { get; set; }
     }
 }

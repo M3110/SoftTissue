@@ -157,7 +157,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults
 
             response
                 .AddErrorIfNegativeOrZero(request.TimeStep, nameof(request.TimeStep))
-                .AddErrorIfNegativeOrZero(request.FinalTime, nameof(request.TimeStep))
+                .AddErrorIfNegativeOrZero(request.FinalTime, nameof(request.FinalTime))
                 .AddErrorIf(() => request.TimeStep >= request.FinalTime, "Time step must be smaller than the final time.");
 
             return response;

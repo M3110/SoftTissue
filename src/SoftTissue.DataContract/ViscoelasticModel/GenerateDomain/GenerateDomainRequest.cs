@@ -24,12 +24,12 @@ namespace SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain
         /// Tau 1.
         /// List of fast relaxation time.
         /// </summary>
-        public Value FastRelaxationTimeList { get; set; }
+        public Range FastRelaxationTimeList { get; set; }
 
         /// <summary>
         /// Tau 2.
         /// List of slow relaxation time.
         /// </summary>
-        public Value SlowRelaxationTimeList { get; set; }
+        public Range SlowRelaxationTimeList { get; set; }
     }
 }

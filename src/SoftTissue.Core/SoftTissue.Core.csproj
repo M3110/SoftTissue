@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\Linear\Maxwell\" />
     <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\DisregardRampTime\Fung\" />
     <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\DisregardRampTime\SimplifiedFung\" />
     <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\ConsiderRampTime\Fung\" />

@@ -12,14 +12,14 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLin
     /// <summary>
     /// It is responsible to calculate the results disregarding the ramp time to Fung Model.
     /// </summary>
-    public class CalculateFungModelStressDisregardRampTime :
+    public class CalculateFungModelResultsDisregardRampTime :
         CalculateQuasiLinearModelResultsDisregardRampTime<
             CalculateFungModelResultsDisregardRampTimeRequest,
             CalculateFungModelResultsDisregardRampTimeRequestData,
             FungModelInput,
             FungModelResult,
             ReducedRelaxationFunctionData>,
-        ICalculateFungModelStressDisregardRampTime
+        ICalculateFungModelResultsDisregardRampTime
     {
         /// <summary>
         /// The base path to files.
@@ -30,7 +30,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLin
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateFungModelStressDisregardRampTime(IFungModel viscoelasticModel) : base(viscoelasticModel) { }
+        public CalculateFungModelResultsDisregardRampTime(IFungModel viscoelasticModel) : base(viscoelasticModel) { }
 
         /// <summary>
         /// This method validates the parameters for Reduced Relaxation Function.

@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Operation AnalyzeResults to also consider when the stress increase.
  - Changed SkipPoints controller to use FromQuery instead of FromBody.
  - Renamed classes that contain LinearViscoelasticity or QuasiLinearViscoelasticity in name from Linear and QuasiLinear.
+ - Renamed class from Value to Range.
 ### Added
  - Methods CalculateResultsAsync and CalculateInitialConditionsAsync to be generic for viscoelastic models.
  - Enum StressDirection that indicates if the stress is increasing or decreasing.

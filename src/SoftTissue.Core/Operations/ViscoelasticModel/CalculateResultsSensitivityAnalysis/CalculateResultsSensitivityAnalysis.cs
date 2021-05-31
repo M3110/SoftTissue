@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
 {
     /// <summary>
-    /// It contains methods and parameters shared between operations to calculate a result .
+    /// It contains methods and parameters shared between operations to calculate a result with sensitivity analysis.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <typeparam name="TInput"></typeparam>
@@ -169,7 +169,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
         }
 
         /// <summary>
-        /// Asynchronously, this method validates <see cref="TRequest"/>.
+        /// Asynchronously, this method validates the request sent to operation.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -181,22 +181,10 @@ namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
                 return response;
             }
 
-            if (request.TimeStep.IsNegative())
-            {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Time step cannot be negative.");
-                return response;
-            }
-
-            if (request.FinalTime.IsNegative())
-            {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Final time cannot be negative.");
-                return response;
-            }
-
-            if (request.TimeStep >= request.FinalTime)
-            {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "Time step must be smaller than the final time.");
-            }
+            response
+                .AddErrorIfNegativeOrZero(request.TimeStep, nameof(request.TimeStep))
+                .AddErrorIfNegativeOrZero(request.FinalTime, nameof(request.FinalTime))
+                .AddErrorIf(() => request.TimeStep >= request.FinalTime, "Time step must be smaller than the final time.");
 
             return response;
         }

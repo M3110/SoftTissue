@@ -1,9 +1,9 @@
 ﻿namespace SoftTissue.DataContract.Models
 {
     /// <summary>
-    /// It contains the parameters to build a list of values.
+    /// It contains the parameters to build a range of values.
     /// </summary>
-    public class Value
+    public class Range
     {
         /// <summary>
         /// The initial point.

@@ -2,25 +2,24 @@
 using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung;
-using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime;
 using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResults;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung;
 using System.IO;
 
-namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction
+namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung
 {
     /// <summary>
     /// It is responsible to calculate the results disregarding the ramp time to Simplified Fung Model.
     /// </summary>
-    public class CalculateSimplifiedFungModelStressDisregardRampTime :
+    public class CalculateSimplifiedFungModelResultsDisregardRampTime :
         CalculateQuasiLinearModelResultsDisregardRampTime<
             CalculateSimplifiedFungModelResultsDisregardRampTimeRequest,
             CalculateSimplifiedFungModelResultsDisregardRampTimeRequestData,
             SimplifiedFungModelInput,
             SimplifiedFungModelResult,
             SimplifiedReducedRelaxationFunctionData>,
-        ICalculateSimplifiedFungModelStressDisregardRampTime
+        ICalculateSimplifiedFungModelResultsDisregardRampTime
     {
         /// <summary>
         /// The base path to files.
@@ -31,7 +30,7 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.
         /// Class constructor.
         /// </summary>
         /// <param name="viscoelasticModel"></param>
-        public CalculateSimplifiedFungModelStressDisregardRampTime(ISimplifiedFungModel viscoelasticModel) : base(viscoelasticModel) { }
+        public CalculateSimplifiedFungModelResultsDisregardRampTime(ISimplifiedFungModel viscoelasticModel) : base(viscoelasticModel) { }
 
         /// <summary>
         /// This method validates the parameters for Reduced Relaxation Function.
