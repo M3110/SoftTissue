@@ -95,7 +95,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to execute an analysis to calculate the results applied to Fung Model disregarding ramp time and considering the Reduced Relaxation Function.
+        /// It is responsible to calculate the results for Simplified Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -108,7 +108,7 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-results/simplified-fung-model/disregard-ramp-time")]
+        [HttpPost("simplified-fung-model/disregard-ramp-time/calculate-results")]
         public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsDisregardRampTime(
             [FromServices] ICalculateSimplifiedFungModelResultsDisregardRampTime operation,
             [FromBody] CalculateSimplifiedFungModelResultsDisregardRampTimeRequest request)
@@ -118,7 +118,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to execute an analysis to calculate the results considering Fung Model.
+        /// It is responsible to calculate the results for Simplified Fung Model disregarding ramp time for a specific experimental model.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -131,7 +131,7 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-results/simplifiedfung-model/disregard-ramp-time/experimental-model")]
+        [HttpPost("simplifiedfung-model/disregard-ramp-time/experimental-model/calculate-results")]
         public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsDisregardRampTimeToExperimentalModel(
             [FromServices] ICalculateSimplifiedFungModelResultsDisregardRampTime operation,
             [FromQuery] double timeStep, double finalTime, double strain, ExperimentalModel experimentalModel)
@@ -156,7 +156,7 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("generate-domain/fung-model")]
+        [HttpPost("fung-model/generate-domain")]
         public async Task<ActionResult<GenerateDomainResponse>> GenerateFungModelDomain(
             [FromServices] IGenerateFungModelDomain operation,
             [FromBody] GenerateDomainRequest request)
