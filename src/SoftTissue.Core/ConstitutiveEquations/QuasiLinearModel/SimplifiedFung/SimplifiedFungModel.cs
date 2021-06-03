@@ -8,7 +8,8 @@ using System;
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel.SimplifiedFung
 {
     /// <summary>
-    /// It represents the Fung Model considering the Simplified Relaxation Function.
+    /// It represents the Simplified Fung Model.
+    /// The simplified Fung Model is characterized by using the Simplified Reduced Relaxation Function. 
     /// </summary>
     public class SimplifiedFungModel : QuasiLinearModel<SimplifiedFungModelInput, SimplifiedFungModelResult, SimplifiedReducedRelaxationFunctionData>, ISimplifiedFungModel
     {
