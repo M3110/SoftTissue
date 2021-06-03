@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime
 {
     /// <summary>
-    /// It is responsible to calculate the results considering ramp time to a quasi-linear viscoelastic model.
+    /// It is responsible to calculate the results considering ramp time for a quasi-linear viscoelastic model.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <typeparam name="TRequestData"></typeparam>

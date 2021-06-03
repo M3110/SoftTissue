@@ -10,7 +10,7 @@ using System.IO;
 namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.Fung
 {
     /// <summary>
-    /// It is responsible to calculate the results disregarding the ramp time to Fung Model.
+    /// It is responsible to calculate the results disregarding the ramp time for Fung Model.
     /// </summary>
     public class CalculateFungModelResultsDisregardRampTime :
         CalculateQuasiLinearModelResultsDisregardRampTime<

@@ -5,7 +5,7 @@ using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.Con
 namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.SimplifiedFung
 {
     /// <summary>
-    /// It is responsible to calculate the results considering the ramp time to Simplified Fung Model.
+    /// It is responsible to calculate the results considering the ramp time for Simplified Fung Model.
     /// </summary>
     public interface ICalculateSimplifiedFungModelResultsConsiderRampTime :
         ICalculateQuasiLinearModelResultsConsiderRampTime<

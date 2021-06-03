@@ -6,7 +6,7 @@ using SoftTissue.DataContract.ViscoelasticModel.CalculateResults;
 namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear
 {
     /// <summary>
-    /// It is responsible to calculate the results to a quasi-linear viscoelastic model.
+    /// It is responsible to calculate the results for a quasi-linear viscoelastic model.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <typeparam name="TRequestData"></typeparam>

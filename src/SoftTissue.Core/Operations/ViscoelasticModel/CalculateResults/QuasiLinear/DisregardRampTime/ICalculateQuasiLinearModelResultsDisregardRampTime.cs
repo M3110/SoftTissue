@@ -4,7 +4,7 @@ using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.Dis
 namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime
 {
     /// <summary>
-    /// It is responsible to calculate the results disregarding ramp time to a quasi-linear viscoelastic model.
+    /// It is responsible to calculate the results disregarding ramp time for a quasi-linear viscoelastic model.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <typeparam name="TRequestData"></typeparam>
