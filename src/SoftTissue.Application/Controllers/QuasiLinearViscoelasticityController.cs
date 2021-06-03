@@ -26,7 +26,7 @@ namespace SoftTissue.Application.Controllers
     public class QuasiLinearViscoelasticityController : ControllerBase
     {
         /// <summary>
-        /// It is responsible to calculate the results for Fung Model considering ramp time.
+        /// Calculates the results for Fung Model considering ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -49,7 +49,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to calculate the results for Fung Model disregarding ramp time.
+        /// Calculate the results for Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -72,7 +72,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to calculate the results for Simplified Fung Model considering ramp time.
+        /// Calculate the results for Simplified Fung Model considering ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -95,7 +95,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to calculate the results for Simplified Fung Model disregarding ramp time.
+        /// Calculate the results for Simplified Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -118,10 +118,13 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to calculate the results for Simplified Fung Model disregarding ramp time for a specific experimental model.
+        /// Calculate the results for Simplified Fung Model disregarding ramp time for a specific experimental model.
         /// </summary>
         /// <param name="operation"></param>
-        /// <param name="request"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <param name="strain"></param>
+        /// <param name="experimentalModel"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
         /// <response code="400">If some validation do not passed.</response>
@@ -142,7 +145,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to generate the domain for Fung Model parameters.
+        /// Generate the domain for Fung Model parameters.
         /// Here is just considered the fast and slow relaxation times, because the another parameters is avaiable for all real and positive domain.
         /// </summary>
         /// <param name="operation"></param>
@@ -166,7 +169,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to calculate the convergence time when the results is constant.
+        /// Calculate the convergence time when the results is constant.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>

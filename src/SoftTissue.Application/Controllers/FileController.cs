@@ -14,7 +14,7 @@ namespace SoftTissue.Application.Controllers
     public class FileController : Controller
     {
         /// <summary>
-        /// It is responsible to skip points into a file.
+        /// Skips points into a file.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>

@@ -22,9 +22,9 @@ namespace SoftTissue.Application.Controllers
     public class LinearViscoelasticityController : ControllerBase
     {
         /// <summary>
-        /// It is responsible to calculate the stress for Maxwell Model.
+        /// Calculate the stress for Maxwell Model.
         /// </summary>
-        /// <param name="calculateMaxwellModelStress"></param>
+        /// <param name="operation"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -37,17 +37,17 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("maxwell-model/calculate-stress")]
         public async Task<ActionResult<CalculateResultsResponse>> CalculateStress(
-            [FromServices] ICalculateMaxwellModelStress calculateMaxwellModelStress,
+            [FromServices] ICalculateMaxwellModelStress operation,
             [FromQuery] CalculateMaxwellModelStressRequest request)
         {
-            CalculateResultsResponse response = await calculateMaxwellModelStress.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to calculate the strain for Maxwell Model.
+        /// Calculate the strain for Maxwell Model.
         /// </summary>
-        /// <param name="calculateMaxwellModelStrain"></param>
+        /// <param name="operation"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -60,17 +60,17 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("maxwell-model/calculate-strain")]
         public async Task<ActionResult<CalculateResultsResponse>> CalculateStrain(
-            [FromServices] ICalculateMaxwellModelStrain calculateMaxwellModelStrain,
+            [FromServices] ICalculateMaxwellModelStrain operation,
             [FromQuery] CalculateMaxwellModelStrainRequest request)
         {
-            CalculateResultsResponse response = await calculateMaxwellModelStrain.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to calculate the results for Maxwell Model.
+        /// Calculate the results for Maxwell Model.
         /// </summary>
-        /// <param name="calculateMaxwellModelResults"></param>
+        /// <param name="operation"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -83,17 +83,17 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("maxwell-model/calculate-results")]
         public async Task<ActionResult<CalculateResultsResponse>> CalculateResults(
-            [FromServices] ICalculateMaxwellModelResults calculateMaxwellModelResults,
+            [FromServices] ICalculateMaxwellModelResults operation,
             [FromQuery] CalculateMaxwellModelResultsRequest request)
         {
-            CalculateResultsResponse response = await calculateMaxwellModelResults.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to calculate the results for Maxwell Model and execute a sensitivity analysis.
+        /// Calculate the results for Maxwell Model and execute a sensitivity analysis.
         /// </summary>
-        /// <param name="calculateMaxwellModelStressSensitivityAnalysis"></param>
+        /// <param name="operation"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -106,10 +106,10 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("maxwell-model/calculate-results/sensitivity-analysis")]
         public async Task<ActionResult<CalculateResultsSensitivityAnalysisResponse>> CalculateStressSensitivityAnalysis(
-            [FromServices] ICalculateMaxwellModelResultsSensitivityAnalysis calculateMaxwellModelStressSensitivityAnalysis,
+            [FromServices] ICalculateMaxwellModelResultsSensitivityAnalysis operation,
             [FromQuery] CalculateMaxwellModelResultsSensitivityAnalysisRequest request)
         {
-            CalculateResultsSensitivityAnalysisResponse response = await calculateMaxwellModelStressSensitivityAnalysis.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsSensitivityAnalysisResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

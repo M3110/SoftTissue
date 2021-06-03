@@ -16,9 +16,9 @@ namespace SoftTissue.Application.Controllers
     public class ExperimentalAnalysisController : Controller
     {
         /// <summary>
-        /// It is responsible to analyze and extrapolate the experimental results.
+        /// Analyzes and extrapolates the experimental results.
         /// </summary>
-        /// <param name="analyzeAndExtrapolateResults"></param>
+        /// <param name="operation"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -31,17 +31,17 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("analyze-and-extrapolate")]
         public async Task<ActionResult<AnalyzeAndExtrapolateResultsResponse>> AnalyzeAndExtrapolateResults(
-            [FromServices] IAnalyzeAndExtrapolateResults analyzeAndExtrapolateResults,
+            [FromServices] IAnalyzeAndExtrapolateResults operation,
             [FromQuery] AnalyzeAndExtrapolateResultsRequest request)
         {
-            AnalyzeAndExtrapolateResultsResponse response = await analyzeAndExtrapolateResults.ProcessAsync(request).ConfigureAwait(false);
+            AnalyzeAndExtrapolateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to analyze the experimental results.
+        /// Analyze the experimental results.
         /// </summary>
-        /// <param name="analyzeResults"></param>
+        /// <param name="operation"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -54,10 +54,10 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("analyze")]
         public async Task<ActionResult<AnalyzeResultsResponse>> AnalyzeResults(
-            [FromServices] IAnalyzeResults analyzeResults,
+            [FromServices] IAnalyzeResults operation,
             [FromQuery] AnalyzeResultsRequest request)
         {
-            AnalyzeResultsResponse response = await analyzeResults.ProcessAsync(request).ConfigureAwait(false);
+            AnalyzeResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }
