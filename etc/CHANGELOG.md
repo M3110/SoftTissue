@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## UNRELEASED
 ### Changed
  - Improved generalizations for Viscoelastic Models.
+ - Renamed classes that contain ViscoelasticityModel in name to Model.
  - Operations that calculate strain and stress for viscoelastic models to inherit from operation CalculateResults.
+ - Endpoint for operation CalculateSimplifiedFungModelResultsDisregardRampTime to receive parameters from query instead of from body with request.
  - Operation AnalyzeResults to also consider when the stress increase.
  - Changed SkipPoints controller to use FromQuery instead of FromBody.
- - Renamed classes that contain ViscoelasticityModel in name to Model.
  - Renamed class from Value to Range.
- - Endpoint for operation CalculateSimplifiedFungModelResultsDisregardRampTime to receive parameters from query instead of from body with request.
+ - Renamed extension method for class Range from 'ToEnumerable' to 'ToList'.
 ### Added
  - Methods CalculateResultsAsync to be generic for viscoelastic models.
  - Enum StressDirection that indicates if the stress is increasing or decreasing.
