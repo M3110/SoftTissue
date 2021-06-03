@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.Linear;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,30 +15,15 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel
         where TResult : LinearModelResult, new()
     {
         /// <summary>
-        /// Asynchronously, this method calculates the initial conditions for a linear viscoelastic model analysis.
-        /// </summary>
-        /// <returns></returns>
-        public override Task<TResult> CalculateInitialConditionsAsync()
-        {
-            return Task.FromResult(new TResult
-            {
-                Time = 0,
-                Strain = 0,
-                CreepCompliance = 0,
-                RelaxationFunction = 0
-            });
-        }
-
-        /// <summary>
-        /// Asynchronously, this method calculates the results for a linear viscoelastic model analysis.
+        /// Asynchronously, this method calculates the results for a linear viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
         public override async Task<TResult> CalculateResultsAsync(TInput input, double time)
         {
-            if (time <= 0)
-                return await this.CalculateInitialConditionsAsync().ConfigureAwait(false);
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), "Time cannot be negative to calculate the results for viscoelastic models.");
 
             var tasks = new List<Task>();
 

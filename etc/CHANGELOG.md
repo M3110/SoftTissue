@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Renamed classes that contain LinearViscoelasticity or QuasiLinearViscoelasticity in name from Linear and QuasiLinear.
  - Renamed class from Value to Range.
 ### Added
- - Methods CalculateResultsAsync and CalculateInitialConditionsAsync to be generic for viscoelastic models.
+ - Methods CalculateResultsAsync to be generic for viscoelastic models.
  - Enum StressDirection that indicates if the stress is increasing or decreasing.
  - Property StressDirection in AnalyzeResultsRequest.
  - Generic contract OperationResponseBase that do not contain ResponseData.
@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.
 ### Removed
  - Response contracts for operations that inherit operation CalculateResults.
+ - Method CalculateInitialConditionsAsync in QuasiLinearModel.
 
 ## [2.1.2] - 2021-04-26
 ### Fixed

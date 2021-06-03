@@ -13,13 +13,7 @@ namespace SoftTissue.Core.ConstitutiveEquations
         where TResult : ViscoelasticModelResult, new()
     {
         /// <summary>
-        /// Asynchronously, this method calculates the initial conditions for a generic viscoelastic model analysis.
-        /// </summary>
-        /// <returns></returns>
-        Task<TResult> CalculateInitialConditionsAsync();
-
-        /// <summary>
-        /// Asynchronously, this method calculates the results for a generic viscoelastic model analysis.
+        /// Asynchronously, this method calculates the results for a generic viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>

@@ -40,32 +40,14 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         }
 
         /// <summary>
-        /// Asynchronously, this method calculates the initial conditions for a quasi-linear viscoelastic model analysis.
-        /// </summary>
-        /// <returns></returns>
-        public override Task<TResult> CalculateInitialConditionsAsync()
-        {
-            return Task.FromResult(new TResult
-            {
-                Time = 0,
-                Strain = 0,
-                ElasticResponse = 0,
-                ReducedRelaxationFunction = 1,
-                Stress = 0,
-                StressByIntegralDerivative = 0,
-                StressByReducedRelaxationFunctionDerivative = 0
-            });
-        }
-
-        /// <summary>
-        /// Asynchronously, this method calculates the results for a quasi-linear viscoelastic model analysis.
+        /// Asynchronously, this method calculates the results for a quasi-linear viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         public override async Task<TResult> CalculateResultsAsync(TInput input, double time)
         {
-            if (time <= 0)
-                return await this.CalculateInitialConditionsAsync().ConfigureAwait(false);
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), "Time cannot be negative to calculate the results for viscoelastic models.");
 
             input.RelaxationNumber = this.CalculateRelaxationNumber(input, time);
 
@@ -139,41 +121,41 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
             // time = 0 
             //     --> strain = 0
-            if (time == input.InitialTime)
+            if (time == 0)
                 return 0;
 
             // 0 < time < first ramp time
             //     --> strain = strain rate * time
-            if (time > input.InitialTime && time < input.FirstRampTime)
+            if (time > 0 && time <= input.FirstRampTime)
                 return input.StrainRate * time;
 
             // first ramp time <= time < first relaxation total time
             // OBS: first relaxation total time = first ramp time + time with constant maximum strain
             //     --> strain = maximum strain
-            if (time >= input.FirstRampTime && time < input.FirstRelaxationTotalTime)
+            if (time > input.FirstRampTime && time < input.FirstRelaxationTotalTime)
                 return input.MaximumStrain;
 
             // This part is used only for the second relaxations and next.
             if (time >= input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time < this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+                time <= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MaximumStrain -
                     input.StrainDecreaseRate * (time - (input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime));
 
-            if (time >= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+            if (time > this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time < this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MinimumStrain;
 
             if (time >= this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time < this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+                time <= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MinimumStrain +
                     input.StrainRate * (time - (this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime));
 
-            if (time >= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+            if (time > this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time < this._relaxationTimes.StrainIncreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.MaximumStrain;
 
             // If the time is bigger than all relaxations time, it means that it is on the last relaxation and the strain is kept at the maximum till the end of analysis.
-            if (time >= input.FirstRelaxationTotalTime + (input.NumerOfRelaxations - 1) * input.RelaxationTotalTime)
+            if (time > input.FirstRelaxationTotalTime + (input.NumerOfRelaxations - 1) * input.RelaxationTotalTime)
                 return input.MaximumStrain;
 
             // The default value returned must be equals to zero.
@@ -191,25 +173,28 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return 0;
 
-            if (time < input.FirstRampTime)
+            if (time == 0)
+                return 0;
+
+            if (time > 0 && time <= input.FirstRampTime)
                 return input.StrainRate;
 
-            if (time >= input.FirstRampTime && time < input.FirstRelaxationTotalTime)
+            if (time > input.FirstRampTime && time < input.FirstRelaxationTotalTime)
                 return 0;
 
             if (time >= input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time < this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+                time <= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return -input.StrainDecreaseRate;
 
-            if (time >= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+            if (time > this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time < this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return 0;
 
             if (time >= this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
-                time < this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
+                time <= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return input.StrainRate;
 
-            if (time >= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
+            if (time > this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time < this._relaxationTimes.StrainIncreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
                 return 0;
 
@@ -226,6 +211,9 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public virtual double CalculateElasticResponse(TInput input, double time)
         {
+            if (time == 0)
+                return 0;
+
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return input.InitialStress;
 
@@ -241,6 +229,9 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// <returns></returns>
         public virtual double CalculateElasticResponseDerivative(TInput input, double time)
         {
+            if (time == 0)
+                return 0;
+
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return 0;
 

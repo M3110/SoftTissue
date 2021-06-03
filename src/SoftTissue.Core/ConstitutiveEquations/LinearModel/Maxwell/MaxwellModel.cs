@@ -1,5 +1,6 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.Linear.Maxwell;
 using System;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
 {
@@ -21,7 +22,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
         }
 
         /// <summary>
-        /// This method calculates the stress for a specific time.
+        /// This method calculates the stress.
         /// Equation used: Sigma(t) = G(t) * Epsilon0
         /// </summary>
         /// <param name="input"></param>

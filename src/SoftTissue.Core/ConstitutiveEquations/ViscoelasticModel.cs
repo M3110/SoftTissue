@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,28 +15,14 @@ namespace SoftTissue.Core.ConstitutiveEquations
         where TResult : ViscoelasticModelResult, new()
     {
         /// <summary>
-        /// Asynchronously, this method calculates the initial conditions for a generic viscoelastic model analysis.
-        /// </summary>
-        /// <returns></returns>
-        public virtual Task<TResult> CalculateInitialConditionsAsync()
-        {
-            return Task.FromResult(new TResult
-            {
-                Time = 0,
-                Strain = 0,
-                Stress = 0
-            });
-        }
-
-        /// <summary>
-        /// Asynchronously, this method calculates the results for a generic viscoelastic model analysis.
+        /// Asynchronously, this method calculates the results for a generic viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         public virtual async Task<TResult> CalculateResultsAsync(TInput input, double time)
         {
-            if (time <= 0)
-                return await this.CalculateInitialConditionsAsync().ConfigureAwait(false);
+            if (time < 0)
+                throw new ArgumentOutOfRangeException(nameof(time), "Time cannot be negative to calculate the results for viscoelastic models.");
 
             var tasks = new List<Task>();
 
@@ -56,7 +43,7 @@ namespace SoftTissue.Core.ConstitutiveEquations
         }
 
         /// <summary>
-        /// This method calculates the stress for a specific time.
+        /// This method calculates the stress.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
@@ -64,7 +51,7 @@ namespace SoftTissue.Core.ConstitutiveEquations
         public abstract double CalculateStress(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the strain for a specific time.
+        /// This method calculates the strain.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
