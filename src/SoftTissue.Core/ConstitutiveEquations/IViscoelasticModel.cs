@@ -20,7 +20,7 @@ namespace SoftTissue.Core.ConstitutiveEquations
         Task<TResult> CalculateResultsAsync(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the stress for a specific time.
+        /// This method calculates the stress.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
@@ -28,7 +28,7 @@ namespace SoftTissue.Core.ConstitutiveEquations
         double CalculateStress(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the strain for a specific time.
+        /// This method calculates the strain.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
