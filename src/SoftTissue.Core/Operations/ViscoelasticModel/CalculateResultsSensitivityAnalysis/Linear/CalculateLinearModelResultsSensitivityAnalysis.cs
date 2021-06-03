@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear
 {
     /// <summary>
-    /// It is responsible to calculate the results with sensitivity analysis to a linear viscoelastic model.
+    /// It is responsible to calculate the results with sensitivity analysis for a linear viscoelastic model.
     /// </summary>
     public abstract class CalculateLinearModelResultsSensitivityAnalysis<TRequest, TInput, TResult> : CalculateResultsSensitivityAnalysis<TRequest, TInput, TResult>, ICalculateLinearModelResultsSensitivityAnalysis<TRequest, TInput, TResult>
         where TRequest : CalculateLinearModelResultsSensitivityAnalysisRequest

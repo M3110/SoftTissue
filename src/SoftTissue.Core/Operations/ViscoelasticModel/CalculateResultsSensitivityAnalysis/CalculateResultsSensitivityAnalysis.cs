@@ -1,7 +1,6 @@
 ﻿using SoftTissue.Core.ConstitutiveEquations;
 using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models.Viscoelasticity;
-using SoftTissue.DataContract.OperationBase;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
 {
     /// <summary>
-    /// It contains methods and parameters shared between operations to calculate a result with sensitivity analysis.
+    /// It is responsible to calculate the results with sensitivity analysis for a generic viscoelastic model.
     /// </summary>
     /// <typeparam name="TRequest"></typeparam>
     /// <typeparam name="TInput"></typeparam>

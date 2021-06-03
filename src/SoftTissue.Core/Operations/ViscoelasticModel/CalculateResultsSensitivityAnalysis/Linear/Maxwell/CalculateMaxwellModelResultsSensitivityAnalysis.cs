@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel
 {
     /// <summary>
-    /// It is responsible to do a semsitivity analysis while calculating the strain to Maxwell model.
+    /// It is responsible to calculate the results with sensitivity analysis for Maxwell model.
     /// </summary>
     public class CalculateMaxwellModelResultsSensitivityAnalysis : CalculateLinearModelResultsSensitivityAnalysis<CalculateMaxwellModelResultsSensitivityAnalysisRequest, MaxwellModelInput, MaxwellModelResult>, ICalculateMaxwellModelResultsSensitivityAnalysis
     {

@@ -5,7 +5,7 @@ using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnaly
 namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear
 {
     /// <summary>
-    /// It is responsible to calculate the results with sensitivity analysis to a linear viscoelastic model.
+    /// It is responsible to calculate the results with sensitivity analysis for a linear viscoelastic model.
     /// </summary>
     public interface ICalculateLinearModelResultsSensitivityAnalysis<TRequest, TInput, TResult> : ICalculateResultsSensitivityAnalysis<TRequest, TInput, TResult>
         where TRequest : CalculateLinearModelResultsSensitivityAnalysisRequest
