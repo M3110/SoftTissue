@@ -6,24 +6,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## UNRELEASED
 ### Changed
- - Improved generalizations at Viscoelastic Models.
+ - Improved generalizations for Viscoelastic Models.
  - Operations that calculate strain and stress for viscoelastic models to inherit from operation CalculateResults.
  - Operation AnalyzeResults to also consider when the stress increase.
  - Changed SkipPoints controller to use FromQuery instead of FromBody.
- - Renamed classes that contain LinearViscoelasticity or QuasiLinearViscoelasticity in name from Linear and QuasiLinear.
+ - Renamed classes that contain ViscoelasticityModel in name to Model.
  - Renamed class from Value to Range.
+ - Endpoint for operation CalculateSimplifiedFungModelResultsDisregardRampTime to receive parameters from query instead of from body with request.
 ### Added
  - Methods CalculateResultsAsync to be generic for viscoelastic models.
  - Enum StressDirection that indicates if the stress is increasing or decreasing.
  - Property StressDirection in AnalyzeResultsRequest.
  - Generic contract OperationResponseBase that do not contain ResponseData.
- - Extension method for OperationResponseBase.
+ - Extension methods for OperationResponseBase.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.
 ### Removed
  - Response contracts for operations that inherit operation CalculateResults.
  - Method CalculateInitialConditionsAsync in QuasiLinearModel.
+ - Contract CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest.
 
 ## [2.1.2] - 2021-04-26
 ### Fixed
