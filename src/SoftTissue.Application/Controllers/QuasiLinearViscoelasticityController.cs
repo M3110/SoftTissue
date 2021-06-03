@@ -49,7 +49,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// Calculate the results for Fung Model disregarding ramp time.
+        /// Calculates the results for Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -72,7 +72,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// Calculate the results for Simplified Fung Model considering ramp time.
+        /// Calculates the results for Simplified Fung Model considering ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -95,7 +95,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// Calculate the results for Simplified Fung Model disregarding ramp time.
+        /// Calculates the results for Simplified Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -118,7 +118,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// Calculate the results for Simplified Fung Model disregarding ramp time for a specific experimental model.
+        /// Calculates the results for Simplified Fung Model disregarding ramp time for a specific experimental model.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="timeStep"></param>
@@ -145,7 +145,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// Generate the domain for Fung Model parameters.
+        /// Generates the domain for Fung Model parameters.
         /// Here is just considered the fast and slow relaxation times, because the another parameters is avaiable for all real and positive domain.
         /// </summary>
         /// <param name="operation"></param>
@@ -169,7 +169,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// Calculate the convergence time when the results is constant.
+        /// Calculates the convergence time when the results is constant.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
