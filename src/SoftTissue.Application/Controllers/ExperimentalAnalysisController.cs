@@ -39,7 +39,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// Analyze the experimental results.
+        /// Analyzes the experimental results.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
