@@ -16,10 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Renamed extension method for class Range from 'ToEnumerable' to 'ToList'.
 ### Added
  - Methods CalculateResultsAsync to be generic for viscoelastic models.
- - Enum StressDirection that indicates if the stress is increasing or decreasing.
- - Property StressDirection in AnalyzeResultsRequest.
  - Generic contract OperationResponseBase that do not contain ResponseData.
  - Extension methods for OperationResponseBase.
+ - Enum StressDirection that indicates if the stress is increasing or decreasing.
+ - Property StressDirection in AnalyzeResultsRequest.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.

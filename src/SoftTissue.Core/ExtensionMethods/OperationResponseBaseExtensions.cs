@@ -1,4 +1,5 @@
-﻿using SoftTissue.DataContract.OperationBase;
+﻿using SoftTissue.DataContract.Models;
+using SoftTissue.DataContract.OperationBase;
 using System;
 using Range = SoftTissue.DataContract.Models.Range;
 
@@ -103,6 +104,69 @@ namespace SoftTissue.Core.ExtensionMethods
                 response
                     .AddErrorIfNegativeOrZero(range.FinalPoint.Value, $"{name} final point")
                     .AddErrorIf(() => range.InitialPoint > range.FinalPoint.Value, "The initial point must be less than final point.");
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// This method adds error if the parameters for Relaxation Function is invalid.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <typeparam name="TRelaxationFunctionData"></typeparam>
+        /// <param name="response"></param>
+        /// <param name="relaxationFunctionData"></param>
+        /// <returns></returns>
+        public static TResponse AddErrorIfInvalidReducedRelaxationFunctionData<TResponse, TRelaxationFunctionData>(this TResponse response, TRelaxationFunctionData relaxationFunctionData)
+            where TResponse : OperationResponseBase
+            where TRelaxationFunctionData : class
+        {
+            if (relaxationFunctionData is ReducedRelaxationFunctionData)
+            {
+                response.AddErrorIfInvalidRelaxationFunctionData(relaxationFunctionData as ReducedRelaxationFunctionData);
+            }
+            else if (relaxationFunctionData is SimplifiedReducedRelaxationFunctionData)
+            {
+                response.AddErrorIfInvalidRelaxationFunctionData(relaxationFunctionData as SimplifiedReducedRelaxationFunctionData);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// This method adds error if the parameters for Reduced Relaxation Function is invalid.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="reducedRelaxationFunctionData"></param>
+        /// <param name="response"></param>
+        private static TResponse AddErrorIfInvalidRelaxationFunctionData<TResponse>(this TResponse response, ReducedRelaxationFunctionData reducedRelaxationFunctionData)
+            where TResponse : OperationResponseBase
+        {
+            response
+                .AddErrorIfNegativeOrZero(reducedRelaxationFunctionData.FastRelaxationTime, nameof(reducedRelaxationFunctionData.FastRelaxationTime))
+                .AddErrorIfNegativeOrZero(reducedRelaxationFunctionData.SlowRelaxationTime, nameof(reducedRelaxationFunctionData.SlowRelaxationTime))
+                .AddErrorIfNegativeOrZero(reducedRelaxationFunctionData.RelaxationStiffness, nameof(reducedRelaxationFunctionData.RelaxationStiffness));
+
+            return response;
+        }
+
+        /// <summary>
+        /// This method adds error if the parameters for Simplified Reduced Relaxation Function is invalid.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="simplifiedReducedRelaxationFunctionData"></param>
+        /// <param name="response"></param>
+        private static TResponse AddErrorIfInvalidRelaxationFunctionData<TResponse>(this TResponse response, SimplifiedReducedRelaxationFunctionData simplifiedReducedRelaxationFunctionData)
+            where TResponse : OperationResponseBase
+        {
+            response
+                .AddErrorIfNegativeOrZero(simplifiedReducedRelaxationFunctionData.FirstViscoelasticStiffness, nameof(simplifiedReducedRelaxationFunctionData.FirstViscoelasticStiffness));
+
+            foreach (var iteratorValues in simplifiedReducedRelaxationFunctionData.IteratorValues)
+            {
+                response
+                    .AddErrorIfNegativeOrZero(iteratorValues.RelaxationTime, nameof(iteratorValues.RelaxationTime))
+                    .AddErrorIfNegativeOrZero(iteratorValues.ViscoelasticStiffness, nameof(iteratorValues.ViscoelasticStiffness));
             }
 
             return response;
