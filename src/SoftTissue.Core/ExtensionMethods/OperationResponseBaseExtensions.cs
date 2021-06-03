@@ -1,5 +1,6 @@
 ﻿using SoftTissue.DataContract.OperationBase;
 using System;
+using Range = SoftTissue.DataContract.Models.Range;
 
 namespace SoftTissue.Core.ExtensionMethods
 {
@@ -77,6 +78,31 @@ namespace SoftTissue.Core.ExtensionMethods
             if (expression())
             {
                 response.AddError(operationErrorCode, errorMessage);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// This method adds error if <see cref="Range"/> is invalid.
+        /// </summary>
+        /// <typeparam name="TResponse"></typeparam>
+        /// <param name="response"></param>
+        /// <param name="range"></param>
+        /// <param name="name"></param>
+        public static TResponse AddErrorIfInvalidRange<TResponse>(this TResponse response, Range range, string name)
+            where TResponse : OperationResponseBase
+        {
+            response.AddErrorIfNegativeOrZero(range.InitialPoint, $"{name} initial point");
+
+            if (range.Step.HasValue)
+                response.AddErrorIfNegativeOrZero(range.Step.Value, $"{name} step");
+
+            if (range.FinalPoint.HasValue)
+            {
+                response
+                    .AddErrorIfNegativeOrZero(range.FinalPoint.Value, $"{name} final point")
+                    .AddErrorIf(() => range.InitialPoint > range.FinalPoint.Value, "The initial point must be less than final point.");
             }
 
             return response;

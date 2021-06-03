@@ -66,9 +66,9 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResultsSensitivi
                 return response;
             }
 
-            request.InitialStrainRange.Validate(nameof(request.InitialStrainRange), response);
-
-            request.InitialStressRange.Validate(nameof(request.InitialStressRange), response);
+            response
+                .AddErrorIfInvalidRange(request.InitialStrainRange, nameof(request.InitialStrainRange))
+                .AddErrorIfInvalidRange(request.InitialStressRange, nameof(request.InitialStressRange));
 
             return response;
         }

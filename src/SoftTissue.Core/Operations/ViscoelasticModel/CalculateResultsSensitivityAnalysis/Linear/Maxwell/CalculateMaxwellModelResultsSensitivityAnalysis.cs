@@ -3,9 +3,11 @@ using SoftTissue.Core.ExtensionMethods;
 using SoftTissue.Core.Models;
 using SoftTissue.Core.Models.Viscoelasticity.Linear.Maxwell;
 using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis;
 using SoftTissue.DataContract.ViscoelasticModel.CalculateResultsSensitivityAnalysis.Linear;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensitivityAnalysis.MaxwellModel
 {
@@ -32,13 +34,13 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
         {
             var inputList = new List<MaxwellModelInput>();
 
-            foreach (var initialStress in request.InitialStressRange.ToEnumerable())
+            foreach (var initialStress in request.InitialStressRange.ToList())
             {
-                foreach (var initialStrain in request.InitialStrainRange.ToEnumerable())
+                foreach (var initialStrain in request.InitialStrainRange.ToList())
                 {
-                    foreach (var stiffness in request.StiffnessRange.ToEnumerable())
+                    foreach (var stiffness in request.StiffnessRange.ToList())
                     {
-                        foreach (var viscosity in request.ViscosityRange.ToEnumerable())
+                        foreach (var viscosity in request.ViscosityRange.ToList())
                         {
                             inputList.Add(new MaxwellModelInput
                             {
@@ -55,6 +57,26 @@ namespace SoftTissue.Core.Operations.LinearViscoelasticity.CalculateStrainSensit
             }
 
             return inputList;
+        }
+
+        /// <summary>
+        /// Asynchronously, this method validates the request sent to operation.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public override async Task<CalculateResultsSensitivityAnalysisResponse> ValidateOperationAsync(CalculateMaxwellModelResultsSensitivityAnalysisRequest request)
+        {
+            var response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
+            if (response.Success == false)
+            {
+                return response;
+            }
+
+            response
+                .AddErrorIfInvalidRange(request.StiffnessRange, nameof(request.StiffnessRange))
+                .AddErrorIfInvalidRange(request.ViscosityRange, nameof(request.ViscosityRange));
+
+            return response;
         }
     }
 }

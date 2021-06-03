@@ -59,8 +59,8 @@ namespace SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.F
         {
             var inputList = new List<GenerateFungModelDomainInput>();
 
-            IEnumerable<double> fastRelaxationTimeList = request.FastRelaxationTimeList.ToEnumerable();
-            IEnumerable<double> slowRelaxationTimeList = request.SlowRelaxationTimeList.ToEnumerable();
+            IEnumerable<double> fastRelaxationTimeList = request.FastRelaxationTimeList.ToList();
+            IEnumerable<double> slowRelaxationTimeList = request.SlowRelaxationTimeList.ToList();
 
             foreach (double fastRelaxationTime in fastRelaxationTimeList)
             {
