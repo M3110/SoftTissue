@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## UNRELEASED
+### Added
+ - Final Project 1 final version.
+ - COBEM Paper final version.
+ - Methods CalculateResultsAsync to be generic for viscoelastic models.
+ - Generic contract OperationResponseBase that do not contain ResponseData.
+ - Extension methods for OperationResponseBase.
+ - Enum StressDirection that indicates if the stress is increasing or decreasing.
+ - Property StressDirection in AnalyzeResultsRequest.
 ### Changed
  - Improved generalizations for Viscoelastic Models.
  - Renamed classes that contain ViscoelasticityModel in name to Model.
@@ -14,12 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Changed SkipPoints controller to use FromQuery instead of FromBody.
  - Renamed class from Value to Range.
  - Renamed extension method for class Range from 'ToEnumerable' to 'ToList'.
-### Added
- - Methods CalculateResultsAsync to be generic for viscoelastic models.
- - Generic contract OperationResponseBase that do not contain ResponseData.
- - Extension methods for OperationResponseBase.
- - Enum StressDirection that indicates if the stress is increasing or decreasing.
- - Property StressDirection in AnalyzeResultsRequest.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.

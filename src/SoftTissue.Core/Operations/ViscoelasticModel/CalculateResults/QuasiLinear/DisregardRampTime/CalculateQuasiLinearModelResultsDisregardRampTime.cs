@@ -82,20 +82,11 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLin
 
                 response
                     .AddErrorIfNegativeOrZero(requestData.Strain, nameof(requestData.Strain), aditionalErrorMessage)
-                    .AddErrorIfNegativeOrZero(requestData.InitialStress, nameof(requestData.InitialStress), aditionalErrorMessage);
-
-                this.ValidateReducedRelaxationFunctionData(requestData.ReducedRelaxationFunctionData, response);
+                    .AddErrorIfNegativeOrZero(requestData.InitialStress, nameof(requestData.InitialStress), aditionalErrorMessage)
+                    .AddErrorIfInvalidReducedRelaxationFunctionData(requestData.ReducedRelaxationFunctionData);
             }
 
             return response;
         }
-
-        /// <summary>
-        /// This method validates the parameters for Reduced Relaxation Function.
-        /// </summary>
-        /// <param name="reducedRelaxationFunctionData"></param>
-        /// <param name="response"></param>
-        /// <returns></returns>
-        protected abstract void ValidateReducedRelaxationFunctionData(TRelaxationFunction reducedRelaxationFunctionData, CalculateResultsResponse response);
     }
 }
