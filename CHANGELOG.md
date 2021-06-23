@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Extension methods for OperationResponseBase.
  - Enum StressDirection that indicates if the stress is increasing or decreasing.
  - Property StressDirection in AnalyzeResultsRequest.
+ - Endpoint that calculate the results for experimental models considering ramp time.
+ - Endpoint that calculate the results for all experimental models disregarding ramp time.
 ### Changed
  - Improved generalizations for Viscoelastic Models.
  - Renamed classes that contain ViscoelasticityModel in name to Model.
@@ -22,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Changed SkipPoints controller to use FromQuery instead of FromBody.
  - Renamed class from Value to Range.
  - Renamed extension method for class Range from 'ToEnumerable' to 'ToList'.
+ - When disregarding ramp time, write the stress result just for one equation.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.
