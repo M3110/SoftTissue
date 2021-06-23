@@ -26,7 +26,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLin
         protected override string TemplateBasePath => BasePaths.QuasiLinearModel;
 
         /// <inheritdoc/>
-        protected override string SolutionFileHeader => QuasiLinearModelResult.ValueSequence;
+        protected override string SolutionFileHeader => QuasiLinearModelResult.ParametersSequence;
 
         /// <summary>
         /// Class constructor.

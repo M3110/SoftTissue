@@ -68,11 +68,13 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             double stress = 0;
             tasks.Add(Task.Run(() => { stress = this.CalculateStress(input, time); }));
 
-            double stressByReducedRelaxationFunctionDerivative = 0;
-            tasks.Add(Task.Run(() => { stressByReducedRelaxationFunctionDerivative = this.CalculateStressByReducedRelaxationFunctionDerivative(input, time); }));
-
-            double stressByIntegralDerivative = 0;
-            tasks.Add(Task.Run(() => { stressByIntegralDerivative = this.CalculateStressByIntegralDerivative(input, time); }));
+            double? stressByReducedRelaxationFunctionDerivative = null;
+            double? stressByIntegralDerivative = null;
+            if (input.ViscoelasticConsideration != ViscoelasticConsideration.DisregardRampTime)
+            {
+                tasks.Add(Task.Run(() => { stressByReducedRelaxationFunctionDerivative = this.CalculateStressByReducedRelaxationFunctionDerivative(input, time); }));
+                tasks.Add(Task.Run(() => { stressByIntegralDerivative = this.CalculateStressByIntegralDerivative(input, time); }));
+            }
 
             await Task.WhenAll(tasks);
 

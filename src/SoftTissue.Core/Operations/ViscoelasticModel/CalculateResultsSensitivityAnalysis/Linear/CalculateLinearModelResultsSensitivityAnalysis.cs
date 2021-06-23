@@ -22,7 +22,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResultsSensitivi
         protected override string TemplateBasePath => BasePaths.LinearModel;
 
         /// <inheritdoc/>
-        protected override string SolutionFileHeader => LinearModelResult.ValueSequence;
+        protected override string SolutionFileHeader => LinearModelResult.ParametersSequence;
 
         private readonly ILinearModel<TInput, TResult> _viscoelasticModel;
 

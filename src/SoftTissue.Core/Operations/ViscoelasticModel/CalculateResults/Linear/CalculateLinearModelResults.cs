@@ -20,7 +20,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear
         protected override string TemplateBasePath => BasePaths.LinearModel;
 
         /// <inheritdoc/>
-        protected override string SolutionFileHeader => LinearModelResult.ValueSequence;
+        protected override string SolutionFileHeader => LinearModelResult.ParametersSequence;
 
         /// <summary>
         /// Class constructor.

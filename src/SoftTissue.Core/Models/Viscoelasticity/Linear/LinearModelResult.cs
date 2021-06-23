@@ -26,8 +26,8 @@
         public override string ToString() => $"{this.CreepCompliance},{this.Strain},{this.RelaxationFunction},{this.Stress}";
 
         /// <summary>
-        /// The sequence of the values, indicanting the order that it is writen in method <see cref="ToString()"/>
+        /// The sequence of the parameters, indicanting the order that it is writen in method <see cref="ToString()"/>
         /// </summary>
-        public const string ValueSequence = "Creep Compliance,Strain,Relaxation Function,Stress";
+        public const string ParametersSequence = "Creep Compliance,Strain,Relaxation Function,Stress";
     }
 }

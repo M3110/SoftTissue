@@ -1,4 +1,6 @@
-﻿namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
+﻿using System.Text;
+
+namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
 {
     /// <summary>
     /// It contains the results for a quasi-linear Viscoelastic Model.
@@ -18,30 +20,56 @@
         /// <summary>
         /// Unit: Pa (Pascal).
         /// </summary>
-        public double StressByIntegralDerivative { get; set; }
+        public double? StressByIntegralDerivative { get; set; }
 
         /// <summary>
         /// Unit: Pa (Pascal).
         /// </summary>
-        public double StressByReducedRelaxationFunctionDerivative { get; set; }
+        public double? StressByReducedRelaxationFunctionDerivative { get; set; }
 
         /// <inheritdoc/>
         public override string ToString(string separator)
-            => $"{this.Time}" +
+        {
+            var result = new StringBuilder($"{this.Time}" +
             $"{separator}{this.Strain}" +
             $"{separator}{this.ReducedRelaxationFunction}" +
             $"{separator}{this.ElasticResponse}" +
-            $"{separator}{this.Stress}" +
-            $"{separator}{this.StressByIntegralDerivative}" +
-            $"{separator}{this.StressByReducedRelaxationFunctionDerivative}";
+            $"{separator}{this.Stress}");
+
+            if (this.StressByIntegralDerivative != null)
+            {
+                result.Append($"{separator}{this.StressByIntegralDerivative}");
+            }
+
+            if (this.StressByReducedRelaxationFunctionDerivative != null)
+            {
+                result.Append($"{separator}{this.StressByReducedRelaxationFunctionDerivative}");
+            }
+
+            return result.ToString();
+        }
 
         /// <inheritdoc/>
-        public override string ToString() 
-            => $"{this.Time},{this.Strain},{this.ReducedRelaxationFunction},{this.ElasticResponse},{this.Stress},{this.StressByIntegralDerivative},{this.StressByReducedRelaxationFunctionDerivative}";
+        public override string ToString()
+        {
+            var result = new StringBuilder($"{this.Time},{this.Strain},{this.ReducedRelaxationFunction},{this.ElasticResponse},{this.Stress}");
+
+            if (this.StressByIntegralDerivative != null)
+            {
+                result.Append($",{this.StressByIntegralDerivative}");
+            }
+
+            if (this.StressByReducedRelaxationFunctionDerivative != null)
+            {
+                result.Append($",{this.StressByReducedRelaxationFunctionDerivative}");
+            }
+
+            return result.ToString();
+        }
 
         /// <summary>
-        /// The sequence of the values, indicanting the order that it is writen in method <see cref="ToString()"/>
+        /// The sequence of the parameters, indicanting the order that it is writen in method <see cref="ToString()"/>
         /// </summary>
-        public const string ValueSequence = "Creep Compliance,Strain,Relaxation Function,Stress";
+        public const string ParametersSequence = "Time,Strain,Reduced Relaxation Function,Elastic Response,Stress,Stress by Integral,Stress by dG";
     }
 }
