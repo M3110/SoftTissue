@@ -202,18 +202,18 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeAndExtrapolateR
                     // Step 7.3 - Calculates the stress.
                     AnalyzedExperimentalResult extrapolatedResult = this.ExtrapolateResult(previousResult, timeStep, finalSecondDerivative);
 
+                    // Step 7.4 - Writes the results in the file.
+                    streamWriter.WriteLine($",,{extrapolatedResult.Time},{extrapolatedResult.Stress}");
+
+                    // Step 7.5 - Saves the current extrapolateed result to be used in the next iteration.
+                    previousResult = extrapolatedResult;
+
                     // If the derivative is equals to zero, the stress reached to asymptote, so should map the time and stress to the response.
                     if (extrapolatedResult.Derivative == 0 && response.Data.AsymptoteTime.HasValue == false)
                     {
                         response.Data.AsymptoteTime = extrapolatedResult.Time;
                         response.Data.AsymptoteStress = extrapolatedResult.Stress;
                     }
-
-                    // Step 7.4 - Writes the results in the file.
-                    streamWriter.WriteLine($",,{extrapolatedResult.Time},{extrapolatedResult.Stress}");
-
-                    // Step 7.5 - Saves the current extrapolateed result to be used in the next iteration.
-                    previousResult = extrapolatedResult;
                 }
             }
 
