@@ -63,7 +63,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults
                 this.TemplateBasePath,
                 $"Solution_{input.SoftTissueType}_{DateTime.Now:yyyy-MM-dd}.csv"));
 
-            if (fileInfo.Exists == false)
+            if (fileInfo.Exists == true)
                 return null;
 
             if (fileInfo.Directory.Exists == false)
@@ -75,8 +75,8 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults
         /// <summary>
         /// Asynchronously, this method calculates the result and writes its into file.
         /// </summary>
-        /// <param name="input"></param>
         /// <param name="streamWriter"></param>
+        /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
         protected virtual async Task CalculateAndWriteResultAsync(StreamWriter streamWriter, TInput input, double time)
@@ -104,7 +104,6 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults
             {
                 // Step 2 - Creates the solution file.
                 string solutionPath = this.CreateSolutionFile(input);
-
                 if (solutionPath == null)
                     continue;
 
