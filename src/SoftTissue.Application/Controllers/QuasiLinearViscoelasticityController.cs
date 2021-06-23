@@ -95,6 +95,57 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
+        /// Calculates the results for Simplified Fung Model considering ramp time for a specific experimental model.
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <param name="experimentalModel"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("simplifiedfung-model/consider-ramp-time/experimental-model/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsConsiderRampTimeToExperimentalModel(
+            [FromServices] ICalculateSimplifiedFungModelResultsConsiderRampTime operation,
+            [FromQuery] double timeStep, double finalTime, ExperimentalModel experimentalModel)
+        {
+            CalculateResultsResponse response = await operation.ProcessAsync(
+                CalculateSimplifiedFungModelResultsConsiderRampTimeRequest.Create(timeStep, finalTime, experimentalModel)).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
+
+        /// <summary>
+        /// Calculates the results for Simplified Fung Model considering ramp time for multiple experimental models.
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("simplifiedfung-model/consider-ramp-time/all-experimental-models/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsConsiderRampTimeToExperimentalModels(
+            [FromServices] ICalculateSimplifiedFungModelResultsConsiderRampTime operation,
+            [FromQuery] double timeStep, double finalTime)
+        {
+            CalculateResultsResponse response = await operation.ProcessAsync(
+                CalculateSimplifiedFungModelResultsConsiderRampTimeRequest.Create(timeStep, finalTime)).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
+
+        /// <summary>
         /// Calculates the results for Simplified Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
@@ -123,7 +174,6 @@ namespace SoftTissue.Application.Controllers
         /// <param name="operation"></param>
         /// <param name="timeStep"></param>
         /// <param name="finalTime"></param>
-        /// <param name="strain"></param>
         /// <param name="experimentalModel"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
@@ -137,10 +187,35 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("simplifiedfung-model/disregard-ramp-time/experimental-model/calculate-results")]
         public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsDisregardRampTimeToExperimentalModel(
             [FromServices] ICalculateSimplifiedFungModelResultsDisregardRampTime operation,
-            [FromQuery] double timeStep, double finalTime, double strain, ExperimentalModel experimentalModel)
+            [FromQuery] double timeStep, double finalTime, ExperimentalModel experimentalModel)
         {
             CalculateResultsResponse response = await operation.ProcessAsync(
-                CalculateSimplifiedFungModelResultsDisregardRampTimeRequest.Create(timeStep, finalTime, strain, experimentalModel)).ConfigureAwait(false);
+                CalculateSimplifiedFungModelResultsDisregardRampTimeRequest.Create(timeStep, finalTime, experimentalModel)).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
+
+        /// <summary>
+        /// Calculates the results for Simplified Fung Model disregarding ramp time for multiple experimental models.
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("simplifiedfung-model/disregard-ramp-time/all-experimental-models/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsDisregardRampTimeToExperimentalModels(
+            [FromServices] ICalculateSimplifiedFungModelResultsDisregardRampTime operation,
+            [FromQuery] double timeStep, double finalTime)
+        {
+            CalculateResultsResponse response = await operation.ProcessAsync(
+                CalculateSimplifiedFungModelResultsDisregardRampTimeRequest.Create(timeStep, finalTime)).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
