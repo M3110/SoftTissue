@@ -81,7 +81,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults
         /// <returns></returns>
         protected virtual async Task CalculateAndWriteResultAsync(StreamWriter streamWriter, TInput input, double time)
         {
-            TResult results = await this.ViscoelasticModel.CalculateResultsAsync(input, time).ConfigureAwait(false);
+            TResult results = await this.ViscoelasticModel.CalculateResultAsync(input, time).ConfigureAwait(false);
             streamWriter.WriteLine($"{results}");
         }
 

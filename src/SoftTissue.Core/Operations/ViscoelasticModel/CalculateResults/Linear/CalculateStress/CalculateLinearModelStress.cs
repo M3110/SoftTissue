@@ -44,7 +44,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear.C
         {
             double relaxationFunction = this._viscoelasticModel.CalculateRelaxationFunction(input, time);
 
-            double stress = this._viscoelasticModel.CalculateStress(input, time);
+            double stress = await this._viscoelasticModel.CalculateStressAsync(input, time).ConfigureAwait(false);
 
             await streamWriter.WriteLineAsync($"{time},{relaxationFunction},{stress}").ConfigureAwait(false);
         }

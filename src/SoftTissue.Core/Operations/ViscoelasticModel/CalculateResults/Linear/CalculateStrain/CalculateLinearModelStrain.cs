@@ -44,7 +44,7 @@ namespace SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.Linear.C
         {
             double creepCompliance = this._viscoelasticModel.CalculateCreepCompliance(input, time);
 
-            double strain = this._viscoelasticModel.CalculateStrain(input, time);
+            double strain = await this._viscoelasticModel.CalculateStrainAsync(input, time).ConfigureAwait(false);
 
             await streamWriter.WriteLineAsync($"{time},{creepCompliance},{strain}").ConfigureAwait(false);
         }

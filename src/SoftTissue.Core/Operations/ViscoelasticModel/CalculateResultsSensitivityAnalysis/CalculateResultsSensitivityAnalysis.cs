@@ -80,13 +80,53 @@ namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
         /// <returns></returns>
         protected virtual List<Task> BuildTasks(List<TInput> inputList, double timeStep, double finalTime)
         {
-            var tasks = new List<Task>
+            return new List<Task>
             {
-                Task.Run(() => this.RunSensitivityAnalysis(inputList, timeStep, finalTime, "Stress", this.ViscoelasticModel.CalculateStress)),
-                Task.Run(() => this.RunSensitivityAnalysis(inputList, timeStep, finalTime, "Strain", this.ViscoelasticModel.CalculateStrain))
+                Task.Run(async () => await this.RunSensitivityAnalysis(inputList, timeStep, finalTime, "Stress", this.ViscoelasticModel.CalculateStressAsync).ConfigureAwait(false)),
+                Task.Run(async () => await this.RunSensitivityAnalysis(inputList, timeStep, finalTime, "Strain", this.ViscoelasticModel.CalculateStrainAsync).ConfigureAwait(false))
             };
+        }
 
-            return tasks;
+        /// <summary>
+        /// Asynchronously, this method runs a sensitivity analysis for a specific function.
+        /// It must be used when adding a sensitivity analysis for any function.
+        /// </summary>
+        /// <param name="inputList"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <param name="functionName"></param>
+        /// <param name="task"></param>
+        protected async Task RunSensitivityAnalysis(List<TInput> inputList, double timeStep, double finalTime, string functionName, Func<TInput, double, Task<double>> task)
+        {
+            // Step 3 - Creates the solution file based on function.
+            using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(functionName)))
+            {
+                // Step 4 - Creates the file header and writes it in the file.
+                StringBuilder fileHeader = this.CreteFileHeader(inputList);
+                streamWriter.WriteLine(fileHeader);
+
+                // Here is consider that the time will always begin in zero.
+                double time = 0;
+
+                while (time <= finalTime)
+                {
+                    // Step 5 - Creates the string that contain the results beginning with the time.
+                    StringBuilder results = new StringBuilder($"{time},");
+
+                    foreach (var input in inputList)
+                    {
+                        // Step 6 - Calculates the result and concatenates with the previous ones.
+                        double result = await task(input, time).ConfigureAwait(false);
+                        results.Append($"{result},");
+                    }
+
+                    // Step 7 - Writes the results in file.
+                    streamWriter.WriteLine(results);
+
+                    // Step 8 - Iterate the time.
+                    time += timeStep;
+                }
+            }
         }
 
         /// <summary>
@@ -101,7 +141,7 @@ namespace SoftTissue.Core.Operations.Base.CalculateResultSensitivityAnalysis
         protected void RunSensitivityAnalysis(List<TInput> inputList, double timeStep, double finalTime, string functionName, Func<TInput, double, double> action)
         {
             // Step 3 - Creates the solution file based on function.
-            using (StreamWriter streamWriter = new StreamWriter(CreateSolutionFile(functionName)))
+            using (StreamWriter streamWriter = new StreamWriter(this.CreateSolutionFile(functionName)))
             {
                 // Step 4 - Creates the file header and writes it in the file.
                 StringBuilder fileHeader = this.CreteFileHeader(inputList);
