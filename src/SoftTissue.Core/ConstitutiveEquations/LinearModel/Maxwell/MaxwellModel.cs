@@ -22,15 +22,15 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
         }
 
         /// <summary>
-        /// This method calculates the stress.
+        /// Asynchronously, this method calculates the stress.
         /// Equation used: Sigma(t) = G(t) * Epsilon0
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public override double CalculateStress(MaxwellModelInput input, double time)
+        public override Task<double> CalculateStressAsync(MaxwellModelInput input, double time)
         {
-            return input.InitialStrain * this.CalculateRelaxationFunction(input, time);
+            return Task.FromResult(input.InitialStrain * this.CalculateRelaxationFunction(input, time));
         }
 
         /// <summary>
@@ -46,15 +46,15 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel.Maxwell
         }
 
         /// <summary>
-        /// This method calculates the strain.
+        /// Asynchronously, this method calculates the strain.
         /// Equation used: Epsilon(t) = (Sigma0 / mi) * J(t)
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public override double CalculateStrain(MaxwellModelInput input, double time)
+        public override Task<double> CalculateStrainAsync(MaxwellModelInput input, double time)
         {
-            return (input.InitialStress / input.Stiffness) * this.CalculateCreepCompliance(input, time);
+            return Task.FromResult((input.InitialStress / input.Stiffness) * this.CalculateCreepCompliance(input, time));
         }
     }
 }

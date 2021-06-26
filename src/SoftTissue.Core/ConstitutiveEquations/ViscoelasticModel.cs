@@ -14,12 +14,8 @@ namespace SoftTissue.Core.ConstitutiveEquations
         where TInput : ViscoelasticModelInput
         where TResult : ViscoelasticModelResult, new()
     {
-        /// <summary>
-        /// Asynchronously, this method calculates the results for a generic viscoelastic model.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        public virtual async Task<TResult> CalculateResultsAsync(TInput input, double time)
+        /// <inheritdoc/>
+        public virtual async Task<TResult> CalculateResultAsync(TInput input, double time)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), "Time cannot be negative to calculate the results for viscoelastic models.");
@@ -27,10 +23,10 @@ namespace SoftTissue.Core.ConstitutiveEquations
             var tasks = new List<Task>();
 
             double strain = 0;
-            tasks.Add(Task.Run(() => { strain = this.CalculateStrain(input, time); }));
+            tasks.Add(Task.Run(async () => { strain = await this.CalculateStrainAsync(input, time).ConfigureAwait(false); }));
 
             double stress = 0;
-            tasks.Add(Task.Run(() => { stress = this.CalculateStress(input, time); }));
+            tasks.Add(Task.Run(async () => { stress = await this.CalculateStressAsync(input, time).ConfigureAwait(false); }));
 
             await Task.WhenAll(tasks).ConfigureAwait(false);
 
@@ -42,20 +38,10 @@ namespace SoftTissue.Core.ConstitutiveEquations
             };
         }
 
-        /// <summary>
-        /// This method calculates the stress.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public abstract double CalculateStress(TInput input, double time);
+        /// <inheritdoc/>
+        public abstract Task<double> CalculateStressAsync(TInput input, double time);
 
-        /// <summary>
-        /// This method calculates the strain.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public abstract double CalculateStrain(TInput input, double time);
+        /// <inheritdoc/>
+        public abstract Task<double> CalculateStrainAsync(TInput input, double time);
     }
 }

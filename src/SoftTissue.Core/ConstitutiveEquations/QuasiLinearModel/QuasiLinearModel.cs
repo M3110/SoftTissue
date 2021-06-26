@@ -44,7 +44,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
-        public override async Task<TResult> CalculateResultsAsync(TInput input, double time)
+        public override async Task<TResult> CalculateResultAsync(TInput input, double time)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), "Time cannot be negative to calculate the results for viscoelastic models.");
@@ -54,36 +54,34 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             if (this._relaxationTimes.IsEmpty() == true)
                 this._relaxationTimes = this.BuildRelaxationTimes(input);
 
-            var tasks = new List<Task>();
-
-            double strain = 0;
-            tasks.Add(Task.Run(() => { strain = this.CalculateStrain(input, time); }));
-
-            double reducedRelaxationFunction = 0;
-            tasks.Add(Task.Run(() => { reducedRelaxationFunction = this.CalculateReducedRelaxationFunction(input, time); }));
-
-            double elasticResponse = 0;
-            tasks.Add(Task.Run(() => { elasticResponse = this.CalculateElasticResponse(input, time); }));
-
             double stress = 0;
-            tasks.Add(Task.Run(() => { stress = this.CalculateStress(input, time); }));
-
             double? stressByReducedRelaxationFunctionDerivative = null;
             double? stressByIntegralDerivative = null;
-            if (input.ViscoelasticConsideration != ViscoelasticConsideration.DisregardRampTime)
-            {
-                tasks.Add(Task.Run(() => { stressByReducedRelaxationFunctionDerivative = this.CalculateStressByReducedRelaxationFunctionDerivative(input, time); }));
-                tasks.Add(Task.Run(() => { stressByIntegralDerivative = this.CalculateStressByIntegralDerivative(input, time); }));
-            }
 
-            await Task.WhenAll(tasks);
+            if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
+            {
+                stress = await this.CalculateStressAsync(input, time).ConfigureAwait(false);
+            }
+            else if (input.ViscoelasticConsideration == ViscoelasticConsideration.GeneralViscoelasctiEffect)
+            {
+                var tasks = new List<Task>
+                {
+                    Task.Run(async () => { stress = await this.CalculateStressAsync(input, time).ConfigureAwait(false); }),
+                    Task.Run(async () => { stressByReducedRelaxationFunctionDerivative = await this.CalculateStressByReducedRelaxationFunctionDerivative(input, time).ConfigureAwait(false); }),
+                    Task.Run(async () => { stressByIntegralDerivative = await this.CalculateStressByIntegralDerivative(input, time).ConfigureAwait(false); })
+                };
+                await Task.WhenAll(tasks);
+            }
 
             return new TResult
             {
                 Time = time,
-                Strain = strain,
-                ReducedRelaxationFunction = reducedRelaxationFunction,
-                ElasticResponse = elasticResponse,
+                Strain = await this.CalculateStrainAsync(input, time).ConfigureAwait(false),
+                StrainDerivative = this.CalculateStrainDerivative(input, time),
+                ReducedRelaxationFunction = this.CalculateReducedRelaxationFunction(input, time),
+                ReducedRelaxationFunctionDerivative = this.CalculateReducedRelaxationFunctionDerivative(input, time),
+                ElasticResponse = await this.CalculateElasticResponseAsync(input, time).ConfigureAwait(false),
+                ElasticResponseDerivative = await this.CalculateElasticResponseDerivativeAsync(input, time).ConfigureAwait(false),
                 Stress = stress,
                 StressByReducedRelaxationFunctionDerivative = stressByReducedRelaxationFunctionDerivative,
                 StressByIntegralDerivative = stressByIntegralDerivative
@@ -111,65 +109,60 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         }
 
         /// <summary>
-        /// This method calculates the strain.
+        /// Asynchronously, this method calculates the strain.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public override double CalculateStrain(TInput input, double time)
+        public override Task<double> CalculateStrainAsync(TInput input, double time)
         {
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
-                return input.MaximumStrain;
+                return Task.FromResult(input.MaximumStrain);
 
             // time = 0 
             //     --> strain = 0
             if (time == 0)
-                return 0;
+                return Task.FromResult<double>(0);
 
             // 0 < time < first ramp time
             //     --> strain = strain rate * time
             if (time > 0 && time <= input.FirstRampTime)
-                return input.StrainRate * time;
+                return Task.FromResult(input.StrainRate * time);
 
             // first ramp time <= time < first relaxation total time
             // OBS: first relaxation total time = first ramp time + time with constant maximum strain
             //     --> strain = maximum strain
             if (time > input.FirstRampTime && time < input.FirstRelaxationTotalTime)
-                return input.MaximumStrain;
+                return Task.FromResult(input.MaximumStrain);
 
             // This part is used only for the second relaxations and next.
             if (time >= input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time <= this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
-                return input.MaximumStrain -
-                    input.StrainDecreaseRate * (time - (input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime));
+                return Task.FromResult(input.MaximumStrain -
+                    input.StrainDecreaseRate * (time - (input.FirstRelaxationTotalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)));
 
             if (time > this._relaxationTimes.StrainDecreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time < this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
-                return input.MinimumStrain;
+                return Task.FromResult(input.MinimumStrain);
 
             if (time >= this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time <= this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
-                return input.MinimumStrain +
-                    input.StrainRate * (time - (this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime));
+                return Task.FromResult(input.MinimumStrain +
+                    input.StrainRate * (time - (this._relaxationTimes.StrainDecreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)));
 
             if (time > this._relaxationTimes.StrainIncreaseStartTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime &&
                 time < this._relaxationTimes.StrainIncreaseFinalTime + (input.RelaxationNumber - 1) * input.RelaxationTotalTime)
-                return input.MaximumStrain;
+                return Task.FromResult(input.MaximumStrain);
 
             // If the time is bigger than all relaxations time, it means that it is on the last relaxation and the strain is kept at the maximum till the end of analysis.
             if (time > input.FirstRelaxationTotalTime + (input.NumerOfRelaxations - 1) * input.RelaxationTotalTime)
-                return input.MaximumStrain;
+                return Task.FromResult(input.MaximumStrain);
 
             // The default value returned must be equals to zero.
-            return 0;
+            return Task.FromResult<double>(0);
         }
 
-        /// <summary>
-        /// This method calculates the strain derivative.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public virtual double CalculateStrainDerivative(TInput input, double time)
         {
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
@@ -204,14 +197,8 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             return 0;
         }
 
-        /// <summary>
-        /// This method calculates the elastic response.
-        /// Equation used: Elastic stress = A * [exp(B * strain) - 1]
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public virtual double CalculateElasticResponse(TInput input, double time)
+        /// <inheritdoc/>
+        public virtual async Task<double> CalculateElasticResponseAsync(TInput input, double time)
         {
             if (time == 0)
                 return 0;
@@ -219,54 +206,37 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return input.InitialStress;
 
-            return input.ElasticStressConstant * (Math.Exp(input.ElasticPowerConstant * this.CalculateStrain(input, time)) - 1);
+            return input.ElasticStressConstant * (Math.Exp(input.ElasticPowerConstant * await this.CalculateStrainAsync(input, time).ConfigureAwait(false)) - 1);
         }
 
-        /// <summary>
-        /// This method calculates the derivtive of elastic response.
-        /// Equation used: Elastic Stress Derivative = A * B * (d/dt)(strain) * exp(B * strain)
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public virtual double CalculateElasticResponseDerivative(TInput input, double time)
+        /// <inheritdoc/>
+        public virtual async Task<double> CalculateElasticResponseDerivativeAsync(TInput input, double time)
         {
-            if (time == 0)
-                return 0;
-
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return 0;
 
-            double strain = this.CalculateStrain(input, time);
+            if (time == 0)
+                return 0;
+
+            double strain = await this.CalculateStrainAsync(input, time).ConfigureAwait(false);
             double strainDerivative = this.CalculateStrainDerivative(input, time);
 
-            // Derivative of elastic stress = A * B * (d/dt)(strain) * exp(B * strain)
             return input.ElasticStressConstant * input.ElasticPowerConstant * strainDerivative * Math.Exp(input.ElasticPowerConstant * strain);
         }
 
-        /// <summary>
-        /// This method calculates the reduced relaxation function.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public abstract double CalculateReducedRelaxationFunction(TInput input, double time);
 
-        /// <summary>
-        /// This method calculates the derivative of reduced relaxation function.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public abstract double CalculateReducedRelaxationFunctionDerivative(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the stress using the equation 7 from Fung, at page 279.
+        /// Asynchronously, this method calculates the stress using the equation 7 from Fung, at page 279.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public override double CalculateStress(TInput input, double time)
+        public override async Task<double> CalculateStressAsync(TInput input, double time)
         {
             if (input.ViscoelasticConsideration == ViscoelasticConsideration.DisregardRampTime)
                 return input.InitialStress * this.CalculateReducedRelaxationFunction(input, time);
@@ -276,25 +246,25 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
             if (time >= Constants.Precision && time < input.FirstRampTime)
             {
-                return this._simpsonRuleIntegration.Calculate(
-                    (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
+                return await this._simpsonRuleIntegration.Calculate(
+                    async (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * await this.CalculateElasticResponseDerivativeAsync(input, integrationTime).ConfigureAwait(false),
                     new IntegralInput
                     {
                         InitialPoint = 0,
                         FinalPoint = time,
                         Step = input.TimeStep
-                    });
+                    }).ConfigureAwait(false);
             }
 
             if (time < input.FirstRelaxationTotalTime && time >= input.FirstRampTime)
-                return this._simpsonRuleIntegration.Calculate(
-                    (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
+                return await this._simpsonRuleIntegration.Calculate(
+                    async (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * await this.CalculateElasticResponseDerivativeAsync(input, integrationTime).ConfigureAwait(false),
                     new IntegralInput
                     {
                         InitialPoint = 0,
                         FinalPoint = input.FirstRampTime,
                         Step = input.TimeStep
-                    });
+                    }).ConfigureAwait(false);
 
             //if (input.ViscoelasticConsideration == ViscoelasticConsideration.GeneralViscoelasticEffectWithStrainDecrease
             //    || input.ViscoelasticConsideration == ViscoelasticConsideration.ViscoelasticEffectAfterRampTimeWithStrainDecrease)
@@ -319,31 +289,25 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             //}
 
             // The default way to calculate the stress is using the convolution between the reduced relaxation function and derivative of elastic response.
-            return this._simpsonRuleIntegration.Calculate(
-                (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * this.CalculateElasticResponseDerivative(input, integrationTime),
+            return await this._simpsonRuleIntegration.Calculate(
+                async (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * await this.CalculateElasticResponseDerivativeAsync(input, integrationTime).ConfigureAwait(false),
                 new IntegralInput
                 {
                     InitialPoint = 0,
                     FinalPoint = time,
                     Step = input.TimeStep
-                });
+                }).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// This method calculates the stress using the equation 8.a from Fung, at page 279.
-        /// That equation do not returns a satisfactory result.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public virtual double CalculateStressByReducedRelaxationFunctionDerivative(TInput input, double time)
+        /// <inheritdoc/>
+        public virtual async Task<double> CalculateStressByReducedRelaxationFunctionDerivative(TInput input, double time)
         {
             if (time <= Constants.Precision)
                 return 0;
 
-            return this.CalculateReducedRelaxationFunction(input, time: 0) * this.CalculateElasticResponse(input, time) +
-                this._simpsonRuleIntegration.Calculate(
-                    (integrationTime) => this.CalculateElasticResponse(input, time - integrationTime) * this.CalculateReducedRelaxationFunctionDerivative(input, integrationTime),
+            return this.CalculateReducedRelaxationFunction(input, time: 0) * await this.CalculateElasticResponseAsync(input, time).ConfigureAwait(false) +
+                await this._simpsonRuleIntegration.Calculate(
+                    async (integrationTime) => await this.CalculateElasticResponseAsync(input, time - integrationTime).ConfigureAwait(false) * this.CalculateReducedRelaxationFunctionDerivative(input, integrationTime),
                     new IntegralInput
                     {
                         InitialPoint = 0,
@@ -352,21 +316,15 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                     });
         }
 
-        /// <summary>
-        /// This method calculates the stress using the equation 8.b from Fung, at page 279.
-        /// That equation do not returns a satisfactory result.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
-        public virtual double CalculateStressByIntegralDerivative(TInput input, double time)
+        /// <inheritdoc/>
+        public virtual async Task<double> CalculateStressByIntegralDerivative(TInput input, double time)
         {
             if (time <= Constants.Precision)
                 return 0;
 
-            return this._derivative.Calculate(
-                (derivativeTime) => this._simpsonRuleIntegration.Calculate(
-                    (integrationTime) => this.CalculateElasticResponse(input, derivativeTime - integrationTime) * this.CalculateReducedRelaxationFunction(input, integrationTime),
+            return await this._derivative.Calculate(
+                async (derivativeTime) => await this._simpsonRuleIntegration.Calculate(
+                    async (integrationTime) => await this.CalculateElasticResponseAsync(input, derivativeTime - integrationTime).ConfigureAwait(false) * this.CalculateReducedRelaxationFunction(input, integrationTime),
                     new IntegralInput
                     {
                         InitialPoint = 0,

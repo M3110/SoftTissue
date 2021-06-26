@@ -21,16 +21,6 @@
         public double Stress { get; set; }
 
         /// <summary>
-        /// This method returns a string that represents the current object.
-        /// </summary>
-        /// <param name="separator"></param>
-        /// <returns></returns>
-        public virtual string ToString(string separator)
-            => $"{this.Time}" +
-            $"{separator}{this.Strain}" +
-            $"{separator}{this.Stress}";
-
-        /// <summary>
         /// This method returns a string that represents the current object with each element separated by comma.
         /// </summary>
         /// <returns></returns>

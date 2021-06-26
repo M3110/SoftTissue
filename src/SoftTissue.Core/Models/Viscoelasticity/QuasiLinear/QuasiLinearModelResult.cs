@@ -8,14 +8,29 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
     public class QuasiLinearModelResult : ViscoelasticModelResult
     {
         /// <summary>
+        /// Unit: /s (Per second).
+        /// </summary>
+        public double StrainDerivative { get; set; }
+
+        /// <summary>
         /// Unit: Pa (Pascal).
         /// </summary>
         public double ElasticResponse { get; set; }
 
         /// <summary>
+        /// Unit: Pa/s (Pascal per second).
+        /// </summary>
+        public double ElasticResponseDerivative { get; set; }
+
+        /// <summary>
         /// Dimensionless.
         /// </summary>
         public double ReducedRelaxationFunction { get; set; }
+
+        /// <summary>
+        /// Unit: /s (Per second).
+        /// </summary>
+        public double ReducedRelaxationFunctionDerivative { get; set; }
 
         /// <summary>
         /// Unit: Pa (Pascal).
@@ -28,31 +43,11 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
         public double? StressByReducedRelaxationFunctionDerivative { get; set; }
 
         /// <inheritdoc/>
-        public override string ToString(string separator)
-        {
-            var result = new StringBuilder($"{this.Time}" +
-            $"{separator}{this.Strain}" +
-            $"{separator}{this.ReducedRelaxationFunction}" +
-            $"{separator}{this.ElasticResponse}" +
-            $"{separator}{this.Stress}");
-
-            if (this.StressByIntegralDerivative != null)
-            {
-                result.Append($"{separator}{this.StressByIntegralDerivative}");
-            }
-
-            if (this.StressByReducedRelaxationFunctionDerivative != null)
-            {
-                result.Append($"{separator}{this.StressByReducedRelaxationFunctionDerivative}");
-            }
-
-            return result.ToString();
-        }
-
-        /// <inheritdoc/>
         public override string ToString()
         {
-            var result = new StringBuilder($"{this.Time},{this.Strain},{this.ReducedRelaxationFunction},{this.ElasticResponse},{this.Stress}");
+            var result = new StringBuilder($"{this.Time},{this.Strain},{this.StrainDerivative}," +
+                $"{this.ReducedRelaxationFunction},{this.ReducedRelaxationFunctionDerivative}," +
+                $"{this.ElasticResponse},{this.ElasticResponseDerivative},{this.Stress}");
 
             if (this.StressByIntegralDerivative != null)
             {
@@ -70,6 +65,6 @@ namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear
         /// <summary>
         /// The sequence of the parameters, indicanting the order that it is writen in method <see cref="ToString()"/>
         /// </summary>
-        public const string ParametersSequence = "Time,Strain,Reduced Relaxation Function,Elastic Response,Stress,Stress by Integral,Stress by dG";
+        public const string ParametersSequence = "Time,Strain,Strain Derivative,Reduced Relaxation Function,Reduced Relaxation Function Derivative,Elastic Response,Elastic Response Derivative,Stress,Stress by Integral,Stress by dG";
     }
 }

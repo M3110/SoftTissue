@@ -20,7 +20,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        public override async Task<TResult> CalculateResultsAsync(TInput input, double time)
+        public override async Task<TResult> CalculateResultAsync(TInput input, double time)
         {
             if (time < 0)
                 throw new ArgumentOutOfRangeException(nameof(time), "Time cannot be negative to calculate the results for viscoelastic models.");
@@ -31,13 +31,13 @@ namespace SoftTissue.Core.ConstitutiveEquations.LinearModel
             tasks.Add(Task.Run(() => { creepCompliance = this.CalculateCreepCompliance(input, time); }));
 
             double strain = 0;
-            tasks.Add(Task.Run(() => { strain = this.CalculateStrain(input, time); }));
+            tasks.Add(Task.Run(async () => { strain = await this.CalculateStrainAsync(input, time).ConfigureAwait(false); }));
 
             double relaxationFunction = 0;
             tasks.Add(Task.Run(() => { relaxationFunction = this.CalculateRelaxationFunction(input, time); }));
 
             double stress = 0;
-            tasks.Add(Task.Run(() => { stress = this.CalculateStress(input, time); }));
+            tasks.Add(Task.Run(async () => { stress = await this.CalculateStressAsync(input, time).ConfigureAwait(false); }));
 
             await Task.WhenAll(tasks).ConfigureAwait(false);
 

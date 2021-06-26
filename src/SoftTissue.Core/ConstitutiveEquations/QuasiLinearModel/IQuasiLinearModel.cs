@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity.QuasiLinear;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 {
@@ -22,20 +23,22 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         double CalculateStrainDerivative(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the elastic response.
+        /// Asynchronously, this method calculates the elastic response.
+        /// Equation used: Elastic stress = A * [exp(B * strain) - 1]
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateElasticResponse(TInput input, double time);
+        Task<double> CalculateElasticResponseAsync(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the derivtive of elastic response.
+        /// Asynchronously, this method calculates the derivative of elastic response.
+        /// Equation used: Elastic Stress Derivative = A * B * (d/dt)(strain) * exp(B * strain)
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateElasticResponseDerivative(TInput input, double time);
+        Task<double> CalculateElasticResponseDerivativeAsync(TInput input, double time);
 
         /// <summary>
         /// This method calculates the reduced relaxation function.
@@ -54,20 +57,19 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
         double CalculateReducedRelaxationFunctionDerivative(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the stress using the equation 8.a from Fung, at page 279.
-        /// That equation do not returns a satisfactory result.
+        /// Asynchronously, this method calculates the stress using the equation 8.a from Fung, at page 279.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateStressByReducedRelaxationFunctionDerivative(TInput input, double time);
+        Task<double> CalculateStressByReducedRelaxationFunctionDerivative(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the stress using the equation 8.b from Fung, at page 279.
+        /// Asynchronously, this method calculates the stress using the equation 8.b from Fung, at page 279.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateStressByIntegralDerivative(TInput input, double time);
+        Task<double> CalculateStressByIntegralDerivative(TInput input, double time);
     }
 }

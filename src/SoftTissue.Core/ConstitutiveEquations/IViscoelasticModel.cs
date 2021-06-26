@@ -13,26 +13,26 @@ namespace SoftTissue.Core.ConstitutiveEquations
         where TResult : ViscoelasticModelResult, new()
     {
         /// <summary>
-        /// Asynchronously, this method calculates the results for a generic viscoelastic model.
+        /// Asynchronously, this method calculates the result for a generic viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
-        Task<TResult> CalculateResultsAsync(TInput input, double time);
+        Task<TResult> CalculateResultAsync(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the stress.
+        /// Asynchronously, this method calculates the stress.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateStress(TInput input, double time);
+        Task<double> CalculateStressAsync(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the strain.
+        /// Asynchronously, this method calculates the strain.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateStrain(TInput input, double time);
+        Task<double> CalculateStrainAsync(TInput input, double time);
     }
 }
