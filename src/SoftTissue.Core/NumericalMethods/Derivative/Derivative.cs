@@ -1,23 +1,14 @@
-﻿using SoftTissue.Core.Models.Viscoelasticity;
-using System;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.NumericalMethods.Derivative
 {
     public class Derivative : IDerivative
     {
-        public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double time)
-            where TInput : ViscoelasticModelInput
+        public async Task<double> CalculateAsync(Func<double, Task<double>> Equation, double step, double time)
         {
-            double previous = Equation(input, time - input.TimeStep);
-            double nextValue = Equation(input, time + input.TimeStep);
-
-            return (nextValue - previous) / (2 * input.TimeStep);
-        }
-
-        public double Calculate(Func<double, double> Equation, double step, double time)
-        {
-            double previous = Equation(time - step);
-            double nextValue = Equation(time + step);
+            double previous = await Equation(time - step).ConfigureAwait(false);
+            double nextValue = await Equation(time + step).ConfigureAwait(false);
 
             return (nextValue - previous) / (2 * step);
         }

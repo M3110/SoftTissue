@@ -322,7 +322,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             if (time <= Constants.Precision)
                 return 0;
 
-            return await this._derivative.Calculate(
+            return await this._derivative.CalculateAsync(
                 async (derivativeTime) => await this._simpsonRuleIntegration.Calculate(
                     async (integrationTime) => await this.CalculateElasticResponseAsync(input, derivativeTime - integrationTime).ConfigureAwait(false) * this.CalculateReducedRelaxationFunction(input, integrationTime),
                     new IntegralInput
