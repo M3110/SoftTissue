@@ -246,7 +246,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
 
             if (time >= Constants.Precision && time < input.FirstRampTime)
             {
-                return await this._simpsonRuleIntegration.Calculate(
+                return await this._simpsonRuleIntegration.CalculateAsync(
                     async (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * await this.CalculateElasticResponseDerivativeAsync(input, integrationTime).ConfigureAwait(false),
                     new IntegralInput
                     {
@@ -257,7 +257,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             }
 
             if (time < input.FirstRelaxationTotalTime && time >= input.FirstRampTime)
-                return await this._simpsonRuleIntegration.Calculate(
+                return await this._simpsonRuleIntegration.CalculateAsync(
                     async (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * await this.CalculateElasticResponseDerivativeAsync(input, integrationTime).ConfigureAwait(false),
                     new IntegralInput
                     {
@@ -289,7 +289,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
             //}
 
             // The default way to calculate the stress is using the convolution between the reduced relaxation function and derivative of elastic response.
-            return await this._simpsonRuleIntegration.Calculate(
+            return await this._simpsonRuleIntegration.CalculateAsync(
                 async (integrationTime) => this.CalculateReducedRelaxationFunction(input, time - integrationTime) * await this.CalculateElasticResponseDerivativeAsync(input, integrationTime).ConfigureAwait(false),
                 new IntegralInput
                 {
@@ -306,7 +306,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                 return 0;
 
             return this.CalculateReducedRelaxationFunction(input, time: 0) * await this.CalculateElasticResponseAsync(input, time).ConfigureAwait(false) +
-                await this._simpsonRuleIntegration.Calculate(
+                await this._simpsonRuleIntegration.CalculateAsync(
                     async (integrationTime) => await this.CalculateElasticResponseAsync(input, time - integrationTime).ConfigureAwait(false) * this.CalculateReducedRelaxationFunctionDerivative(input, integrationTime),
                     new IntegralInput
                     {
@@ -323,7 +323,7 @@ namespace SoftTissue.Core.ConstitutiveEquations.QuasiLinearModel
                 return 0;
 
             return await this._derivative.CalculateAsync(
-                async (derivativeTime) => await this._simpsonRuleIntegration.Calculate(
+                async (derivativeTime) => await this._simpsonRuleIntegration.CalculateAsync(
                     async (integrationTime) => await this.CalculateElasticResponseAsync(input, derivativeTime - integrationTime).ConfigureAwait(false) * this.CalculateReducedRelaxationFunction(input, integrationTime),
                     new IntegralInput
                     {
