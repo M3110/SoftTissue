@@ -17,14 +17,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Endpoint that calculate the results for all experimental models disregarding ramp time.
 ### Changed
  - Improved generalizations for Viscoelastic Models.
+ - Renamed method at class ViscoelasticModel from 'CalculateResultsAsync' to 'CalculateResultAsync'.
  - Renamed classes that contain ViscoelasticityModel in name to Model.
- - Operations that calculate strain and stress for viscoelastic models to inherit from operation CalculateResults.
- - Endpoint for operation CalculateSimplifiedFungModelResultsDisregardRampTime to receive parameters from query instead of from body with request.
+ - Quasi-Linear viscoelastic model to returns the derivative of strain, elastic response and reduced relaxation function in class QuasiLinearModelResult.
  - Operation AnalyzeResults to also consider when the stress increase.
- - Changed SkipPoints controller to use FromQuery instead of FromBody.
+ - Operations that calculate strain and stress for viscoelastic models to inherit from operation CalculateResults.
+ - Endpoint for operations CalculateSimplifiedFungModelResultsDisregardRampTime and SkipPoints to receive parameters from query instead of from body.
  - Renamed class from Value to Range.
  - Renamed extension method for class Range from 'ToEnumerable' to 'ToList'.
- - When disregarding ramp time, write the stress result just for one equation.
+ - When disregarding ramp time, write the stress result for only one equation.
+ - Method 'Calculate(Func<double, double> Equation, double step, double time)' at class Derivative to be asynchronous.
+ - Method 'Calculate(Func<double, Task<double>> Equation, IntegralInput integralInput)' at class SimpsonRuleIntegration to be asynchronous.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.
@@ -32,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Response contracts for operations that inherit operation CalculateResults.
  - Method CalculateInitialConditionsAsync in QuasiLinearModel.
  - Contract CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest.
+ - Method 'ToString(string separator)' at classes for viscoelastic result.
+ - Method 'Calculate<TInput>(Func<TInput, double, double> Equation, TInput input, double time)' at class Derivative that was not used.
 
 ## [2.1.2] - 2021-04-26
 ### Fixed
