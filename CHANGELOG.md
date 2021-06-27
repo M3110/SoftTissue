@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Renamed extension method for class Range from 'ToEnumerable' to 'ToList'.
  - When disregarding ramp time, write the stress result for only one equation.
  - Method 'Calculate(Func<double, double> Equation, double step, double time)' at class Derivative to be asynchronous.
- - Method 'Calculate(Func<double, Task<double>> Equation, IntegralInput integralInput)' at class SimpsonRuleIntegration to be asynchronous.
+ - Method 'Calculate(Func<double, double> Equation, IntegralInput integralInput)' at class SimpsonRuleIntegration to be asynchronous.
 ### Fixed
  - Improved operation CalculateQuasiLinearViscoelasticityStress based on final project necessities.
  - Improved QuasiLinearViscoelasticityModel based on bibliographies.
