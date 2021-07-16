@@ -1,4 +1,5 @@
 ﻿using SoftTissue.Core.Models.Viscoelasticity;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.ConstitutiveEquations
 {
@@ -6,23 +7,32 @@ namespace SoftTissue.Core.ConstitutiveEquations
     /// It represents a generic viscoelastic model.
     /// </summary>
     /// <typeparam name="TInput"></typeparam>
-    public interface IViscoelasticModel<TInput>
-        where TInput : ViscoelasticModelInput, new()
+    /// <typeparam name="TResult"></typeparam>
+    public interface IViscoelasticModel<TInput, TResult>
+        where TInput : ViscoelasticModelInput
+        where TResult : ViscoelasticModelResult, new()
     {
         /// <summary>
-        /// This method calculates the stress for a specific time.
+        /// Asynchronously, this method calculates the result for a generic viscoelastic model.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
-        /// <returns></returns>
-        double CalculateStress(TInput input, double time);
+        Task<TResult> CalculateResultAsync(TInput input, double time);
 
         /// <summary>
-        /// This method calculates the strain for a specific time.
+        /// Asynchronously, this method calculates the stress.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="time"></param>
         /// <returns></returns>
-        double CalculateStrain(TInput input, double time);
+        Task<double> CalculateStressAsync(TInput input, double time);
+
+        /// <summary>
+        /// Asynchronously, this method calculates the strain.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        Task<double> CalculateStrainAsync(TInput input, double time);
     }
 }

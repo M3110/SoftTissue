@@ -6,10 +6,10 @@
     public class ReducedRelaxationFunctionData
     {
         /// <summary>
-        /// The relaxation index. Constant C.
+        /// The relaxation stiffness. Constant C.
         /// Unit: Dimensionless.
         /// </summary>
-        public double RelaxationIndex { get; set; }
+        public double RelaxationStiffness { get; set; }
 
         /// <summary>
         /// The fast relaxation time. Tau 1.

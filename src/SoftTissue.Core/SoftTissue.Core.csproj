@@ -14,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Operations\QuasiLinearViscoelasticity\CalculateStressSensitivityAnalysis\FungModel\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\DisregardRampTime\Fung\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\DisregardRampTime\SimplifiedFung\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\ConsiderRampTime\Fung\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\ConsiderRampTime\" />
+    <Folder Include="Operations\ViscoelasticModel\CalculateResultsSensitivityAnalysis\QuasiLinear\ConsiderRampTime\SimplifiedFung\" />
   </ItemGroup>
 
 </Project>

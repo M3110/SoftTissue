@@ -211,7 +211,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
 
             if (this._previousResult != null)
             {
-                // Calculates the first and second derivative using the previous result passed on method.
+                // Calculates the first and second derivative using the previous result saved in the variable.
                 currentResult.Derivative = this._derivative.Calculate(this._previousResult.Stress, currentResult.Stress, currentResult.Time - this._previousResult.Time);
                 currentResult.SecondDerivative = this._derivative.Calculate(this._previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - this._previousResult.Time);
 

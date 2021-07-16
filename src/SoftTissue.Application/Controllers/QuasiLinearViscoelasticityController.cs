@@ -2,17 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using SoftTissue.Application.Extensions;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateConvergenceTime;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderRelaxationFunction;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderRelaxationFunction;
-using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.CalculateStress.FungModel.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.Core.Operations.QuasiLinearViscoelasticity.GenerateDomain.FungModel;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.Fung;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.SimplifiedFung;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.Fung;
+using SoftTissue.Core.Operations.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung;
+using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateConvergenceTime;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderRelaxationFunction;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.ConsiderRampTime.ConsiderSimplifiedRelaxationFunction;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderRelaxationFunction;
-using SoftTissue.DataContract.QuasiLinearViscoelasticity.CalculateStress.Fung.DisregardRampTime.ConsiderSimplifiedRelaxationFunction;
 using SoftTissue.DataContract.QuasiLinearViscoelasticity.GenerateDomain;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.Fung;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.ConsiderRampTime.SimplifiedFung;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.Fung;
+using SoftTissue.DataContract.ViscoelasticModel.CalculateResults.QuasiLinear.DisregardRampTime.SimplifiedFung;
 using System.Threading.Tasks;
 
 namespace SoftTissue.Application.Controllers
@@ -24,7 +26,7 @@ namespace SoftTissue.Application.Controllers
     public class QuasiLinearViscoelasticityController : ControllerBase
     {
         /// <summary>
-        /// It is responsible to execute an analysis to calculate the stress applied to Fung Model considering ramp time and the Reduced Relaxation Function.
+        /// Calculates the results for Fung Model considering ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -37,17 +39,17 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-stress/fung-model/consider-ramp-time")]
-        public async Task<ActionResult<CalculateFungModelStressConsiderRampTimeResponse>> CalculateFungModelStressConsiderRampTime(
-            [FromServices] ICalculateFungModelStressConsiderRampTime operation,
-            [FromBody] CalculateFungModelStressConsiderRampTimeRequest request)
+        [HttpPost("fung-model/consider-ramp-time/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateFungModelResultsConsiderRampTime(
+            [FromServices] ICalculateFungModelResultsConsiderRampTime operation,
+            [FromBody] CalculateFungModelResultsConsiderRampTimeRequest request)
         {
-            CalculateFungModelStressConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to execute an analysis to calculate the stress applied to Fung Model disregarding ramp time and considering the Reduced Relaxation Function.
+        /// Calculates the results for Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -60,17 +62,17 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-stress/fung-model/disregard-ramp-time")]
-        public async Task<ActionResult<CalculateFungModelStressDisregardRampTimeResponse>> CalculateFungModelStressDisregardRampTime(
-            [FromServices] ICalculateFungModelStressDisregardRampTime operation,
-            [FromBody] CalculateFungModelStressDisregardRampTimeRequest request)
+        [HttpPost("fung-model/disregard-ramp-time/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateFungModelResultsDisregardRampTime(
+            [FromServices] ICalculateFungModelResultsDisregardRampTime operation,
+            [FromBody] CalculateFungModelResultsDisregardRampTimeRequest request)
         {
-            CalculateFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to execute an analysis to calculate the stress applied to Fung Model disregarding ramp time and considering the Simplified Reduced Relaxation Function.
+        /// Calculates the results for Simplified Fung Model considering ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -83,17 +85,68 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-stress/simplified-fung-model/consider-ramp-time")]
-        public async Task<ActionResult<CalculateSimplifiedFungModelStressConsiderRampTimeResponse>> CalculateSimplifiedFungModelStressConsiderRampTime(
-            [FromServices] ICalculateSimplifiedFungModelStressConsiderRampTime operation,
-            [FromBody] CalculateSimplifiedFungModelStressConsiderRampTimeRequest request)
+        [HttpPost("simplified-fung-model/consider-ramp-time/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsConsiderRampTime(
+            [FromServices] ICalculateSimplifiedFungModelResultsConsiderRampTime operation,
+            [FromBody] CalculateSimplifiedFungModelResultsConsiderRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressConsiderRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to execute an analysis to calculate the stress applied to Fung Model disregarding ramp time and considering the Reduced Relaxation Function.
+        /// Calculates the results for Simplified Fung Model considering ramp time for a specific experimental model.
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <param name="experimentalModel"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("simplifiedfung-model/consider-ramp-time/experimental-model/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsConsiderRampTimeToExperimentalModel(
+            [FromServices] ICalculateSimplifiedFungModelResultsConsiderRampTime operation,
+            [FromQuery] double timeStep, double finalTime, ExperimentalModel experimentalModel)
+        {
+            CalculateResultsResponse response = await operation.ProcessAsync(
+                CalculateSimplifiedFungModelResultsConsiderRampTimeRequest.Create(timeStep, finalTime, experimentalModel)).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
+
+        /// <summary>
+        /// Calculates the results for Simplified Fung Model considering ramp time for multiple experimental models.
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <returns></returns>
+        /// <response code="201">Returns the newly created files.</response>
+        /// <response code="400">If some validation do not passed.</response>
+        /// <response code="500">If occurred some error in process.</response>
+        /// <response code="501">If some resource is not implemented.</response>
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("simplifiedfung-model/consider-ramp-time/all-experimental-models/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsConsiderRampTimeToExperimentalModels(
+            [FromServices] ICalculateSimplifiedFungModelResultsConsiderRampTime operation,
+            [FromQuery] double timeStep, double finalTime)
+        {
+            CalculateResultsResponse response = await operation.ProcessAsync(
+                CalculateSimplifiedFungModelResultsConsiderRampTimeRequest.Create(timeStep, finalTime)).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
+
+        /// <summary>
+        /// Calculates the results for Simplified Fung Model disregarding ramp time.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -106,20 +159,22 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-stress/simplified-fung-model/disregard-ramp-time")]
-        public async Task<ActionResult<CalculateSimplifiedFungModelStressDisregardRampTimeResponse>> CalculateSimplifiedFungModelStressDisregardRampTime(
-            [FromServices] ICalculateSimplifiedFungModelStressDisregardRampTime operation,
-            [FromBody] CalculateSimplifiedFungModelStressDisregardRampTimeRequest request)
+        [HttpPost("simplified-fung-model/disregard-ramp-time/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsDisregardRampTime(
+            [FromServices] ICalculateSimplifiedFungModelResultsDisregardRampTime operation,
+            [FromBody] CalculateSimplifiedFungModelResultsDisregardRampTimeRequest request)
         {
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to execute an analysis to calculate the stress considering Fung Model.
+        /// Calculates the results for Simplified Fung Model disregarding ramp time for a specific experimental model.
         /// </summary>
         /// <param name="operation"></param>
-        /// <param name="request"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
+        /// <param name="experimentalModel"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
         /// <response code="400">If some validation do not passed.</response>
@@ -129,63 +184,43 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("calculate-stress/simplifiedfung-model/disregard-ramp-time/experimental-model")]
-        public async Task<ActionResult<CalculateSimplifiedFungModelStressDisregardRampTimeResponse>> CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModel(
-            [FromServices] ICalculateSimplifiedFungModelStressDisregardRampTime operation,
-            [FromBody] CalculateSimplifiedFungModelStressDisregardRampTimeToExperimentalModelRequest request)
+        [HttpPost("simplifiedfung-model/disregard-ramp-time/experimental-model/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsDisregardRampTimeToExperimentalModel(
+            [FromServices] ICalculateSimplifiedFungModelResultsDisregardRampTime operation,
+            [FromQuery] double timeStep, double finalTime, ExperimentalModel experimentalModel)
         {
-            CalculateSimplifiedFungModelStressDisregardRampTimeResponse response = await operation.ProcessAsync(request.CreateQuasiLinearRequest()).ConfigureAwait(false);
+            CalculateResultsResponse response = await operation.ProcessAsync(
+                CalculateSimplifiedFungModelResultsDisregardRampTimeRequest.Create(timeStep, finalTime, experimentalModel)).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
         /// <summary>
-        /// It is responsible to execute a sensitivity analysis while calculating the stress considering Fung Model.
+        /// Calculates the results for Simplified Fung Model disregarding ramp time for multiple experimental models.
         /// </summary>
         /// <param name="operation"></param>
-        /// <param name="request"></param>
+        /// <param name="timeStep"></param>
+        /// <param name="finalTime"></param>
         /// <returns></returns>
         /// <response code="201">Returns the newly created files.</response>
         /// <response code="400">If some validation do not passed.</response>
         /// <response code="500">If occurred some error in process.</response>
         /// <response code="501">If some resource is not implemented.</response>
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        //[HttpPost("calculate-stress/fung-model/sensitivity-analysis")]
-        //public async Task<ActionResult<CalculateStressResponse>> CalculateStressSensivityAnalysis(
-        //    [FromServices] ICalculateFungModelStressSentivityAnalysis operation,
-        //    [FromBody] CalculateStressSensitivityAnalysisRequest request)
-        //{
-        //    CalculateStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request).ConfigureAwait(false);
-        //    return response.BuildHttpResponse();
-        //}
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status501NotImplemented)]
+        [HttpPost("simplifiedfung-model/disregard-ramp-time/all-experimental-models/calculate-results")]
+        public async Task<ActionResult<CalculateResultsResponse>> CalculateSimplifiedFungModelResultsDisregardRampTimeToExperimentalModels(
+            [FromServices] ICalculateSimplifiedFungModelResultsDisregardRampTime operation,
+            [FromQuery] double timeStep, double finalTime)
+        {
+            CalculateResultsResponse response = await operation.ProcessAsync(
+                CalculateSimplifiedFungModelResultsDisregardRampTimeRequest.Create(timeStep, finalTime)).ConfigureAwait(false);
+            return response.BuildHttpResponse();
+        }
 
         /// <summary>
-        /// It is responsible to execute a sensitivity analysis while calculating the stress considering Fung Model.
-        /// </summary>
-        /// <param name="operation"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        /// <response code="201">Returns the newly created files.</response>
-        /// <response code="400">If some validation do not passed.</response>
-        /// <response code="500">If occurred some error in process.</response>
-        /// <response code="501">If some resource is not implemented.</response>
-        //[ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        //[HttpPost("calculate-stress/fung-model/sensitivity-analysis/explicit")]
-        //public async Task<ActionResult<CalculateStressResponse>> CalculateStressSensivityAnalysisExplicit(
-        //    [FromServices] ICalculateFungModelStressSentivityAnalysis operation,
-        //    [FromBody] CalculateStressSensitivityAnalysisExplicitRequest request)
-        //{
-        //    CalculateStressResponse response = await calculateFungModelStressSentivityAnalysis.Process(request.MapToSensitivityAnalysis()).ConfigureAwait(false);
-        //    return response.BuildHttpResponse();
-        //}
-
-        /// <summary>
-        /// It is responsible to generate the domain for Fung Model parameters.
+        /// Generates the domain for Fung Model parameters.
         /// Here is just considered the fast and slow relaxation times, because the another parameters is avaiable for all real and positive domain.
         /// </summary>
         /// <param name="operation"></param>
@@ -199,7 +234,7 @@ namespace SoftTissue.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost("generate-domain/fung-model")]
+        [HttpPost("fung-model/generate-domain")]
         public async Task<ActionResult<GenerateDomainResponse>> GenerateFungModelDomain(
             [FromServices] IGenerateFungModelDomain operation,
             [FromBody] GenerateDomainRequest request)
@@ -209,7 +244,7 @@ namespace SoftTissue.Application.Controllers
         }
 
         /// <summary>
-        /// It is responsible to calculate the convergence time when the stress is constant.
+        /// Calculates the convergence time when the results is constant.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>

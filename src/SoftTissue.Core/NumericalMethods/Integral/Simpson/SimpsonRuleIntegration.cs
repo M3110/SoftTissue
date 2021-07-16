@@ -1,14 +1,12 @@
 ﻿using SoftTissue.Core.Models;
-using SoftTissue.Core.Models.Viscoelasticity;
 using System;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
 {
     public class SimpsonRuleIntegration : ISimpsonRuleIntegration
     {
-        public double Calculate<TInput>(Func<TInput, double, double> Equation, TInput equationInput, IntegralInput integralInput)
-            where TInput : ViscoelasticModelInput
+        public async Task<double> CalculateAsync(Func<double, Task<double>> Equation, IntegralInput integralInput)
         {
             double finalPoint = integralInput.InitialPoint;
 
@@ -18,7 +16,7 @@ namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
             }
             else
             {
-                while (Equation(equationInput, finalPoint) >= integralInput.Precision)
+                while (await Equation(finalPoint).ConfigureAwait(false) >= integralInput.Precision)
                 {
                     finalPoint += integralInput.Step;
                 }
@@ -26,15 +24,19 @@ namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
 
             double numberOfDivisions = (finalPoint - integralInput.InitialPoint) / integralInput.Step;
 
-            // TODO: Ver como funciona o Aggregate ou Sum.
-            // Checar no MoreLinq.
+            // If the number of divisions is equals to zero, it means that the interval is null, so the integral must be zero.
+            if (numberOfDivisions == 0)
+            {
+                return 0;
+            }
+
             double result = 0;
 
             for (int i = 0; i <= numberOfDivisions; i++)
             {
                 double multiplyfactor = i == 0 || i == integralInput.Step ? 1 : i % 2 != 0 ? 4 : 2;
 
-                result += multiplyfactor * Equation(equationInput, integralInput.InitialPoint + i * integralInput.Step);
+                result += multiplyfactor * await Equation(integralInput.InitialPoint + i * integralInput.Step).ConfigureAwait(false);
             }
 
             result *= integralInput.Step / 3;

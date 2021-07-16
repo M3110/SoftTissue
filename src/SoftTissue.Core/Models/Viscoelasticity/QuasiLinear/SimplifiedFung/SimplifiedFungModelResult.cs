@@ -1,4 +1,7 @@
 ﻿namespace SoftTissue.Core.Models.Viscoelasticity.QuasiLinear.Fung
 {
-    public class SimplifiedFungModelResult : QuasiLinearViscoelasticityModelResult { }
+    /// <summary>
+    /// It contains the results for Simplified Fung Model.
+    /// </summary>
+    public class SimplifiedFungModelResult : QuasiLinearModelResult { }
 }

@@ -1,7 +1,7 @@
 ﻿namespace SoftTissue.Core.Models.Viscoelasticity
 {
     /// <summary>
-    /// It contains the input data to a generic Viscoelastic Model.
+    /// It contains the input data for a generic Viscoelastic Model.
     /// </summary>
     public class ViscoelasticModelInput
     {

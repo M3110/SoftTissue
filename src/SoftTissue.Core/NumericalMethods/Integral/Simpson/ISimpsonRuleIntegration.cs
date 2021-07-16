@@ -1,13 +1,12 @@
 ﻿using SoftTissue.Core.Models;
-using SoftTissue.Core.Models.Viscoelasticity;
 using System;
+using System.Threading.Tasks;
 
 namespace SoftTissue.Core.NumericalMethods.Integral.Simpson
 {
     public interface ISimpsonRuleIntegration
     {
-        double Calculate<TInput>(Func<TInput, double, double> Equation, TInput equationInput, IntegralInput integralInput)
-            where TInput : ViscoelasticModelInput;
+        Task<double> CalculateAsync(Func<double, Task<double>> Equation, IntegralInput integralInput);
 
         double Calculate(Func<double, double> Equation, IntegralInput integralInput);
     }
