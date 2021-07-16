@@ -7,8 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E3669B78-169
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{E468E120-4BDD-4C72-AD36-FA44CB23642E}"
 	ProjectSection(SolutionItems) = preProject
-		etc\CHANGELOG.md = etc\CHANGELOG.md
-		etc\README.md = etc\README.md
+		CHANGELOG.md = CHANGELOG.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "request", "request", "{800A2B1C-918C-4FE6-9A30-5857E38AE44E}"

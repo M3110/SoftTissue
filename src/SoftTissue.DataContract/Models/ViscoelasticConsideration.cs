@@ -14,7 +14,8 @@
         /// <summary>
         /// Viscoelastic effect considered after the ramp time.
         /// </summary>
-        ViscoelasticEffectAfterRampTime = 2,
+        // This consideration was removed because is necessary to investigate an error while processing the operation.
+        //ViscoelasticEffectAfterRampTime = 2,
 
         /// <summary>
         /// The ramp time is disregarded. In time equals to zero, the stress is maximum and equals to the maximum elastic stress.

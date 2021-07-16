@@ -14,7 +14,7 @@ namespace SoftTissue.Application.Controllers
     public class FileController : Controller
     {
         /// <summary>
-        /// It is responsible to skip points into a file.
+        /// Skips points into a file.
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="request"></param>
@@ -30,7 +30,7 @@ namespace SoftTissue.Application.Controllers
         [HttpPost("skip-points")]
         public async Task<ActionResult<SkipPointsResponse>> SkipPoints(
             [FromServices] ISkipPoints operation,
-            [FromBody] SkipPointsRequest request)
+            [FromQuery] SkipPointsRequest request)
         {
             SkipPointsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

@@ -5,6 +5,7 @@ using SoftTissue.Core.Models.ExperimentalAnalysis;
 using SoftTissue.Core.NumericalMethods.Derivative;
 using SoftTissue.Core.Operations.Base;
 using SoftTissue.DataContract.ExperimentalAnalysis.AnalyzeResults;
+using SoftTissue.DataContract.Models;
 using SoftTissue.DataContract.OperationBase;
 using System;
 using System.Collections.Generic;
@@ -72,20 +73,71 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         }
 
         /// <summary>
+        /// This method checks if the stress is valid comparing with the previous stress.
+        /// </summary>
+        /// <param name="previousStress"></param>
+        /// <param name="currentStress"></param>
+        /// <param name="stressDirection"></param>
+        /// <returns></returns>
+        public bool IsStressValid(double previousStress, double currentStress, StressDirection stressDirection = StressDirection.Decrease)
+        {
+            if (stressDirection == StressDirection.Decrease)
+                return previousStress > currentStress;
+
+            if (stressDirection == StressDirection.Increase)
+                return previousStress < currentStress;
+
+            throw new ArgumentOutOfRangeException(nameof(stressDirection), $"Invalid stress direction: '{stressDirection}'.");
+        }
+
+        /// <summary>
+        /// This method checks if the stress derivative is valid comparing with the previous stress derivative.
+        /// </summary>
+        /// <param name="previousDerivative"></param>
+        /// <param name="currentDerivative"></param>
+        /// <param name="stressDirection"></param>
+        /// <returns></returns>
+        public bool IsDerivativeValid(double previousDerivative, double currentDerivative, StressDirection stressDirection = StressDirection.Decrease)
+        {
+            if (stressDirection == StressDirection.Decrease ||
+                stressDirection == StressDirection.Increase)
+                return previousDerivative < currentDerivative;
+
+            throw new ArgumentOutOfRangeException(nameof(stressDirection), $"Invalid stress direction: '{stressDirection}'.");
+        }
+
+        /// <summary>
+        /// This method checks if the current result is valid.
+        /// </summary>
+        /// <param name="currentResult"></param>
+        /// <param name="stressDirection"></param>
+        /// <returns></returns>
+        public bool IsResultValid(AnalyzedExperimentalResult currentResult, StressDirection stressDirection = StressDirection.Decrease)
+        {
+            if (stressDirection == StressDirection.Decrease)
+                return currentResult.Derivative.IsNegative() && currentResult.SecondDerivative.IsPositive();
+
+            if (stressDirection == StressDirection.Increase)
+                return currentResult.Derivative.IsPositive() && currentResult.SecondDerivative.IsPositive();
+
+            throw new ArgumentOutOfRangeException(nameof(stressDirection), $"Invalid stress direction: '{stressDirection}'.");
+        }
+
+        /// <summary>
         /// This method calculates the second valid result and its index at experimental file.
         /// </summary>
         /// <param name="firstResult"></param>
         /// <param name="experimentalResults"></param>
+        /// <param name="stressDirection"></param>
         /// <returns></returns>
-        public (AnalyzedExperimentalResult SecondResult, int SecondResultIndex) CalculateSecondResultAndIndex(AnalyzedExperimentalResult firstResult, List<ExperimentalResult> experimentalResults)
+        public (AnalyzedExperimentalResult SecondResult, int SecondResultIndex) CalculateSecondResultAndIndex(AnalyzedExperimentalResult firstResult, List<ExperimentalResult> experimentalResults, StressDirection stressDirection = StressDirection.Decrease)
         {
             // The code below uses the method Skip(1) to avoid the first result in the list.
             foreach (var experimentalResult in experimentalResults.Skip(1))
             {
                 AnalyzedExperimentalResult secondResult = new AnalyzedExperimentalResult(experimentalResult);
 
-                // To be a valid result, stress must decrease over the time.
-                if (firstResult.Stress > secondResult.Stress)
+                if (this.IsStressValid(firstResult.Stress, secondResult.Stress, stressDirection))
                 {
                     secondResult.Derivative = this._derivative.Calculate(firstResult.Stress, secondResult.Stress, secondResult.Time - firstResult.Time);
                     secondResult.IsValid = true;
@@ -105,21 +157,20 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         /// <param name="secondResult"></param>
         /// <param name="secondResultIndex"></param>
         /// <param name="experimentalResults"></param>
+        /// <param name="stressDirection"></param>
         /// <returns></returns>
-        public (AnalyzedExperimentalResult ThirdResult, int ThirdResultIndex) CalculateThirdResultAndIndex(AnalyzedExperimentalResult secondResult, int secondResultIndex, List<ExperimentalResult> experimentalResults)
+        public (AnalyzedExperimentalResult ThirdResult, int ThirdResultIndex) CalculateThirdResultAndIndex(AnalyzedExperimentalResult secondResult, int secondResultIndex, List<ExperimentalResult> experimentalResults, StressDirection stressDirection = StressDirection.Decrease)
         {
             // The code below uses the method Skip(secondResultIndex + 1) to avoid the lines that was previously analyzed to calculate the second valid result.
             foreach (var experimentalResult in experimentalResults.Skip(secondResultIndex + 1))
             {
                 AnalyzedExperimentalResult thirdResult = new AnalyzedExperimentalResult(experimentalResult);
 
-                // To be a valid result, stress must decrease over the time.
-                if (secondResult.Stress > thirdResult.Stress)
+                if (this.IsStressValid(secondResult.Stress, thirdResult.Stress, stressDirection))
                 {
                     thirdResult.Derivative = this._derivative.Calculate(secondResult.Stress, thirdResult.Stress, thirdResult.Time - secondResult.Time);
 
-                    // To be a valid result, derivative must increase over the time.
-                    if (secondResult.Derivative < thirdResult.Derivative)
+                    if (this.IsDerivativeValid(secondResult.Derivative.Value, thirdResult.Derivative.Value, stressDirection))
                     {
                         thirdResult.SecondDerivative = this._derivative.Calculate(secondResult.Derivative.Value, thirdResult.Derivative.Value, thirdResult.Time - secondResult.Time);
                         thirdResult.IsValid = true;
@@ -139,8 +190,9 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
         /// </summary>
         /// <param name="previousResult"></param>
         /// <param name="experimentalResult"></param>
+        /// <param name="stressDirection"></param>
         /// <returns></returns>
-        public AnalyzedExperimentalResult AnalyzeExperimentalResult(AnalyzedExperimentalResult previousResult, ExperimentalResult experimentalResult)
+        public AnalyzedExperimentalResult AnalyzeExperimentalResult(AnalyzedExperimentalResult previousResult, ExperimentalResult experimentalResult, StressDirection stressDirection = StressDirection.Decrease)
         {
             // Creates the result based on the experimental result.
             var currentResult = new AnalyzedExperimentalResult(experimentalResult);
@@ -149,7 +201,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
             currentResult.Derivative = this._derivative.Calculate(previousResult.Stress, currentResult.Stress, currentResult.Time - previousResult.Time);
             currentResult.SecondDerivative = this._derivative.Calculate(previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - previousResult.Time);
 
-            if (currentResult.Derivative.IsNegative() && currentResult.SecondDerivative.IsPositive())
+            if (this.IsResultValid(currentResult, stressDirection))
             {
                 this._previousResult = currentResult;
 
@@ -159,11 +211,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
 
             if (this._previousResult != null)
             {
-                // Calculates the first and second derivative using the previous result passed on method.
+                // Calculates the first and second derivative using the previous result saved in the variable.
                 currentResult.Derivative = this._derivative.Calculate(this._previousResult.Stress, currentResult.Stress, currentResult.Time - this._previousResult.Time);
                 currentResult.SecondDerivative = this._derivative.Calculate(this._previousResult.Derivative.Value, currentResult.Derivative.Value, currentResult.Time - this._previousResult.Time);
 
-                if (currentResult.Derivative.IsNegative() && currentResult.SecondDerivative.IsPositive())
+                if (this.IsResultValid(currentResult, stressDirection))
                 {
                     this._previousResult = currentResult;
 
@@ -197,19 +249,19 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
                 streamWriter.WriteLine($"{this.ExperimentalResults[0].Time},{this.ExperimentalResults[0].Stress}");
 
                 // Step 3 - Calculates the second result and write its in the file.
-                (AnalyzedExperimentalResult secondResult, int secondResultIndex) = this.CalculateSecondResultAndIndex(firstResult, this.ExperimentalResults);
+                (AnalyzedExperimentalResult secondResult, int secondResultIndex) = this.CalculateSecondResultAndIndex(firstResult, this.ExperimentalResults, request.StressDirection);
                 streamWriter.WriteLine($"{secondResult.Time},{secondResult.Stress}");
 
                 // Step 4 - Calculates the third result and write its in the file.
                 // The third result is the previous result that will be used in next step.
-                (AnalyzedExperimentalResult previousResult, int previousResultIndex) = this.CalculateThirdResultAndIndex(secondResult, secondResultIndex, this.ExperimentalResults);
+                (AnalyzedExperimentalResult previousResult, int previousResultIndex) = this.CalculateThirdResultAndIndex(secondResult, secondResultIndex, this.ExperimentalResults, request.StressDirection);
                 streamWriter.WriteLine($"{previousResult.Time},{previousResult.Stress}");
 
                 // Step 5 - Analyze the experimental results avoiding the points that are invalid.
                 foreach (ExperimentalResult experimentalResult in this.ExperimentalResults.Skip(previousResultIndex + 1))
                 {
                     // Step 5.1 - Analyzes the experimental result.
-                    AnalyzedExperimentalResult analyzedResult = this.AnalyzeExperimentalResult(previousResult, experimentalResult);
+                    AnalyzedExperimentalResult analyzedResult = this.AnalyzeExperimentalResult(previousResult, experimentalResult, request.StressDirection);
 
                     // Step 5.2 - Writes the result in the file if it is valid.
                     if (analyzedResult.IsValid == true)
@@ -240,6 +292,11 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
                 return response;
             }
 
+            if (request.StressDirection == default)
+            {
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"Invalid stress direction: '{request.StressDirection}'.");
+            }
+
             // Reads the file and add it into a variable to be used in the operation.
             using (var streamReader = new StreamReader(Path.Combine(request.FileUri, request.FileName)))
             using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
@@ -250,7 +307,7 @@ namespace SoftTissue.Core.Operations.ExperimentalAnalysis.AnalyzeResults
             // The file must be at least a specific number of lines to be possible to execute the operation.
             if (this.ExperimentalResults.Count <= Constants.MinimumFileNumberOfLines)
             {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"The file passed on request must have at least {Constants.MinimumFileNumberOfLines} lines.");
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, $"The file passed on request must have at least '{Constants.MinimumFileNumberOfLines}' lines.");
 
                 return response;
             }

@@ -6,9 +6,7 @@ namespace SoftTissue.DataContract.OperationBase
     /// <summary>
     /// It represents the response content for all operations.
     /// </summary>
-    /// <typeparam name="TResponseData"></typeparam>
-    public abstract class OperationResponseBase<TResponseData>
-        where TResponseData : OperationResponseData, new()
+    public abstract class OperationResponseBase
     {
         /// <summary>
         /// Class constructor.
@@ -16,7 +14,6 @@ namespace SoftTissue.DataContract.OperationBase
         public OperationResponseBase()
         {
             this.Errors = new List<OperationError>();
-            this.Data = new TResponseData();
         }
 
         /// <summary>
@@ -35,9 +32,18 @@ namespace SoftTissue.DataContract.OperationBase
         public List<OperationError> Errors { get; protected set; }
 
         /// <summary>
-        /// It represents the 'data' content of all operation response.
+        /// This method adds error on list of errors.
         /// </summary>
-        public TResponseData Data { get; set; }
+        /// <param name="errorCode"></param>
+        /// <param name="errorMessage"></param>
+        /// <param name="httpStatusCode"></param>
+        public void AddError(string errorCode, string errorMessage, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
+        {
+            this.Errors.Add(new OperationError(errorCode, errorMessage));
+
+            this.HttpStatusCode = httpStatusCode;
+            this.Success = false;
+        }
 
         /// <summary>
         /// This method adds a list of errors.
@@ -119,19 +125,27 @@ namespace SoftTissue.DataContract.OperationBase
             this.HttpStatusCode = httpStatusCode;
             this.Success = false;
         }
+    }
+
+    /// <summary>
+    /// It represents the response content for all operations.
+    /// </summary>
+    /// <typeparam name="TResponseData"></typeparam>
+    public abstract class OperationResponseBase<TResponseData> : OperationResponseBase
+        where TResponseData : OperationResponseData, new()
+    {
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        public OperationResponseBase()
+        {
+            this.Errors = new List<OperationError>();
+            this.Data = new TResponseData();
+        }
 
         /// <summary>
-        /// This method adds error on list of errors.
+        /// It represents the 'data' content of all operation response.
         /// </summary>
-        /// <param name="errorCode"></param>
-        /// <param name="errorMessage"></param>
-        /// <param name="httpStatusCode"></param>
-        protected void AddError(string errorCode, string errorMessage, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
-        {
-            this.Errors.Add(new OperationError(errorCode, errorMessage));
-
-            this.HttpStatusCode = httpStatusCode;
-            this.Success = false;
-        }
+        public TResponseData Data { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace SoftTissue.Core.Operations.Base
         public virtual Task<TResponse> ValidateOperationAsync(TRequest request)
         {
             var response = new TResponse();
-            response.SetSuccessCreated();
+            response.SetSuccessOk();
 
             if (request == null)
             {
